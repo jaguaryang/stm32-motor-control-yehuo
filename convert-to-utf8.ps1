@@ -1,6 +1,7 @@
 # 获取当前目录下所有符合条件的文件
 $files = Get-ChildItem -Path . -Recurse -Include *.txt,*.c,*.h | 
     Where-Object { 
+        $_.FullName -notmatch '\\Drivers\\' -and 
         $_.FullName -notmatch '\\Libraries\\' -and 
         $_.FullName -notmatch '\\Project\\' 
     }
