@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ÈÎÒâÏóÏŞË³Ê±ÕëÔ²»¡²å²¹-Öğµã±È½Ï·¨
+  * @brief   ä»»æ„è±¡é™é¡ºæ—¶é’ˆåœ†å¼§æ’è¡¥-é€ç‚¹æ¯”è¾ƒæ³•
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,21 +24,21 @@ Quadrant_TypeDef quadrant;
 CircularInterpolation_TypeDef circular_para = {0};
 
 /**
-  * @brief  ÉèÖÃ½ø¸ø·½Ïò
+  * @brief  è®¾ç½®è¿›ç»™æ–¹å‘
   * @param  coord_x
   * @param  coord_y
-  * @retval ÎŞ
+  * @retval æ— 
   */
 static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
 {
-  /* ¼ÇÂ¼²å²¹ÔË¶¯·½Ïò */
+  /* è®°å½•æ’è¡¥è¿åŠ¨æ–¹å‘ */
   circular_para.dir_interpo = dir;
   
   if(dir == CW)
   {
-    if(coord_x > 0)/* xÕı°ëÖá */
+    if(coord_x > 0)/* xæ­£åŠè½´ */
     {
-      if(coord_y > 0)/* µÚÒ»ÏóÏŞ */
+      if(coord_y > 0)/* ç¬¬ä¸€è±¡é™ */
       {
         circular_para.crood_pos = quadrant_1st;
         circular_para.dir_x = CW;
@@ -48,7 +48,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
-      else/* µÚËÄÏóÏŞ */
+      else/* ç¬¬å››è±¡é™ */
       {
         circular_para.crood_pos = quadrant_4th;
         circular_para.dir_x = CCW;
@@ -59,9 +59,9 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
     }
-    else if(coord_x < 0)/* x¸º°ëÖá */
+    else if(coord_x < 0)/* xè´ŸåŠè½´ */
     {
-      if(coord_y >= 0)/* µÚ¶şÏóÏŞ */
+      if(coord_y >= 0)/* ç¬¬äºŒè±¡é™ */
       {
         circular_para.crood_pos = quadrant_2nd;
         circular_para.dir_x = CW;
@@ -71,7 +71,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CW);
       }
-      else/* µÚÈıÏóÏŞ */
+      else/* ç¬¬ä¸‰è±¡é™ */
       {
         circular_para.crood_pos = quadrant_3rd;
         circular_para.dir_x = CCW;
@@ -82,9 +82,9 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CW);
       }
     }
-    else if(coord_x == 0)/* x=0£¬µ±Ç°µãÔÚYÖáÉÏ */
+    else if(coord_x == 0)/* x=0ï¼Œå½“å‰ç‚¹åœ¨Yè½´ä¸Š */
     {
-      if(coord_y > 0)/* µÚÒ»ÏóÏŞ */
+      if(coord_y > 0)/* ç¬¬ä¸€è±¡é™ */
       {
         circular_para.crood_pos = quadrant_1st;
         circular_para.dir_x = CW;
@@ -94,7 +94,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
-      else if(coord_y < 0)/* µÚÈıÏóÏŞ */
+      else if(coord_y < 0)/* ç¬¬ä¸‰è±¡é™ */
       {
         circular_para.crood_pos = quadrant_3rd;
         circular_para.dir_x = CCW;
@@ -108,9 +108,9 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
   }
   else
   {
-    if(coord_x > 0)/* xÕı°ëÖá */
+    if(coord_x > 0)/* xæ­£åŠè½´ */
     {
-      if(coord_y >= 0)/* µÚÒ»ÏóÏŞ */
+      if(coord_y >= 0)/* ç¬¬ä¸€è±¡é™ */
       {
         circular_para.crood_pos = quadrant_1st;
         circular_para.dir_x = CCW;
@@ -120,7 +120,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CCW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CW);
       }
-      else/* µÚËÄÏóÏŞ */
+      else/* ç¬¬å››è±¡é™ */
       {
         circular_para.crood_pos = quadrant_4th;
         circular_para.dir_x = CW;
@@ -131,9 +131,9 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CW);
       }
     }
-    else if(coord_x < 0)/* x¸º°ëÖá */
+    else if(coord_x < 0)/* xè´ŸåŠè½´ */
     {
-      if(coord_y > 0)/* µÚ¶şÏóÏŞ */
+      if(coord_y > 0)/* ç¬¬äºŒè±¡é™ */
       {
         circular_para.crood_pos = quadrant_2nd;
         circular_para.dir_x = CCW;
@@ -143,7 +143,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CCW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
-      else/* µÚÈıÏóÏŞ */
+      else/* ç¬¬ä¸‰è±¡é™ */
       {
         circular_para.crood_pos = quadrant_3rd;
         circular_para.dir_x = CW;
@@ -154,9 +154,9 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
     }
-    else if(coord_x == 0)/* x=0£¬µ±Ç°µãÔÚYÖáÉÏ */
+    else if(coord_x == 0)/* x=0ï¼Œå½“å‰ç‚¹åœ¨Yè½´ä¸Š */
     {
-      if(coord_y > 0)/* µÚ¶şÏóÏŞ */
+      if(coord_y > 0)/* ç¬¬äºŒè±¡é™ */
       {
         circular_para.crood_pos = quadrant_2nd;
         circular_para.dir_x = CCW;
@@ -166,7 +166,7 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
         MOTOR_DIR(step_motor[x_axis].dir_port, step_motor[x_axis].dir_pin, CCW);
         MOTOR_DIR(step_motor[y_axis].dir_port, step_motor[y_axis].dir_pin, CCW);
       }
-      else if(coord_y < 0)/* µÚËÄÏóÏŞ */
+      else if(coord_y < 0)/* ç¬¬å››è±¡é™ */
       {
         circular_para.crood_pos = quadrant_4th;
         circular_para.dir_x = CW;
@@ -181,67 +181,67 @@ static void Set_Feed_DIR(int32_t coord_x, int32_t coord_y, uint8_t dir)
 }
   
 /**
-  * @brief  ÈÎÒâÏóÏŞË³Ô²²å²¹ÔË¶¯
-  * @param  start_x£ºÔ²»¡Æğµã×ø±êX
-  * @param  start_y£ºÔ²»¡Æğµã×ø±êY
-  * @param  stop_x£ºÔ²»¡ÖÕµã×ø±êX
-  * @param  stop_y£ºÔ²»¡ÖÕµã×ø±êY
-  * @param  speed£º½ø¸øËÙ¶È
-  * @param  dir£º½ø¸ø·½Ïò
-  * @retval ÎŞ
+  * @brief  ä»»æ„è±¡é™é¡ºåœ†æ’è¡¥è¿åŠ¨
+  * @param  start_xï¼šåœ†å¼§èµ·ç‚¹åæ ‡X
+  * @param  start_yï¼šåœ†å¼§èµ·ç‚¹åæ ‡Y
+  * @param  stop_xï¼šåœ†å¼§ç»ˆç‚¹åæ ‡X
+  * @param  stop_yï¼šåœ†å¼§ç»ˆç‚¹åæ ‡Y
+  * @param  speedï¼šè¿›ç»™é€Ÿåº¦
+  * @param  dirï¼šè¿›ç»™æ–¹å‘
+  * @retval æ— 
   */
 void Circular_InterPolation(int32_t start_x, int32_t start_y, int32_t stop_x, int32_t stop_y, uint16_t speed, uint8_t dir)
 {
-  /* ÉèÖÃ²å²¹Ä£Ê½ÎªÖ±Ïß²å²¹ */
+  /* è®¾ç½®æ’è¡¥æ¨¡å¼ä¸ºç›´çº¿æ’è¡¥ */
   mode = Circular;
   
-  /* ÅĞ¶Ïµ±Ç°ÊÇ·ñÕıÔÚ×ö²å²¹ÔË¶¯ */
+  /* åˆ¤æ–­å½“å‰æ˜¯å¦æ­£åœ¨åšæ’è¡¥è¿åŠ¨ */
   if(circular_para.motionstatus != 0)
     return;
   
-  /* ¼ì²éÆğµã¡¢ÖÕµã×ø±êÊÇ·ñÔÚÍ¬Ò»¸öÔ²ÉÏ */
+  /* æ£€æŸ¥èµ·ç‚¹ã€ç»ˆç‚¹åæ ‡æ˜¯å¦åœ¨åŒä¸€ä¸ªåœ†ä¸Š */
   if(((start_x * start_x) + (start_y * start_y)) != ((stop_x * stop_x) + (stop_y * stop_y)))
     return;
   
-  /* Æ«²îÇåÁã */
+  /* åå·®æ¸…é›¶ */
   circular_para.deviation = 0;
   
-  /* Æğµã×ø±ê */
+  /* èµ·ç‚¹åæ ‡ */
   circular_para.startpoint[x_axis] = start_x;
   circular_para.startpoint[y_axis] = start_y;
-  /* ÖÕµã×ø±ê */
+  /* ç»ˆç‚¹åæ ‡ */
   circular_para.endpoint_x = stop_x;
   circular_para.endpoint_y = stop_y;
-  /* ËùĞèÂö³åÊıÊÇ´ÓÆğµãµ½ÖÕµãµÄÂö³åÊıÖ®ºÍ */
+  /* æ‰€éœ€è„‰å†²æ•°æ˜¯ä»èµ·ç‚¹åˆ°ç»ˆç‚¹çš„è„‰å†²æ•°ä¹‹å’Œ */
   circular_para.endpoint_pulse = abs(stop_x - start_x) + abs(stop_y - start_y);
   
-  /* ¸ù¾İ×ø±êÈ·¶¨²å²¹·½ÏòºÍX¡¢YÔË¶¯·½Ïò */
+  /* æ ¹æ®åæ ‡ç¡®å®šæ’è¡¥æ–¹å‘å’ŒXã€Yè¿åŠ¨æ–¹å‘ */
   Set_Feed_DIR(circular_para.startpoint[x_axis], circular_para.startpoint[y_axis], dir);
   
-  /* Æğµã×ø±êx=0£¬ËµÃ÷ÆğµãÔÚyÖáÉÏ£¬Ö±½ÓÏòxÖá½ø¸ø¿É¼õĞ¡Îó²î */
+  /* èµ·ç‚¹åæ ‡x=0ï¼Œè¯´æ˜èµ·ç‚¹åœ¨yè½´ä¸Šï¼Œç›´æ¥å‘xè½´è¿›ç»™å¯å‡å°è¯¯å·® */
   if(circular_para.startpoint[x_axis] == 0)
   {
-    /* Æ«²î·½³Ì£ºF = F ¡À 2 * x + 1*/
+    /* åå·®æ–¹ç¨‹ï¼šF = F Â± 2 * x + 1*/
     circular_para.active_axis = x_axis;
     circular_para.deviation += 2 * circular_para.devi_sign[x_axis]
                                  * circular_para.startpoint[x_axis] + 1;
   }
   else
   {
-    /* Æ«²î·½³Ì£ºF = F ¡À 2 * y + 1*/
+    /* åå·®æ–¹ç¨‹ï¼šF = F Â± 2 * y + 1*/
     circular_para.active_axis = y_axis;
     circular_para.deviation += 2 * circular_para.devi_sign[y_axis]
                                  * circular_para.startpoint[y_axis] + 1;
   }
   
-  /* ÉèÖÃËÙ¶È */
+  /* è®¾ç½®é€Ÿåº¦ */
   __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, step_motor[x_axis].pul_channel, speed);
   __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, step_motor[y_axis].pul_channel, speed);
   __HAL_TIM_SET_AUTORELOAD(&TIM_StepperHandle, speed * 2);
   
-  /* Ê¹ÄÜÖ÷Êä³ö */
+  /* ä½¿èƒ½ä¸»è¾“å‡º */
   __HAL_TIM_MOE_ENABLE(&TIM_StepperHandle);
-  /* ¿ªÆô»î¶¯Öá±È½ÏÍ¨µÀÊä³ö */
+  /* å¼€å¯æ´»åŠ¨è½´æ¯”è¾ƒé€šé“è¾“å‡º */
   TIM_CCxChannelCmd(MOTOR_PUL_TIM, step_motor[circular_para.active_axis].pul_channel, TIM_CCx_ENABLE);
   HAL_TIM_Base_Start_IT(&TIM_StepperHandle);
   
@@ -249,19 +249,19 @@ void Circular_InterPolation(int32_t start_x, int32_t start_y, int32_t stop_x, in
 }
 
 /**
-  * @brief  Ô²»¡²å²¹´¦Àíº¯Êı
-  * @param  htim£º¶¨Ê±Æ÷¾ä±úÖ¸Õë
-	*	@note   Ö±Ïß²å²¹ºÍÔ²»¡²å²¹¹²ÓÃÒ»¸ö»Øµ÷º¯Êı
-  * @retval ÎŞ
+  * @brief  åœ†å¼§æ’è¡¥å¤„ç†å‡½æ•°
+  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„æŒ‡é’ˆ
+	*	@note   ç›´çº¿æ’è¡¥å’Œåœ†å¼§æ’è¡¥å…±ç”¨ä¸€ä¸ªå›è°ƒå‡½æ•°
+  * @retval æ— 
   */
 void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
 {
   uint32_t last_axis = 0;
   
-  /* ¼ÇÂ¼ÉÏÒ»²½µÄ½ø¸ø»î¶¯Öá */
+  /* è®°å½•ä¸Šä¸€æ­¥çš„è¿›ç»™æ´»åŠ¨è½´ */
   last_axis = circular_para.active_axis;
   
-  /* ¸ù¾İ½ø¸ø·½ÏòË¢ĞÂ×ø±ê */
+  /* æ ¹æ®è¿›ç»™æ–¹å‘åˆ·æ–°åæ ‡ */
   switch(last_axis)
   {
     case x_axis:
@@ -280,12 +280,12 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
       break;
   }
   
-  /* ¸ù¾İÉÏÒ»´Î½ø¸øµÄÆ«²î£¬ÅĞ¶ÏĞÂµÄ½ø¸ø»î¶¯Öá */
+  /* æ ¹æ®ä¸Šä¸€æ¬¡è¿›ç»™çš„åå·®ï¼Œåˆ¤æ–­æ–°çš„è¿›ç»™æ´»åŠ¨è½´ */
   if(circular_para.deviation >= 0)
   {
     switch(circular_para.dir_interpo)
     {
-      case CW:/* Ë³Ê±Õë */
+      case CW:/* é¡ºæ—¶é’ˆ */
         switch(circular_para.crood_pos)
         {
           case quadrant_1st:
@@ -298,7 +298,7 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
             break;
         }
         break;
-      case CCW:/* ÄæÊ±Õë */
+      case CCW:/* é€†æ—¶é’ˆ */
         switch(circular_para.crood_pos)
         {
           case quadrant_1st:
@@ -313,11 +313,11 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
         break;
     }
   }
-  else /* Æ«²îĞ¡ÓÚ0£¬ÏòÔ²Íâ½ø¸ø */
+  else /* åå·®å°äº0ï¼Œå‘åœ†å¤–è¿›ç»™ */
   {
     switch(circular_para.dir_interpo)
     {
-      case CW:/* Ë³Ê±Õë */
+      case CW:/* é¡ºæ—¶é’ˆ */
         switch(circular_para.crood_pos)
         {
           case quadrant_1st:
@@ -330,7 +330,7 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
             break;
         }
         break;
-      case CCW:/* ÄæÊ±Õë */
+      case CCW:/* é€†æ—¶é’ˆ */
         switch(circular_para.crood_pos)
         {
           case quadrant_1st:
@@ -345,24 +345,24 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
         break;
     }
   }
-  /* ¸ù¾İ²å²¹ÔË¶¯·½ÏòºÍ½ø¸ø·½Ïò¼ÆËã³öĞÂµÄÆ«²î */
+  /* æ ¹æ®æ’è¡¥è¿åŠ¨æ–¹å‘å’Œè¿›ç»™æ–¹å‘è®¡ç®—å‡ºæ–°çš„åå·® */
   circular_para.deviation += 2 * circular_para.devi_sign[circular_para.active_axis]
                                * circular_para.startpoint[circular_para.active_axis] + 1;
   
-  /* ÏÂÒ»²½µÄ»î¶¯ÖáÓëÉÏÒ»²½µÄ²»Ò»ÖÂÊ±£¬ĞèÒª»»Öá */
+  /* ä¸‹ä¸€æ­¥çš„æ´»åŠ¨è½´ä¸ä¸Šä¸€æ­¥çš„ä¸ä¸€è‡´æ—¶ï¼Œéœ€è¦æ¢è½´ */
   if(last_axis != circular_para.active_axis)
   {
     TIM_CCxChannelCmd(htim->Instance, step_motor[last_axis].pul_channel, TIM_CCx_DISABLE);
     TIM_CCxChannelCmd(htim->Instance, step_motor[circular_para.active_axis].pul_channel, TIM_CCx_ENABLE);
   }
   
-  /* ½ø¸ø×Ü²½Êı¼õ1 */
+  /* è¿›ç»™æ€»æ­¥æ•°å‡1 */
   circular_para.endpoint_pulse--;
   
-  /* ÅĞ¶ÏÊÇ·ñÍê³É²å²¹ */
+  /* åˆ¤æ–­æ˜¯å¦å®Œæˆæ’è¡¥ */
   if(circular_para.endpoint_pulse == 0)
   {
-    /* ¹Ø±Õ¶¨Ê±Æ÷ */
+    /* å…³é—­å®šæ—¶å™¨ */
     TIM_CCxChannelCmd(htim->Instance, step_motor[last_axis].pul_channel, TIM_CCx_DISABLE);
     TIM_CCxChannelCmd(htim->Instance, step_motor[circular_para.active_axis].pul_channel, TIM_CCx_DISABLE);
     __HAL_TIM_MOE_DISABLE(htim);
@@ -372,10 +372,10 @@ void CircularInterpolation_Handler(TIM_HandleTypeDef *htim)
 }
 
 /**
-  * @brief  ¶¨Ê±Æ÷ÖĞ¶Ï»Øµ÷º¯Êı
-  * @param  htim£º¶¨Ê±Æ÷¾ä±úÖ¸Õë
-	*	@note   Ö±Ïß²å²¹ºÍÔ²»¡²å²¹¹²ÓÃÒ»¸ö»Øµ÷º¯Êı
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨ä¸­æ–­å›è°ƒå‡½æ•°
+  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„æŒ‡é’ˆ
+	*	@note   ç›´çº¿æ’è¡¥å’Œåœ†å¼§æ’è¡¥å…±ç”¨ä¸€ä¸ªå›è°ƒå‡½æ•°
+  * @retval æ— 
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {

@@ -3,30 +3,30 @@
 
 #include "stm32f4xx.h"
 
-// ADC ĞòºÅºê¶¨Òå
+// ADC åºå·å®å®šä¹‰
 #define TEMP_ADC                        ADC3
 #define TEMP_ADC_CLK_ENABLE()           __ADC3_CLK_ENABLE()
 
 #define ADC_VBUS_IRQ                    ADC_IRQn
 #define ADC_VBUS_IRQHandler             ADC_IRQHandler
 
-#define VREF                            3.3f     // ²Î¿¼µçÑ¹£¬ÀíÂÛÉÏÊÇ3.3
-#define ADC_NUM_MAX                     128      // ADC ×ª»»½á¹û»º³åÇø×î´óÖµ
+#define VREF                            3.3f     // å‚è€ƒç”µå‹ï¼Œç†è®ºä¸Šæ˜¯3.3
+#define ADC_NUM_MAX                     128      // ADC è½¬æ¢ç»“æœç¼“å†²åŒºæœ€å¤§å€¼
 
-#define GET_ADC_VDC_VAL(val)            ((float)val/4096.0f*VREF)          // µÃµ½µçÑ¹Öµ
+#define GET_ADC_VDC_VAL(val)            ((float)val/4096.0f*VREF)          // å¾—åˆ°ç”µå‹å€¼
   
-/*********************** ÎÂ¶È´«¸ĞÆ÷µçÑ¹²É¼¯ ******************/
-// ADC GPIO ºê¶¨Òå
+/*********************** æ¸©åº¦ä¼ æ„Ÿå™¨ç”µå‹é‡‡é›† ******************/
+// ADC GPIO å®å®šä¹‰
 #define TEMP_ADC_GPIO_PORT              GPIOF
 #define TEMP_ADC_GPIO_PIN               GPIO_PIN_10
 #define TEMP_ADC_GPIO_CLK_ENABLE()      __GPIOB_CLK_ENABLE()
 
 #define TEMP_ADC_CHANNEL                ADC_CHANNEL_8
 
-// ADC DR¼Ä´æÆ÷ºê¶¨Òå£¬ADC×ª»»ºóµÄÊı×ÖÖµÔò´æ·ÅÔÚÕâÀï
+// ADC DRå¯„å­˜å™¨å®å®šä¹‰ï¼ŒADCè½¬æ¢åçš„æ•°å­—å€¼åˆ™å­˜æ”¾åœ¨è¿™é‡Œ
 #define TEMP_ADC_DR_ADDR                ((uint32_t)ADC1+0x4c)
 
-// ADC DMA Í¨µÀºê¶¨Òå£¬ÕâÀïÎÒÃÇÊ¹ÓÃDMA´«Êä
+// ADC DMA é€šé“å®å®šä¹‰ï¼Œè¿™é‡Œæˆ‘ä»¬ä½¿ç”¨DMAä¼ è¾“
 #define TEMP_ADC_DMA_CLK_ENABLE()       __DMA2_CLK_ENABLE()
 #define TEMP_ADC_DMA_CHANNEL            DMA_CHANNEL_2
 #define TEMP_ADC_DMA_STREAM             DMA2_Stream0
@@ -34,7 +34,7 @@
 #define ADC_DMA_IRQ                     DMA2_Stream0_IRQn
 #define ADC_DMA_IRQ_Handler             DMA2_Stream0_IRQHandler
 
-/*********************** µçÔ´µçÑ¹²É¼¯ ******************/
+/*********************** ç”µæºç”µå‹é‡‡é›† ******************/
 
 #define VBUS_GPIO_PORT                  GPIOF
 #define VBUS_GPIO_PIN                   GPIO_PIN_9
@@ -42,7 +42,7 @@
 
 #define VBUS_ADC_CHANNEL                ADC_CHANNEL_7
 
-#define GET_VBUS_VAL(val)               (((float)val - 1.24f) * 37.0f)      // »ñÈ¡µçÑ¹Öµ£¨²âÁ¿µçÑ¹ÊÇµçÔ´µçÑ¹µÄ1/37£©
+#define GET_VBUS_VAL(val)               (((float)val - 1.24f) * 37.0f)      // è·å–ç”µå‹å€¼ï¼ˆæµ‹é‡ç”µå‹æ˜¯ç”µæºç”µå‹çš„1/37ï¼‰
 
 extern DMA_HandleTypeDef DMA_Init_Handle;
 extern ADC_HandleTypeDef ADC_Handle;

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   GPIOÄ£Äâ·½²¨¿ØÖÆ²½½øµç»ú
+  * @brief   GPIOæ¨¡æ‹Ÿæ–¹æ³¢æ§åˆ¶æ­¥è¿›ç”µæœº
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,9 +24,9 @@
 #include "./key/bsp_key.h" 
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
@@ -35,41 +35,41 @@ int main(void)
   int dir_val=0;
   int angle_val=90;
   
-  /* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+  /* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
   SystemClock_Config();
-  /*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+  /*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
   DEBUG_USART_Config();
-  printf("»¶Ó­Ê¹ÓÃÒ°»ğ µç»ú¿ª·¢°å ²½½øµç»ú IO¿ÚÄ£Äâ¿ØÖÆ Àı³Ì\r\n");
-  printf("°´ÏÂ°´¼ü2¿ÉĞŞ¸ÄĞı×ª·½Ïò¡¢°´ÏÂ°´¼ü3¿ÉĞŞ¸ÄĞı×ª½Ç¶È\r\n");
-  /*°´¼ü³õÊ¼»¯*/
+  printf("æ¬¢è¿ä½¿ç”¨é‡ç« ç”µæœºå¼€å‘æ¿ æ­¥è¿›ç”µæœº IOå£æ¨¡æ‹Ÿæ§åˆ¶ ä¾‹ç¨‹\r\n");
+  printf("æŒ‰ä¸‹æŒ‰é”®2å¯ä¿®æ”¹æ—‹è½¬æ–¹å‘ã€æŒ‰ä¸‹æŒ‰é”®3å¯ä¿®æ”¹æ—‹è½¬è§’åº¦\r\n");
+  /*æŒ‰é”®åˆå§‹åŒ–*/
   Key_GPIO_Config();
-  /*²½½øµç»ú³õÊ¼»¯*/
+  /*æ­¥è¿›ç”µæœºåˆå§‹åŒ–*/
   stepper_Init();
-  /*¿ªÆô²½½øµç»úÊ¹ÄÜ*/
+  /*å¼€å¯æ­¥è¿›ç”µæœºä½¿èƒ½*/
   while(1)
   {     
     if( Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON  )
     {
-      /*¸Ä±ä·½Ïò*/
+      /*æ”¹å˜æ–¹å‘*/
       dir_val=(++i % 2) ? CW : CCW;
       MOTOR_DIR(dir_val);
       key_val = ON;
     }
     if( Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON  )
     {
-      /*¸Ä±ä½Ç¶È*/
+      /*æ”¹å˜è§’åº¦*/
       angle_val=angle_val+90;
       key_val = ON;
     }
     if( key_val == ON  )
     {
-      /*´òÓ¡×´Ì¬*/
+      /*æ‰“å°çŠ¶æ€*/
       if(dir_val)
-        printf("Ë³Ê±ÕëĞı×ª %d ¶È,",angle_val);
+        printf("é¡ºæ—¶é’ˆæ—‹è½¬ %d åº¦,",angle_val);
       else
-        printf("ÄæÊ±ÕëĞı×ª %d ¶È,",angle_val);
+        printf("é€†æ—¶é’ˆæ—‹è½¬ %d åº¦,",angle_val);
       
-      printf("ÕıÔÚÔËĞĞÖĞ......\r\n");
+      printf("æ­£åœ¨è¿è¡Œä¸­......\r\n");
       stepper_turn(1000,angle_val,32,dir_val);
       key_val = OFF;
     }

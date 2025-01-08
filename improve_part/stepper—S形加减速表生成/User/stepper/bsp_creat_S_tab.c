@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   S�Ӽ������ɱ�
+  * @brief   S加减速生成表
   ******************************************************************************
   * @attention
   *
-  * ʵ��ƽ̨:Ұ��  STM32 F407 ������ 
-  * ��̳    :http://www.firebbs.cn
-  * �Ա�    :http://firestm32.taobao.com
+  * 实验平台:野火  STM32 F407 开发板 
+  * 论坛    :http://www.firebbs.cn
+  * 淘宝    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -18,11 +18,11 @@
 
 /*
 
-��������õ�����ѧ�ȱ��ٵ���ѧģ�ͣ������ٶ�Ҳ��
+在这里采用的是数学匀变速的数学模型，但是速度也并
 
-�������ٱ仯�ģ�����׼ȷ��˵�Ǽ��ٶȵ��ȱ���ѧģ�͡�
+不是匀速变化的，所以准确的说是加速度的匀变数学模型。
 
-a-t �������� ��V-t���� �뿴 �ĵ���
+a-t 曲线如下 （V-t曲线 请看 文档）
 
 	| 
  a|   /|\             
@@ -31,21 +31,21 @@ a-t �������� ��V-t���� �뿴 �ĵ���
 	|/___|___\_t 		
 	0   t/2
 		
-���Ͼ��Ǽ��ٶȵ��ȱ�ģ�ͣ�Ĭ�ϳ�ʼ�ļ��ٶ�Ϊ0��
+以上就是加速度的匀变模型（默认初始的加速度为0）
 
-��ô�������ģ�;ͺ����׿������һЩ��Ϊ��֪�����ܣ�����
+那么有了这个模型就很容易可以算出一些不为人知的秘密！！！
 
-�����������ϵ�ģ�;Ϳ������ÿһʱ�̵ļ��ٶȣ������ȿ� 
+首先有了以上的模型就可以算出每一时刻的加速度，所以先看 
 
-0~t/2 ��� a=K*T ������KΪ���ٶ�a��б��
+0~t/2 这段 a=K*T ，其中K为加速度a的斜率
 
-�����ٶȻ��־����ٶȣ����� V = a dt = K*T dt
+将加速度积分就是速度，所以 V = a dt = K*T dt
 
-�ã� V = K*T^2/2
+得： V = K*T^2/2
 
-���ٶȻ��־���λ�ƣ����� S = V dt = K*T^2/2 dt 
+将速度积分就是位移，所以 S = V dt = K*T^2/2 dt 
 
-�ã� S = K*T^3/6
+得： S = K*T^3/6
 
 */
 
@@ -54,68 +54,68 @@ uint8_t print_flag=0;
 
 
 /**
-  * @brief  ������ٱ�
-  * @param  Vo  ��ʼ�ٶ�
-  * @param  Vt	tʱ�̵��ٶ�
-  * @param  T	�������ʱ��
-  *	@note 		��
-  * @retval ��
+  * @brief  计算加速表
+  * @param  Vo  初始速度
+  * @param  Vt	t时刻的速度
+  * @param  T	加速完成时间
+  *	@note 		无
+  * @retval 无
   */
 
 void CalculateSpeedTab(int Vo, int Vt, float T)
 {
 	int32_t i = 0;
 
-	int32_t Vm =0;      // �м���ٶ�
-	float K = 0;   		// �Ӽ��ٶ� ���ٶȵ�б��
-	float Tn = 0;     	// Tnʱ��
-	float DeltaV = 0; 	// ÿһʱ�̵��ٶ�
-	float TimeDel = 0;	// ʱ����
+	int32_t Vm =0;      // 中间点速度
+	float K = 0;   		// 加加速度 加速度的斜率
+	float Tn = 0;     	// Tn时刻
+	float DeltaV = 0; 	// 每一时刻的速度
+	float TimeDel = 0;	// 时间间隔
 
-	Speed.Vo = CONVER(Vo);    // ����:Step/s
-	Speed.Vt = CONVER(Vt);    // ĩ��:Step/s
+	Speed.Vo = CONVER(Vo);    // 起速:Step/s
+	Speed.Vt = CONVER(Vt);    // 末速:Step/s
 	
-	T = T / 2;						//�Ӽ��ٶε�ʱ�䣨���ٶ�б��>0��ʱ�䣩
+	T = T / 2;						//加加速段的时间（加速度斜率>0的时间）
 	
-	Vm = (Speed.Vo + Speed.Vt) / 2;	//�����е���ٶ�
+	Vm = (Speed.Vo + Speed.Vt) / 2;	//计算中点的速度
 	
-	K = ( ( 2 * ((Vm) - (Speed.Vo)) ) / pow((T),2) );// �����е��ٶȼ���Ӽ��ٶ�
+	K = ( ( 2 * ((Vm) - (Speed.Vo)) ) / pow((T),2) );// 根据中点速度计算加加速度
 	
-	Speed.AccelHalfStep  = (int)( ( (K) * pow( (T) ,3) ) / 6 );// �Ӽ�����Ҫ�Ĳ���
+	Speed.AccelHalfStep  = (int)( ( (K) * pow( (T) ,3) ) / 6 );// 加加速需要的步数
 	
-	/* �����ڴ�ռ����ٶȱ� */
-	Speed.AccelHalfStep  = abs(Speed.AccelHalfStep ); // ���ټ����ʱ���ֹ���ָ���
-	if( Speed.AccelHalfStep  % 2 != 0)     // ���ڸ���������ת�����������ݴ��������,���������1
+	/* 申请内存空间存放速度表 */
+	Speed.AccelHalfStep  = abs(Speed.AccelHalfStep ); // 减速计算的时候防止出现负数
+	if( Speed.AccelHalfStep  % 2 != 0)     // 由于浮点型数据转换成整形数据带来了误差,所以这里加1
 	{
 		Speed.AccelHalfStep  += 1;
 	}
-	Speed.AccelTotalStep = Speed.AccelHalfStep * 2;           // ���ٶεĲ���
+	Speed.AccelTotalStep = Speed.AccelHalfStep * 2;           // 加速段的步数
 	
 	if(FORM_LEN<Speed.AccelTotalStep)
 	{
-		printf("FORM_LEN ���泤�Ȳ���\r\n,�뽫 FORM_LEN �޸�Ϊ %d \r\n",Speed.AccelTotalStep);
+		printf("FORM_LEN 缓存长度不足\r\n,请将 FORM_LEN 修改为 %d \r\n",Speed.AccelTotalStep);
 		return ;
 	}
 	  
-	/* Ŀ����ٶ������Ƕ�ʱ��ķ���,��ʱ���벽����Ӧ�������ڴ˽�ʱ��ֳ�
-		�벽����Ӧ�ķ���,���Ҽ���� ,�����Ϳ��Լ������Ӧ���ٶ�*/
+	/* 目标的速度曲线是对时间的方程,将时间与步数对应，所以在此将时间分成
+		与步数对应的份数,并且计算出 ,这样就可以计算出相应的速度*/
 	TimeDel = T / Speed.AccelHalfStep;
 
 	for(i = 0; i <= Speed.AccelHalfStep; i++)
 	{
-		Tn = i * TimeDel;						// ��i��ʱ�̵�Tn
-		DeltaV = 0.5f * K * pow(Tn,2);        	// ��Tnʱ������Ӧ���ٶ�  dv = 1/2 * K * t^2;
-		Speed.Form[i] = Speed.Vo + DeltaV;		// �õ�ÿһʱ�̶�Ӧ���ٶ�,���ڿ��ǵ����ٶȲ�Ϊ0�������������Vo������
+		Tn = i * TimeDel;						// 第i个时刻的Tn
+		DeltaV = 0.5f * K * pow(Tn,2);        	// 在Tn时刻所对应的速度  dv = 1/2 * K * t^2;
+		Speed.Form[i] = Speed.Vo + DeltaV;		// 得到每一时刻对应的速度,由于考虑到初速度不为0的情况，所以与Vo相加求和
 																				
-		Speed.Form [ Speed.AccelTotalStep - i] = Speed.Vt - DeltaV ;        // �Ӽ��ٹ���������������ĶԳ�,����ֱ����������ٶ�
-																			// �����ٹ��̶ԳƵ���ٶ�
+		Speed.Form [ Speed.AccelTotalStep - i] = Speed.Vt - DeltaV ;        // 加加速过程与减加速是中心对称,可以直接求出后半段速度
+																			// 减加速过程对称点的速度
 	}
-	/* ����ٶȱ����� */
+	/* 输出速度表内容 */
 	for(i = 0; i <= Speed.AccelTotalStep ; i++)
 	{
 		printf("i,%.3f;speed,%.3f\n",(float)i,Speed.Form[i]);	
 	}
-	/* ��ձ� */
+	/* 清空表 */
 	memset(Speed.Form,0,FORM_LEN*sizeof(float));
 }
 

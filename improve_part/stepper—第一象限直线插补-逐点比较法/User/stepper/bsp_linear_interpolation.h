@@ -4,19 +4,19 @@
 #include "stm32f4xx_hal.h"
 #include "./stepper/bsp_stepper_init.h"
 
-/* ×ø±êÖáÃ¶¾Ù */
+/* åæ ‡è½´æšä¸¾ */
 typedef enum{
   x_axis = 0U,
   y_axis
 }Axis_TypeDef;
 
-/* Ö±Ïß²å²¹²ÎÊı½á¹¹Ìå */
+/* ç›´çº¿æ’è¡¥å‚æ•°ç»“æ„ä½“ */
 typedef struct{
-  __IO uint32_t endpoint_x;           //ÖÕµã×ø±êX
-  __IO uint32_t endpoint_y;           //ÖÕµã×ø±êY
-  __IO uint32_t endpoint_pulse;       //µ½´ïÖÕµãÎ»ÖÃĞèÒªµÄÂö³åÊı
-  __IO uint32_t active_axis;          //µ±Ç°ÔË¶¯µÄÖá
-  __IO int32_t deviation;             //Æ«²î²ÎÊı
+  __IO uint32_t endpoint_x;           //ç»ˆç‚¹åæ ‡X
+  __IO uint32_t endpoint_y;           //ç»ˆç‚¹åæ ‡Y
+  __IO uint32_t endpoint_pulse;       //åˆ°è¾¾ç»ˆç‚¹ä½ç½®éœ€è¦çš„è„‰å†²æ•°
+  __IO uint32_t active_axis;          //å½“å‰è¿åŠ¨çš„è½´
+  __IO int32_t deviation;             //åå·®å‚æ•°
 }LinearInterpolation_TypeDef;
 
 #define F       32

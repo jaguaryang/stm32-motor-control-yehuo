@@ -188,7 +188,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(htim==(&TIM_TimeBaseStructure))
     {
-        LED1_TOGGLE;  //ºìµÆÖÜÆÚÉÁË¸
+        LED1_TOGGLE;  //çº¢ç¯å‘¨æœŸé—ªçƒ
     }
 }
 /**

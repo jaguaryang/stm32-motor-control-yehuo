@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2016-xx-xx
-  * @brief   Ê¹ÓÃ´®¿Ú1£¬ÖØ¶¨Ïòc¿âprintfº¯Êýµ½usart¶Ë¿Ú£¬ÖÐ¶Ï½ÓÊÕÄ£Ê½
+  * @brief   ä½¿ç”¨ä¸²å£1ï¼Œé‡å®šå‘cåº“printfå‡½æ•°åˆ°usartç«¯å£ï¼Œä¸­æ–­æŽ¥æ”¶æ¨¡å¼
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ð STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®žéªŒå¹³å°:é‡Žç« STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -19,19 +19,19 @@
 
 UART_HandleTypeDef UartHandle;
 
-//´®¿Ú½ÓÊÕÊý×é
+//ä¸²å£æŽ¥æ”¶æ•°ç»„
 unsigned char UART_RxBuffer[UART_RX_BUFFER_SIZE];
-//´®¿Ú½ÓÊÕÊý×éÖ¸Õë
+//ä¸²å£æŽ¥æ”¶æ•°ç»„æŒ‡é’ˆ
 unsigned char UART_RxPtr;
-/* ÃüÁî½ÓÊÕÍê³É */
+/* å‘½ä»¤æŽ¥æ”¶å®Œæˆ */
 uint8_t receive_cmd = 0;
 
 static unsigned char data;
 
  /**
-  * @brief  DEBUG_USART GPIO ÅäÖÃ,¹¤×÷Ä£Ê½ÅäÖÃ¡£115200 8-N-1
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  DEBUG_USART GPIO é…ç½®,å·¥ä½œæ¨¡å¼é…ç½®ã€‚115200 8-N-1
+  * @param  æ— 
+  * @retval æ— 
   */  
 void DEBUG_USART_Config(void)
 { 
@@ -47,16 +47,16 @@ void DEBUG_USART_Config(void)
   
   HAL_UART_Init(&UartHandle);
     
-  /*Ê¹ÄÜ´®¿Ú½ÓÊÕ¶Ï */
+  /*ä½¿èƒ½ä¸²å£æŽ¥æ”¶æ–­ */
   __HAL_UART_ENABLE_IT(&UartHandle, USART_IT_RXNE);
 //  HAL_USART_Receive_IT(&UartHandle, &data, sizeof(data));
 }
 
 
 /**
-  * @brief UART MSP ³õÊ¼»¯ 
+  * @brief UART MSP åˆå§‹åŒ– 
   * @param huart: UART handle
-  * @retval ÎÞ
+  * @retval æ— 
   */
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {  
@@ -71,7 +71,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   PA9     ------> USART1_TX
   PA10    ------> USART1_RX 
   */
-  /* ÅäÖÃTxÒý½ÅÎª¸´ÓÃ¹¦ÄÜ  */
+  /* é…ç½®Txå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½  */
   GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -79,16 +79,16 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
   HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
   
-  /* ÅäÖÃRxÒý½ÅÎª¸´ÓÃ¹¦ÄÜ */
+  /* é…ç½®Rxå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½ */
   GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
   GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
   HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct); 
  
-  HAL_NVIC_SetPriority(DEBUG_USART_IRQ ,5,0);	//ÇÀÕ¼ÓÅÏÈ¼¶0£¬×ÓÓÅÏÈ¼¶1
-  HAL_NVIC_EnableIRQ(DEBUG_USART_IRQ );		    //Ê¹ÄÜUSART1ÖÐ¶ÏÍ¨µÀ  
+  HAL_NVIC_SetPriority(DEBUG_USART_IRQ ,5,0);	//æŠ¢å ä¼˜å…ˆçº§0ï¼Œå­ä¼˜å…ˆçº§1
+  HAL_NVIC_EnableIRQ(DEBUG_USART_IRQ );		    //ä½¿èƒ½USART1ä¸­æ–­é€šé“  
 }
 
-//Çå¿Õ½ÓÊÕ»º³å
+//æ¸…ç©ºæŽ¥æ”¶ç¼“å†²
 void uart_FlushRxBuffer(void)
 {
   UART_RxPtr = 0;
@@ -99,10 +99,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 //	if(__HAL_UART_GET_IT_SOURCE(&UartHandle, UART_IT_RXNE) != RESET)
 //	{
-//    //Èç¹ûÎªÍË¸ñ¼ü
+//    //å¦‚æžœä¸ºé€€æ ¼é”®
 //    if(data == '\b')
 //    {
-//      //Èç¹ûÖ¸Õë²»ÔÚÊý×éµÄ¿ªÊ¼Î»ÖÃ
+//      //å¦‚æžœæŒ‡é’ˆä¸åœ¨æ•°ç»„çš„å¼€å§‹ä½ç½®
 //      if(UART_RxPtr)
 //      {
 //        Usart_SendByte('\b');
@@ -112,11 +112,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //        UART_RxBuffer[UART_RxPtr]=0x00;
 //      }
 //    }
-//    //Èç¹û²»ÊÇÍË¸ñ¼ü
+//    //å¦‚æžœä¸æ˜¯é€€æ ¼é”®
 //    else
 //    {
-//      //½«Êý¾ÝÌîÈëÊý×éUART_RxBuffer
-//      //²¢ÇÒ½«ºóÃæµÄÒ»¸öÔªËØÇåÁãÈç¹ûÊý×éÂúÁËÔòÐ´Èë×îºóÒ»¸öÔªËØÎªÖ¹
+//      //å°†æ•°æ®å¡«å…¥æ•°ç»„UART_RxBuffer
+//      //å¹¶ä¸”å°†åŽé¢çš„ä¸€ä¸ªå…ƒç´ æ¸…é›¶å¦‚æžœæ•°ç»„æ»¡äº†åˆ™å†™å…¥æœ€åŽä¸€ä¸ªå…ƒç´ ä¸ºæ­¢
 //      if(UART_RxPtr < (UART_RX_BUFFER_SIZE - 1))
 //      {
 //        UART_RxBuffer[UART_RxPtr] = data;
@@ -128,7 +128,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //        UART_RxBuffer[UART_RxPtr - 1] = data;
 //        Usart_SendByte('\b');
 //      }
-//      //Èç¹ûÎª»Ø³µ¼ü£¬Ôò¿ªÊ¼´¦Àí´®¿ÚÊý¾Ý
+//      //å¦‚æžœä¸ºå›žè½¦é”®ï¼Œåˆ™å¼€å§‹å¤„ç†ä¸²å£æ•°æ®
 //      if(data == 13 || data == 10)
 //      {
 //        receive_cmd = 1;
@@ -143,13 +143,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //  HAL_USART_Receive_IT(&UartHandle, &data, sizeof(data));
 }
 
-/*****************  ·¢ËÍ×Ö·û **********************/
+/*****************  å‘é€å­—ç¬¦ **********************/
 void Usart_SendByte(uint8_t str)
 {
   HAL_UART_Transmit(&UartHandle, &str, 1, 1000);
 }
 
-/*****************  ·¢ËÍ×Ö·û´® **********************/
+/*****************  å‘é€å­—ç¬¦ä¸² **********************/
 void Usart_SendString(uint8_t *str)
 {
 	unsigned int k=0;
@@ -160,16 +160,16 @@ void Usart_SendString(uint8_t *str)
   } while(*(str + k)!='\0');
 }
 
-///ÖØ¶¨Ïòc¿âº¯Êýprintfµ½´®¿ÚDEBUG_USART£¬ÖØ¶¨Ïòºó¿ÉÊ¹ÓÃprintfº¯Êý
+///é‡å®šå‘cåº“å‡½æ•°printfåˆ°ä¸²å£DEBUG_USARTï¼Œé‡å®šå‘åŽå¯ä½¿ç”¨printfå‡½æ•°
 int fputc(int ch, FILE *f)
 {
-	/* ·¢ËÍÒ»¸ö×Ö½ÚÊý¾Ýµ½´®¿ÚDEBUG_USART */
+	/* å‘é€ä¸€ä¸ªå­—èŠ‚æ•°æ®åˆ°ä¸²å£DEBUG_USART */
 	HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 1000);	
 	
 	return (ch);
 }
 
-///ÖØ¶¨Ïòc¿âº¯Êýscanfµ½´®¿ÚDEBUG_USART£¬ÖØÐ´Ïòºó¿ÉÊ¹ÓÃscanf¡¢getcharµÈº¯Êý
+///é‡å®šå‘cåº“å‡½æ•°scanfåˆ°ä¸²å£DEBUG_USARTï¼Œé‡å†™å‘åŽå¯ä½¿ç”¨scanfã€getcharç­‰å‡½æ•°
 int fgetc(FILE *f)
 {
 		

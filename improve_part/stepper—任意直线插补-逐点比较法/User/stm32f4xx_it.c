@@ -167,9 +167,9 @@ void SysTick_Handler(void)
 
 
 /**
-  * @brief  ¶¨Ê±Æ÷ÖĞ¶Ï·şÎñº¯Êı
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
+	*	@note   æ— 
+  * @retval æ— 
   */
 void MOTOR_PUL_IRQHandler(void)
 {

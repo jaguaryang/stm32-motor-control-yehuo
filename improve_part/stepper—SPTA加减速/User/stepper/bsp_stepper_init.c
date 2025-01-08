@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ²½½øµç»ú³õÊ¼»¯
+  * @brief   æ­¥è¿›ç”µæœºåˆå§‹åŒ–
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -19,43 +19,43 @@
 TIM_HandleTypeDef TIM_StepperHandle = {0};
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Stepper_GPIO_Config(void) 
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
-	/*¿ªÆôMotorÏà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+	/*å¼€å¯Motorç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
 	MOTOR_DIR_GPIO_CLK_ENABLE();
 	MOTOR_PUL_GPIO_CLK_ENABLE();
 	MOTOR_EN_GPIO_CLK_ENABLE();
 
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/															   
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/															   
 	GPIO_InitStruct.Pin = MOTOR_DIR_PIN;	
-	/*ÉèÖÃÒı½ÅµÄÊä³öÀàĞÍÎªÍÆÍìÊä³ö*/
+	/*è®¾ç½®å¼•è„šçš„è¾“å‡ºç±»å‹ä¸ºæ¨æŒ½è¾“å‡º*/
 	GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;  
 	GPIO_InitStruct.Pull =GPIO_NOPULL;
-	/*ÉèÖÃÒı½ÅËÙÂÊÎª¸ßËÙ */   
+	/*è®¾ç½®å¼•è„šé€Ÿç‡ä¸ºé«˜é€Ÿ */   
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*Motor ·½ÏòÒı½Å ³õÊ¼»¯*/
+	/*Motor æ–¹å‘å¼•è„š åˆå§‹åŒ–*/
 	HAL_GPIO_Init(MOTOR_DIR_GPIO_PORT, &GPIO_InitStruct);	
   HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT, MOTOR_DIR_PIN, GPIO_PIN_SET);
-	/*Motor Ê¹ÄÜÒı½Å ³õÊ¼»¯*/
+	/*Motor ä½¿èƒ½å¼•è„š åˆå§‹åŒ–*/
 	GPIO_InitStruct.Pin = MOTOR_EN_PIN;	
 	HAL_GPIO_Init(MOTOR_EN_GPIO_PORT, &GPIO_InitStruct);	
 
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = MOTOR_PUL_PIN;
-	/*Motor Âö³åÒı½Å ³õÊ¼»¯*/
+	/*Motor è„‰å†²å¼•è„š åˆå§‹åŒ–*/
 	HAL_GPIO_Init(MOTOR_PUL_GPIO_PORT, &GPIO_InitStruct);			
   HAL_GPIO_WritePin(MOTOR_PUL_GPIO_PORT, MOTOR_PUL_PIN, GPIO_PIN_RESET);
 }
 
 /**
-  * @brief  ÅäÖÃ²½½øµç»úµÄTIM
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®æ­¥è¿›ç”µæœºçš„TIM
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Stepper_TIM_Init(void)
 {
@@ -68,43 +68,43 @@ static void Stepper_TIM_Init(void)
   TIM_StepperHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   HAL_TIM_Base_Init(&TIM_StepperHandle);
 
-  /* ¹Ø±ÕÃ»ÓĞÓÃµ½µÄÖĞ¶Ï */
+  /* å…³é—­æ²¡æœ‰ç”¨åˆ°çš„ä¸­æ–­ */
   __HAL_TIM_DISABLE_IT(&TIM_StepperHandle,TIM_IT_CC1|TIM_IT_CC2|TIM_IT_CC3|TIM_IT_CC4|
                                           TIM_IT_COM|TIM_IT_TRIGGER|TIM_IT_BREAK);
-  /* ÇåÁãÖĞ¶Ï±êÖ¾Î» */
+  /* æ¸…é›¶ä¸­æ–­æ ‡å¿—ä½ */
   __HAL_TIM_CLEAR_IT(&TIM_StepperHandle,TIM_IT_UPDATE);
-  /* Ê¹ÄÜ¶¨Ê±Æ÷µÄ¸üĞÂÊÂ¼şÖĞ¶Ï */
+  /* ä½¿èƒ½å®šæ—¶å™¨çš„æ›´æ–°äº‹ä»¶ä¸­æ–­ */
   __HAL_TIM_ENABLE_IT(&TIM_StepperHandle,TIM_IT_UPDATE);
-  /* ÉèÖÃ¸üĞÂÊÂ¼şÇëÇóÔ´Îª£º¼ÆÊıÆ÷Òç³ö */
+  /* è®¾ç½®æ›´æ–°äº‹ä»¶è¯·æ±‚æºä¸ºï¼šè®¡æ•°å™¨æº¢å‡º */
   __HAL_TIM_URS_ENABLE(&TIM_StepperHandle);
   
-  /* ¹Ø±Õ¶¨Ê±Æ÷ */
+  /* å…³é—­å®šæ—¶å™¨ */
   HAL_TIM_Base_Stop_IT(&TIM_StepperHandle);
 }
 
 /**
-  * @brief  ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Stepper_NVIC_Init(void)
 {
-  /* ÍâÉèÖĞ¶ÏÅäÖÃ */
+  /* å¤–è®¾ä¸­æ–­é…ç½® */
   HAL_NVIC_SetPriority(MOTOR_TIM_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(MOTOR_TIM_IRQn);
 }
 
 /**
-  * @brief  ²½½øµç»ú³õÊ¼»¯
-  * @retval ÎŞ
+  * @brief  æ­¥è¿›ç”µæœºåˆå§‹åŒ–
+  * @retval æ— 
   */
 void stepper_Init()
 {
-	/* µç»úIOÅäÖÃ */
+	/* ç”µæœºIOé…ç½® */
 	Stepper_GPIO_Config();
-  /* µç»ú¶¨Ê±Æ÷³õÊ¼»¯ */
+  /* ç”µæœºå®šæ—¶å™¨åˆå§‹åŒ– */
   Stepper_TIM_Init();
-  /* ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ */
+  /* ä¸­æ–­ä¼˜å…ˆçº§é…ç½® */
   Stepper_NVIC_Init();
 }
 

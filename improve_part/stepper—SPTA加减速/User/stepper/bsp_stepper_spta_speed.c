@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ²½½øµç»úSPTA¼Ó¼õËÙËã·¨
+  * @brief   æ­¥è¿›ç”µæœºSPTAåŠ å‡é€Ÿç®—æ³•
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -19,24 +19,24 @@
 
 SPTAData_Typedef spta_data = {0};
 
-/**  @brief Æô¶¯spta¼Ó¼õËÙ
-  *  @param steps£ºÒÆ¶¯µÄ²½Êı£¬²»¿¼ÂÇÏ¸·ÖµÄÕû²½Êı¡£ÕıÊıÎªË³Ê±Õë£¬¸ºÊıÎªÄæÊ±Õë¡£
-  *  @param speed_lim£º×î´óËÙ¶ÈÏŞÖÆ£¬ÆäÖµ´óĞ¡¾ö¶¨sptaµÄËÙ¶ÈÇúÏßÂÖÀªÎªÈı½ÇÂÖÀª»òÌİĞÎÂÖÀª
-  *  @param accel£º¼ÓËÙ¶ÈÊıÖµ
+/**  @brief å¯åŠ¨sptaåŠ å‡é€Ÿ
+  *  @param stepsï¼šç§»åŠ¨çš„æ­¥æ•°ï¼Œä¸è€ƒè™‘ç»†åˆ†çš„æ•´æ­¥æ•°ã€‚æ­£æ•°ä¸ºé¡ºæ—¶é’ˆï¼Œè´Ÿæ•°ä¸ºé€†æ—¶é’ˆã€‚
+  *  @param speed_limï¼šæœ€å¤§é€Ÿåº¦é™åˆ¶ï¼Œå…¶å€¼å¤§å°å†³å®šsptaçš„é€Ÿåº¦æ›²çº¿è½®å»“ä¸ºä¸‰è§’è½®å»“æˆ–æ¢¯å½¢è½®å»“
+  *  @param accelï¼šåŠ é€Ÿåº¦æ•°å€¼
   */
 void Stepper_Move_SPTA(int32_t steps, uint32_t speed_lim, uint32_t accel)
 {
   SPTAData_Typedef *pspta = &spta_data;
   
-  /* ÅĞ¶ÏÊÇ·ñÕıÔÚ¼Ó¼õËÙ */
+  /* åˆ¤æ–­æ˜¯å¦æ­£åœ¨åŠ å‡é€Ÿ */
   if(pspta->step_state != IDLE)
     return;
   
-  /* ÅĞ¶Ï·½Ïò */
+  /* åˆ¤æ–­æ–¹å‘ */
   (steps < 0) ? MOTOR_DIR(CCW) : MOTOR_DIR(CW);
   steps = abs(steps);
   
-  /* SPTAÔËĞĞ²ÎÊı³õÊ¼»¯ */
+  /* SPTAè¿è¡Œå‚æ•°åˆå§‹åŒ– */
   pspta->steps_required = steps * MICRO_STEP;
   pspta->steps_middle = pspta->steps_required >> 1;
 
@@ -45,65 +45,65 @@ void Stepper_Move_SPTA(int32_t steps, uint32_t speed_lim, uint32_t accel)
 
   pspta->step_state = ACCELERATING;
 
-  /* Æô¶¯¶¨Ê±Æ÷ */
+  /* å¯åŠ¨å®šæ—¶å™¨ */
   HAL_TIM_Base_Start_IT(&TIM_StepperHandle);
 }
 
 /**
-  * @brief  sptaËÙ¶È¾ö²ß
-  * @param  *pspta£ºsptaÊı¾İ½á¹¹ÌåÖ¸Õë
-  * @retval ÎŞ
+  * @brief  sptaé€Ÿåº¦å†³ç­–
+  * @param  *psptaï¼šsptaæ•°æ®ç»“æ„ä½“æŒ‡é’ˆ
+  * @retval æ— 
   */
 void SPTA_Speed_Decision(SPTAData_Typedef *pspta)
 {
-  /* À­µÍÂö³åĞÅºÅ */
+  /* æ‹‰ä½è„‰å†²ä¿¡å· */
   MOTOR_PUL(LOW);
 
-  /* ËÙ¶ÈÖµÀÛ¼Óµ½²½ÊıÀÛ¼ÓÆ÷ */
+  /* é€Ÿåº¦å€¼ç´¯åŠ åˆ°æ­¥æ•°ç´¯åŠ å™¨ */
   pspta->step_accumulator += pspta->step_speed;
   
-  /* ²½ÊıÀÛ¼ÓÆ÷ÊÇ·ñÒç³ö */
+  /* æ­¥æ•°ç´¯åŠ å™¨æ˜¯å¦æº¢å‡º */
   if((pspta->step_accumulator >> 17) == 1)
   {
-    /* Òç³ö±êÖ¾ÇåÁã */
+    /* æº¢å‡ºæ ‡å¿—æ¸…é›¶ */
     pspta->step_accumulator &= ~(1 << 17);
-    /* ÒÑ×ß²½Êı+1 */
+    /* å·²èµ°æ­¥æ•°+1 */
     pspta->steps_taken++;
-    /* À­¸ßÂö³åĞÅºÅ²úÉúÒ»¸ö²½½øÂö³å */
+    /* æ‹‰é«˜è„‰å†²ä¿¡å·äº§ç”Ÿä¸€ä¸ªæ­¥è¿›è„‰å†² */
     MOTOR_PUL(HIGH);
   }
 
-  /* ¸ù¾İµç»úµÄ×´Ì¬½øĞĞ×´Ì¬×ª»»ÒÔ¼°²ÎÊı¼ÆËã */
+  /* æ ¹æ®ç”µæœºçš„çŠ¶æ€è¿›è¡ŒçŠ¶æ€è½¬æ¢ä»¥åŠå‚æ•°è®¡ç®— */
   switch (pspta->step_state)
   {
-    /* SPTA¼ÓËÙ×´Ì¬ */
+    /* SPTAåŠ é€ŸçŠ¶æ€ */
     case ACCELERATING:
-      /* ÊÇ·ñ´ïµ½×î´óËÙ¶ÈÏŞÖÆ*/
+      /* æ˜¯å¦è¾¾åˆ°æœ€å¤§é€Ÿåº¦é™åˆ¶*/
       if(pspta->step_speed >= pspta->speed_lim)
       {
-        /* ´ïµ½×î´óËÙ¶È */
+        /* è¾¾åˆ°æœ€å¤§é€Ÿåº¦ */
         pspta->step_speed = pspta->speed_lim;
-        /* ´ËÊ±×ß¹ıµÄ²½Êı¼ÇÎª¼ÓËÙ½×¶ÎµÄ²½Êı */
+        /* æ­¤æ—¶èµ°è¿‡çš„æ­¥æ•°è®°ä¸ºåŠ é€Ÿé˜¶æ®µçš„æ­¥æ•° */
         pspta->steps_acced = pspta->steps_taken;
-        /* ×ªÎªÔÈËÙ×´Ì¬ */
+        /* è½¬ä¸ºåŒ€é€ŸçŠ¶æ€ */
         pspta->step_state = UNIFORM;
         break;
       }
       
-      /* ¼ÓËÙ¶ÈÖµ¼Óµ½ËÙ¶ÈÀÛ¼ÓÆ÷ */
+      /* åŠ é€Ÿåº¦å€¼åŠ åˆ°é€Ÿåº¦ç´¯åŠ å™¨ */
       pspta->speed_accumulator += pspta->acceleration;
-      /* ËÙ¶ÈÀÛ¼ÓÆ÷ÊÇ·ñÒç³ö */
+      /* é€Ÿåº¦ç´¯åŠ å™¨æ˜¯å¦æº¢å‡º */
       if((pspta->speed_accumulator >> 17) == 1)
       {
-        /* Òç³ö±êÖ¾ÇåÁã */
+        /* æº¢å‡ºæ ‡å¿—æ¸…é›¶ */
         pspta->speed_accumulator &= ~(1 << 17);
-        /* ¼ÓËÙ½×¶Î£¬ËÙ¶ÈÀÛ¼ÓÆ÷Òç³ö£¬ÔòËÙ¶ÈÖµµİÔö */
+        /* åŠ é€Ÿé˜¶æ®µï¼Œé€Ÿåº¦ç´¯åŠ å™¨æº¢å‡ºï¼Œåˆ™é€Ÿåº¦å€¼é€’å¢ */
         pspta->step_speed++;
       }
       
       if(pspta->steps_middle != 0)
       {
-        /* Èç¹ûÒÑ¾­ÔËĞĞµÄ²½Êı¡İÖĞµã²½Êı£¬Ôò¿ªÊ¼¼õËÙ */
+        /* å¦‚æœå·²ç»è¿è¡Œçš„æ­¥æ•°â‰¥ä¸­ç‚¹æ­¥æ•°ï¼Œåˆ™å¼€å§‹å‡é€Ÿ */
         if (pspta->steps_taken >= pspta->steps_middle)
         {
           pspta->step_state = DECELERATING;
@@ -111,49 +111,49 @@ void SPTA_Speed_Decision(SPTAData_Typedef *pspta)
       }
       else if(pspta->steps_taken > 0)
       {
-        /* Ö»ÔËĞĞÒ»²½£¬Ö±½Ó±äÎª¼õËÙ×´Ì¬ */
+        /* åªè¿è¡Œä¸€æ­¥ï¼Œç›´æ¥å˜ä¸ºå‡é€ŸçŠ¶æ€ */
         pspta->step_state = DECELERATING;
       }
       break;
-    /* SPTAÔÈËÙ×´Ì¬ */
+    /* SPTAåŒ€é€ŸçŠ¶æ€ */
     case UNIFORM:
-      /* ÔÈËÙÔËĞĞ½×¶Î£¬µ±Ê£Óà²½Êı¡Ü¼ÓËÙ½×¶Î²½Êı£¬Ôò¿ªÊ¼¼õËÙ */
+      /* åŒ€é€Ÿè¿è¡Œé˜¶æ®µï¼Œå½“å‰©ä½™æ­¥æ•°â‰¤åŠ é€Ÿé˜¶æ®µæ­¥æ•°ï¼Œåˆ™å¼€å§‹å‡é€Ÿ */
       if ((pspta->steps_required - pspta->steps_taken) <= pspta->steps_acced)
       {
         pspta->step_state = DECELERATING;
       }
       break;
-    /* SPTA¼õËÙ×´Ì¬ */
+    /* SPTAå‡é€ŸçŠ¶æ€ */
     case DECELERATING:
-      /* µ½´ïÉè¶¨µÄ²½ÊıÖ®ºóÍ£Ö¹ÔËĞĞ */
+      /* åˆ°è¾¾è®¾å®šçš„æ­¥æ•°ä¹‹ååœæ­¢è¿è¡Œ */
       if(pspta->steps_taken >= pspta->steps_required)
       {
-        /* ×ªÎª¿ÕÏĞ×´Ì¬ */
+        /* è½¬ä¸ºç©ºé—²çŠ¶æ€ */
         pspta->step_state = IDLE;
         break;
       }
       
-      /* ¼ÓËÙ¶ÈÖµ¼Óµ½ËÙ¶ÈÀÛ¼ÓÆ÷ */
+      /* åŠ é€Ÿåº¦å€¼åŠ åˆ°é€Ÿåº¦ç´¯åŠ å™¨ */
       pspta->speed_accumulator += pspta->acceleration;
-      /* ËÙ¶ÈÀÛ¼ÓÆ÷ÊÇ·ñÒç³ö */
+      /* é€Ÿåº¦ç´¯åŠ å™¨æ˜¯å¦æº¢å‡º */
       if((pspta->speed_accumulator >> 17) == 1)
       {
-        /* Òç³ö±êÖ¾ÇåÁã */
+        /* æº¢å‡ºæ ‡å¿—æ¸…é›¶ */
         pspta->speed_accumulator &= ~(1 << 17);
-        /* ¼õËÙ½×¶Î£¬ËÙ¶ÈÀÛ¼ÓÆ÷Òç³ö£¬ËÙ¶ÈÖµµİ¼õ */
+        /* å‡é€Ÿé˜¶æ®µï¼Œé€Ÿåº¦ç´¯åŠ å™¨æº¢å‡ºï¼Œé€Ÿåº¦å€¼é€’å‡ */
         pspta->step_speed--;
       }
       break;
-    /* SPTA¿ÕÏĞ×´Ì¬ */
+    /* SPTAç©ºé—²çŠ¶æ€ */
     case IDLE:
-      /* ÇåÁãsptaÏà¹ØÊı¾İ */
+      /* æ¸…é›¶sptaç›¸å…³æ•°æ® */
       pspta->speed_lim = 0;
       pspta->step_accumulator = 0;
       pspta->speed_accumulator = 0;
       pspta->steps_acced = 0;
       pspta->step_speed = 0;
       pspta->steps_taken = 0;
-      /* ¹Ø±Õ¶¨Ê±Æ÷ */
+      /* å…³é—­å®šæ—¶å™¨ */
       HAL_TIM_Base_Stop_IT(&TIM_StepperHandle);
       break;
     default:

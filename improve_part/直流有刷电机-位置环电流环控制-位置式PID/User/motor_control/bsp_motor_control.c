@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   µç»ú¿ØÖÆ½Ó¿Ú
+  * @brief   ç”µæœºæ§åˆ¶æ¥å£
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -23,94 +23,94 @@
 #include <math.h>
 #include <stdlib.h>
 
-static motor_dir_t direction  = MOTOR_FWD;     // ¼ÇÂ¼·½Ïò
-static uint16_t    dutyfactor = 0;             // ¼ÇÂ¼Õ¼¿Õ±È
-uint8_t    is_motor_en = 0;             // µç»úÊ¹ÄÜ
+static motor_dir_t direction  = MOTOR_FWD;     // è®°å½•æ–¹å‘
+static uint16_t    dutyfactor = 0;             // è®°å½•å ç©ºæ¯”
+uint8_t    is_motor_en = 0;             // ç”µæœºä½¿èƒ½
 
-#define TARGET_CURRENT_MAX    130    // Ä¿±êµçÁ÷µÄ×î´óÖµ mA
+#define TARGET_CURRENT_MAX    130    // ç›®æ ‡ç”µæµçš„æœ€å¤§å€¼ mA
 
 static void sd_gpio_config(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒı½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	SHUTDOWN_GPIO_CLK_ENABLE();
   
-  /* Òı½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàĞÍ*/
+  /* å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»å‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	/*ÉèÖÃÒı½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = SHUTDOWN_PIN;
   
-	/*µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(SHUTDOWN_GPIO_PORT, &GPIO_InitStruct);
 }
 
 /**
-  * @brief  µç»ú³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 void motor_init(void)
 {
-  Motor_TIMx_Configuration();     // ³õÊ¼»¯µç»ú 1
+  Motor_TIMx_Configuration();     // åˆå§‹åŒ–ç”µæœº 1
   sd_gpio_config();
 }
 
 /**
-  * @brief  ÉèÖÃµç»úËÙ¶È
-  * @param  v: ËÙ¶È£¨Õ¼¿Õ±È£©
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºé€Ÿåº¦
+  * @param  v: é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰
+  * @retval æ— 
   */
 void set_motor_speed(uint16_t v)
 {
-  v = (v > PWM_PERIOD_COUNT) ? PWM_PERIOD_COUNT : v;     // ÉÏÏŞ´¦Àí
+  v = (v > PWM_PERIOD_COUNT) ? PWM_PERIOD_COUNT : v;     // ä¸Šé™å¤„ç†
   
   dutyfactor = v;
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  ÉèÖÃµç»ú·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºæ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_direction(motor_dir_t dir)
 {
   direction = dir;
   
-//  SET_FWD_COMPAER(0);     // ÉèÖÃËÙ¶ÈÎª 0
-//  SET_REV_COMPAER(0);     // ÉèÖÃËÙ¶ÈÎª 0
+//  SET_FWD_COMPAER(0);     // è®¾ç½®é€Ÿåº¦ä¸º 0
+//  SET_REV_COMPAER(0);     // è®¾ç½®é€Ÿåº¦ä¸º 0
 
-//  HAL_Delay(200);         // ÑÓÊ±Ò»»á
+//  HAL_Delay(200);         // å»¶æ—¶ä¸€ä¼š
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(0);              // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_FWD_COMPAER(0);              // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
   
 }
 
 /**
-  * @brief  Ê¹ÄÜµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä½¿èƒ½ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_enable(void)
 {
@@ -121,9 +121,9 @@ void set_motor_enable(void)
 }
 
 /**
-  * @brief  ½ûÓÃµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¦ç”¨ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_disable(void)
 {
@@ -134,28 +134,28 @@ void set_motor_disable(void)
 }
 
 /**
-  * @brief  µç»úÎ»ÖÃÊ½ PID ¿ØÖÆÊµÏÖ(¶¨Ê±µ÷ÓÃ)
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºä½ç½®å¼ PID æ§åˆ¶å®ç°(å®šæ—¶è°ƒç”¨)
+  * @param  æ— 
+  * @retval æ— 
   */
 void motor_pid_control(void)
 {
-  static uint32_t location_timer = 0;         // Î»ÖÃ»·ÖÜÆÚ
-  int32_t actual_current = get_curr_val();    // ¶ÁÈ¡µ±Ç°µçÁ÷Öµ
+  static uint32_t location_timer = 0;         // ä½ç½®ç¯å‘¨æœŸ
+  int32_t actual_current = get_curr_val();    // è¯»å–å½“å‰ç”µæµå€¼
   
-  if (is_motor_en == 1)                  // µç»úÔÚÊ¹ÄÜ×´Ì¬ÏÂ²Å½øĞĞ¿ØÖÆ´¦Àí
+  if (is_motor_en == 1)                  // ç”µæœºåœ¨ä½¿èƒ½çŠ¶æ€ä¸‹æ‰è¿›è¡Œæ§åˆ¶å¤„ç†
   {
-    static int32_t Capture_Count = 0;    // µ±Ç°Ê±¿Ì×Ü¼ÆÊıÖµ
-    float cont_val = 0;                  // µ±Ç°¿ØÖÆÖµ
+    static int32_t Capture_Count = 0;    // å½“å‰æ—¶åˆ»æ€»è®¡æ•°å€¼
+    float cont_val = 0;                  // å½“å‰æ§åˆ¶å€¼
     
-    /* µ±Ç°Ê±¿Ì×Ü¼ÆÊıÖµ = ¼ÆÊıÆ÷Öµ + ¼ÆÊıÒç³ö´ÎÊı * ENCODER_TIM_PERIOD  */
+    /* å½“å‰æ—¶åˆ»æ€»è®¡æ•°å€¼ = è®¡æ•°å™¨å€¼ + è®¡æ•°æº¢å‡ºæ¬¡æ•° * ENCODER_TIM_PERIOD  */
     Capture_Count = __HAL_TIM_GET_COUNTER(&TIM_EncoderHandle) + (Encoder_Overflow_Count * ENCODER_TIM_PERIOD);
     
     if (location_timer++%2 == 0)
     {
-      cont_val = location_pid_realize(&pid_location, Capture_Count);    // ½øĞĞ PID ¼ÆËã
+      cont_val = location_pid_realize(&pid_location, Capture_Count);    // è¿›è¡Œ PID è®¡ç®—
 
-      if (cont_val > 0)    // ÅĞ¶Ïµç»ú·½Ïò
+      if (cont_val > 0)    // åˆ¤æ–­ç”µæœºæ–¹å‘
       {
         set_motor_direction(MOTOR_FWD);
       }
@@ -165,41 +165,41 @@ void motor_pid_control(void)
         set_motor_direction(MOTOR_REV);
       }
       
-      cont_val = (cont_val > TARGET_CURRENT_MAX) ? TARGET_CURRENT_MAX : cont_val;    // µçÁ÷ÉÏÏŞ´¦Àí
-      set_pid_target(&pid_curr, cont_val);    // Éè¶¨ËÙ¶ÈµÄÄ¿±êÖµ
+      cont_val = (cont_val > TARGET_CURRENT_MAX) ? TARGET_CURRENT_MAX : cont_val;    // ç”µæµä¸Šé™å¤„ç†
+      set_pid_target(&pid_curr, cont_val);    // è®¾å®šé€Ÿåº¦çš„ç›®æ ‡å€¼
       
     #if defined(PID_ASSISTANT_EN)
       int32_t temp = cont_val;
-      set_computer_value(SEND_TARGET_CMD, CURVES_CH2, &temp, 1);     // ¸øÍ¨µÀ 2 ·¢ËÍÄ¿±êÖµ
+      set_computer_value(SEND_TARGET_CMD, CURVES_CH2, &temp, 1);     // ç»™é€šé“ 2 å‘é€ç›®æ ‡å€¼
     #endif
     }
     
-    cont_val = curr_pid_realize(&pid_curr, actual_current);    // ½øĞĞ PID ¼ÆËã
+    cont_val = curr_pid_realize(&pid_curr, actual_current);    // è¿›è¡Œ PID è®¡ç®—
     
     if (cont_val < 0)
     {
-      cont_val = 0;    // ÏÂÏŞ´¦Àí
+      cont_val = 0;    // ä¸‹é™å¤„ç†
     }
     else if (cont_val > PWM_MAX_PERIOD_COUNT)
     {
-      cont_val = PWM_MAX_PERIOD_COUNT;    // ËÙ¶ÈÉÏÏŞ´¦Àí
+      cont_val = PWM_MAX_PERIOD_COUNT;    // é€Ÿåº¦ä¸Šé™å¤„ç†
     }
 
-    set_motor_speed(cont_val);                                                 // ÉèÖÃ PWM Õ¼¿Õ±È
+    set_motor_speed(cont_val);                                                 // è®¾ç½® PWM å ç©ºæ¯”
     
   #if defined(PID_ASSISTANT_EN)
-    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &Capture_Count,  1);          // ¸øÍ¨µÀ 1 ·¢ËÍÊµ¼ÊÖµ
-//    set_computer_value(SEND_FACT_CMD, CURVES_CH2, &actual_current, 1);         // ¸øÍ¨µÀ 2 ·¢ËÍÊµ¼ÊÖµ
+    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &Capture_Count,  1);          // ç»™é€šé“ 1 å‘é€å®é™…å€¼
+//    set_computer_value(SEND_FACT_CMD, CURVES_CH2, &actual_current, 1);         // ç»™é€šé“ 2 å‘é€å®é™…å€¼
   #else
-    printf("Êµ¼ÊÖµ£º%d. Ä¿±êÖµ£º%.0f. ²îÖµ£º%.0f. ¿ØÖÆÖµ£º%.0f\n", Capture_Count, get_pid_target(&pid_location), (float)Capture_Count - get_pid_target(&pid_location), cont_val);      // ´òÓ¡Êµ¼ÊÖµºÍÄ¿±êÖµ
+    printf("å®é™…å€¼ï¼š%d. ç›®æ ‡å€¼ï¼š%.0f. å·®å€¼ï¼š%.0f. æ§åˆ¶å€¼ï¼š%.0f\n", Capture_Count, get_pid_target(&pid_location), (float)Capture_Count - get_pid_target(&pid_location), cont_val);      // æ‰“å°å®é™…å€¼å’Œç›®æ ‡å€¼
   #endif
   }
 }
 
 ///**
-//  * @brief  ¶¨Ê±Æ÷Ã¿100ms²úÉúÒ»´ÎÖĞ¶Ï»Øµ÷º¯Êı
-//  * @param  htim£º¶¨Ê±Æ÷¾ä±ú
-//  * @retval ÎŞ
+//  * @brief  å®šæ—¶å™¨æ¯100msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­å›è°ƒå‡½æ•°
+//  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„
+//  * @retval æ— 
 //  */
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //{

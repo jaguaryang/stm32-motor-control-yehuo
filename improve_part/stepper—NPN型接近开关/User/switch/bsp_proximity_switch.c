@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ½Ó½ü¿ª¹ØÖĞ¶ÏÓ¦ÓÃbsp
+  * @brief   æ¥è¿‘å¼€å…³ä¸­æ–­åº”ç”¨bsp
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -19,7 +19,7 @@
 #include "./led/bsp_led.h"
 #include "./usart/bsp_debug_usart.h"
 
-/* ½Ó½ü¿ª¹ØÊı×é£¬¿ÉÓÃÀ´Ôö¼õ½Ó½ü¿ª¹ØµÄÊıÁ¿ */
+/* æ¥è¿‘å¼€å…³æ•°ç»„ï¼Œå¯ç”¨æ¥å¢å‡æ¥è¿‘å¼€å…³çš„æ•°é‡ */
 ProximitySwitch_TypeDef proximity_switch[4] = 
 {
   {SWITCH1_INT_GPIO_PORT, SWITCH1_INT_GPIO_PIN, GPIO_MODE_IT_FALLING, SWITCH1_INT_EXTI_IRQ},
@@ -29,15 +29,15 @@ ProximitySwitch_TypeDef proximity_switch[4] =
 };
 
  /**
-  * @brief  ÅäÖÃ½Ó½ü¿ª¹ØIO¿Ú£¬²¢ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®æ¥è¿‘å¼€å…³IOå£ï¼Œå¹¶è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§
+  * @param  æ— 
+  * @retval æ— 
   */
 void ProximitySwitch_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure; 
   
-  /*¿ªÆô°´¼üGPIO¿ÚµÄÊ±ÖÓ*/
+  /*å¼€å¯æŒ‰é”®GPIOå£çš„æ—¶é’Ÿ*/
   SWITCH1_INT_GPIO_CLK_ENABLE();
   SWITCH2_INT_GPIO_CLK_ENABLE();
   SWITCH3_INT_GPIO_CLK_ENABLE();
@@ -47,26 +47,26 @@ void ProximitySwitch_Config(void)
 
   for(uint8_t i = 0; i < size; i++)
   {
-    /* Ñ¡Ôñ½Ó½ü¿ª¹ØµÄÒı½Å */ 
+    /* é€‰æ‹©æ¥è¿‘å¼€å…³çš„å¼•è„š */ 
     GPIO_InitStructure.Pin = proximity_switch[i].pin;
-    /* ÉèÖÃÒı½ÅÎªÏÂ½µÑØ´¥·¢Ä£Ê½ */ 
+    /* è®¾ç½®å¼•è„šä¸ºä¸‹é™æ²¿è§¦å‘æ¨¡å¼ */ 
     GPIO_InitStructure.Mode = proximity_switch[i].gpio_mode;
-    /* ÉèÖÃÒı½Å²»ÉÏÀ­Ò²²»ÏÂÀ­ */
+    /* è®¾ç½®å¼•è„šä¸ä¸Šæ‹‰ä¹Ÿä¸ä¸‹æ‹‰ */
     GPIO_InitStructure.Pull = GPIO_NOPULL;
-    /* Ê¹ÓÃÉÏÃæµÄ½á¹¹Ìå³õÊ¼»¯Òı½Å */
+    /* ä½¿ç”¨ä¸Šé¢çš„ç»“æ„ä½“åˆå§‹åŒ–å¼•è„š */
     HAL_GPIO_Init(proximity_switch[i].port, &GPIO_InitStructure);
     
-    /* ÅäÖÃ EXTI ÖĞ¶ÏÔ´ µ½Òı½Å¡¢ÅäÖÃÖĞ¶ÏÓÅÏÈ¼¶*/
+    /* é…ç½® EXTI ä¸­æ–­æº åˆ°å¼•è„šã€é…ç½®ä¸­æ–­ä¼˜å…ˆçº§*/
     HAL_NVIC_SetPriority(proximity_switch[i].IRQn, 1, 1);
-    /* Ê¹ÄÜÖĞ¶Ï */
+    /* ä½¿èƒ½ä¸­æ–­ */
     HAL_NVIC_EnableIRQ(proximity_switch[i].IRQn);
   }
 }
 
 /**
-  * @brief  Íâ²¿ÖĞ¶Ï»Øµ÷º¯Êı
-  * @param  GPIO_Pin£º´¥·¢Íâ²¿ÖĞ¶ÏµÄIOÒı½Å
-  * @retval ÎŞ
+  * @brief  å¤–éƒ¨ä¸­æ–­å›è°ƒå‡½æ•°
+  * @param  GPIO_Pinï¼šè§¦å‘å¤–éƒ¨ä¸­æ–­çš„IOå¼•è„š
+  * @retval æ— 
   */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -74,19 +74,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   {
     case SWITCH1_INT_GPIO_PIN:
       LED1_TOGGLE;
-      printf("½Ó½ü¿ª¹Ø1ÒÔ´¥·¢\r\n");
+      printf("æ¥è¿‘å¼€å…³1ä»¥è§¦å‘\r\n");
       break;
     case SWITCH2_INT_GPIO_PIN:
       LED2_TOGGLE;
-      printf("½Ó½ü¿ª¹Ø2ÒÔ´¥·¢\r\n");
+      printf("æ¥è¿‘å¼€å…³2ä»¥è§¦å‘\r\n");
       break;
     case SWITCH3_INT_GPIO_PIN:
       LED3_TOGGLE;
-      printf("½Ó½ü¿ª¹Ø3ÒÔ´¥·¢\r\n");
+      printf("æ¥è¿‘å¼€å…³3ä»¥è§¦å‘\r\n");
       break;
     case SWITCH4_INT_GPIO_PIN:
       LED4_TOGGLE;
-      printf("½Ó½ü¿ª¹Ø4ÒÔ´¥·¢\r\n");
+      printf("æ¥è¿‘å¼€å…³4ä»¥è§¦å‘\r\n");
       break;
     default:
       break;

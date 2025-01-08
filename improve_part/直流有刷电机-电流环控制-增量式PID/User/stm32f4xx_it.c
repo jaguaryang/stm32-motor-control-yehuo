@@ -180,7 +180,7 @@ void SysTick_Handler(void)
 {
 }*/
 
-// 串口中断服务函数
+// 涓插彛涓柇鏈嶅姟鍑芥暟
 
 void DEBUG_USART_IRQHandler(void)
 {

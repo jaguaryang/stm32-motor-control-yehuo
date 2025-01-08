@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÓĞË¢µç»ú-Î»ÖÃ»·ËÙ¶È»·¿ØÖÆ-Î»ÖÃÊ½PID
+  * @brief   ç›´æµæœ‰åˆ·ç”µæœº-ä½ç½®ç¯é€Ÿåº¦ç¯æ§åˆ¶-ä½ç½®å¼PID
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -28,94 +28,94 @@
 #include "./pid/bsp_pid.h"
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void)
 {
   int32_t target_location = PER_CYCLE_PULSES;
   
-  /* HAL ¿â³õÊ¼»¯ */
+  /* HAL åº“åˆå§‹åŒ– */
   HAL_Init();
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼ü GPIO */
+	/* åˆå§‹åŒ–æŒ‰é”® GPIO */
 	Key_GPIO_Config();
   
-  /* ³õÊ¼»¯ LED */
+  /* åˆå§‹åŒ– LED */
   LED_GPIO_Config();
   
-  /* Ğ­Òé³õÊ¼»¯ */
+  /* åè®®åˆå§‹åŒ– */
   protocol_init();
   
-  /* ³õÊ¼»¯´®¿Ú */
+  /* åˆå§‹åŒ–ä¸²å£ */
   DEBUG_USART_Config();
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   motor_init();
   
-	set_motor_disable();     // Í£Ö¹µç»ú 
+	set_motor_disable();     // åœæ­¢ç”µæœº 
   
-  /* ±àÂëÆ÷½Ó¿Ú³õÊ¼»¯ */
+  /* ç¼–ç å™¨æ¥å£åˆå§‹åŒ– */
 	Encoder_Init();
   
-  /* ³õÊ¼»¯»ù±¾¶¨Ê±Æ÷£¬ÓÃÓÚ´¦Àí¶¨Ê±ÈÎÎñ */
+  /* åˆå§‹åŒ–åŸºæœ¬å®šæ—¶å™¨ï¼Œç”¨äºå¤„ç†å®šæ—¶ä»»åŠ¡ */
   TIMx_Configuration();
   
-  /* PID ²ÎÊı³õÊ¼»¯ */
+  /* PID å‚æ•°åˆå§‹åŒ– */
   PID_param_init();
   
 #if defined(PID_ASSISTANT_EN)
-  set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);    // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
-  set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &target_location, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+  set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);    // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
+  set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &target_location, 1);     // ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
 #endif
 
 	while(1)
 	{
-    /* ½ÓÊÕÊı¾İ´¦Àí */
+    /* æ¥æ”¶æ•°æ®å¤„ç† */
     receiving_process();
     
-    /* É¨ÃèKEY1 */
+    /* æ‰«æKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
     #if defined(PID_ASSISTANT_EN) 
-      set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);               // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+      set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);               // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
     #endif
-      set_pid_target(&pid_location, target_location);    // ÉèÖÃÄ¿±êÖµ
-      set_motor_enable();              // Ê¹ÄÜµç»ú
+      set_pid_target(&pid_location, target_location);    // è®¾ç½®ç›®æ ‡å€¼
+      set_motor_enable();              // ä½¿èƒ½ç”µæœº
     }
     
-    /* É¨ÃèKEY2 */
+    /* æ‰«æKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
-      set_motor_disable();     // Í£Ö¹µç»ú
-      set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);               // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+      set_motor_disable();     // åœæ­¢ç”µæœº
+      set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);               // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
     }
     
-    /* É¨ÃèKEY3 */
+    /* æ‰«æKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* Ôö´óÄ¿±êËÙ¶È */
+      /* å¢å¤§ç›®æ ‡é€Ÿåº¦ */
       target_location += PER_CYCLE_PULSES;
       
       set_pid_target(&pid_location, target_location);
     #if defined(PID_ASSISTANT_EN)
-      set_computer_value(SEND_TARGET_CMD, CURVES_CH1,  &target_location, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+      set_computer_value(SEND_TARGET_CMD, CURVES_CH1,  &target_location, 1);     // ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
     #endif
     }
 
-    /* É¨ÃèKEY4 */
+    /* æ‰«æKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
-      /* ¼õĞ¡Ä¿±êËÙ¶È */
+      /* å‡å°ç›®æ ‡é€Ÿåº¦ */
       target_location -= PER_CYCLE_PULSES;
       
       set_pid_target(&pid_location, target_location);
     #if defined(PID_ASSISTANT_EN)
-      set_computer_value(SEND_TARGET_CMD, CURVES_CH1,  &target_location, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+      set_computer_value(SEND_TARGET_CMD, CURVES_CH1,  &target_location, 1);     // ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
     #endif
     }
 	}

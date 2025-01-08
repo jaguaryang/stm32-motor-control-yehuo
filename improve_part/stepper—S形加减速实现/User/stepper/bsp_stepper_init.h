@@ -4,24 +4,24 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 
-/*ºê¶¨Òå*/
+/*å®å®šä¹‰*/
 /*******************************************************/
-//ºê¶¨Òå¶ÔÓ¦¿ª·¢°åµÄ½Ó¿Ú 1 ¡¢2 ¡¢3 ¡¢4
+//å®å®šä¹‰å¯¹åº”å¼€å‘æ¿çš„æ¥å£ 1 ã€2 ã€3 ã€4
 #define CHANNEL_SW 1
 
 #if(CHANNEL_SW == 1)
 
-//Motor ·½Ïò 
+//Motor æ–¹å‘ 
 #define MOTOR_DIR_PIN                  	GPIO_PIN_1   
 #define MOTOR_DIR_GPIO_PORT            	GPIOE                    
 #define MOTOR_DIR_GPIO_CLK_ENABLE()   	__HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ 
+//Motor ä½¿èƒ½ 
 #define MOTOR_EN_PIN                  	GPIO_PIN_0
 #define MOTOR_EN_GPIO_PORT            	GPIOE                       
 #define MOTOR_EN_GPIO_CLK_ENABLE()    	__HAL_RCC_GPIOE_CLK_ENABLE()
 	
-//Motor Âö³å
+//Motor è„‰å†²
 #define MOTOR_PUL_IRQn                  TIM8_CC_IRQn
 #define MOTOR_PUL_IRQHandler            TIM8_CC_IRQHandler
 
@@ -44,17 +44,17 @@
 
 #elif(CHANNEL_SW == 2)
 
-//Motor ·½Ïò 
+//Motor æ–¹å‘ 
 #define MOTOR_DIR_PIN                  	GPIO_PIN_8
 #define MOTOR_DIR_GPIO_PORT            	GPIOI          
 #define MOTOR_DIR_GPIO_CLK_ENABLE()   	__HAL_RCC_GPIOI_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ 
+//Motor ä½¿èƒ½ 
 #define MOTOR_EN_PIN                  	GPIO_PIN_4
 #define MOTOR_EN_GPIO_PORT            	GPIOE                       
 #define MOTOR_EN_GPIO_CLK_ENABLE()    	__HAL_RCC_GPIOE_CLK_ENABLE()
 	
-//Motor Âö³å
+//Motor è„‰å†²
 #define MOTOR_PUL_IRQn                  TIM8_CC_IRQn
 #define MOTOR_PUL_IRQHandler            TIM8_CC_IRQHandler
 
@@ -73,17 +73,17 @@
 
 #elif(CHANNEL_SW == 3)
 
-//Motor ·½Ïò 
+//Motor æ–¹å‘ 
 #define MOTOR_DIR_PIN                  	GPIO_PIN_11
 #define MOTOR_DIR_GPIO_PORT            	GPIOI          
 #define MOTOR_DIR_GPIO_CLK_ENABLE()   	__HAL_RCC_GPIOI_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ 
+//Motor ä½¿èƒ½ 
 #define MOTOR_EN_PIN                  	GPIO_PIN_10
 #define MOTOR_EN_GPIO_PORT            	GPIOI                 
 #define MOTOR_EN_GPIO_CLK_ENABLE()    	__HAL_RCC_GPIOI_CLK_ENABLE()
 	
-//Motor Âö³å
+//Motor è„‰å†²
 #define MOTOR_PUL_IRQn                  TIM8_CC_IRQn
 #define MOTOR_PUL_IRQHandler            TIM8_CC_IRQHandler
 
@@ -102,17 +102,17 @@
 
 #elif(CHANNEL_SW == 4)
 
-//Motor ·½Ïò 
+//Motor æ–¹å‘ 
 #define MOTOR_DIR_PIN                  	GPIO_PIN_2
 #define MOTOR_DIR_GPIO_PORT            	GPIOF
 #define MOTOR_DIR_GPIO_CLK_ENABLE()   	__HAL_RCC_GPIOF_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ 
+//Motor ä½¿èƒ½ 
 #define MOTOR_EN_PIN                  	GPIO_PIN_1
 #define MOTOR_EN_GPIO_PORT            	GPIOF       
 #define MOTOR_EN_GPIO_CLK_ENABLE()    	__HAL_RCC_GPIOF_CLK_ENABLE()
 	
-//Motor Âö³å
+//Motor è„‰å†²
 #define MOTOR_PUL_IRQn                  TIM8_CC_IRQn
 #define MOTOR_PUL_IRQHandler            TIM8_CC_IRQHandler
 
@@ -136,22 +136,22 @@
 
 /****************************************************************/
 
-#define HIGH 1		//¸ßµçÆ½
-#define LOW  0		//µÍµçÆ½
+#define HIGH 1		//é«˜ç”µå¹³
+#define LOW  0		//ä½ç”µå¹³
 
-#define ON  0			//¿ª
-#define OFF !0			//¹Ø
+#define ON  0			//å¼€
+#define OFF !0			//å…³
 
-#define CLOCKWISE 			1//Ë³Ê±Õë
-#define ANTI_CLOCKWISE	0//ÄæÊ±Õë
+#define CLOCKWISE 			1//é¡ºæ—¶é’ˆ
+#define ANTI_CLOCKWISE	0//é€†æ—¶é’ˆ
 
-//Êä³ö±È½ÏÄ£Ê½ÖÜÆÚÉèÖÃÎª0xFFFF
+//è¾“å‡ºæ¯”è¾ƒæ¨¡å¼å‘¨æœŸè®¾ç½®ä¸º0xFFFF
 #define TIM_PERIOD                   0xFFFF
 
-//¿ØÖÆÊ¹ÄÜÒı½Å
-#define	GPIO_H(p,i)					{p->BSRR=i;}			  								//ÉèÖÃÎª¸ßµçÆ½		
-#define GPIO_L(p,i)					{p->BSRR=(uint32_t)i << 16;}				//Êä³öµÍµçÆ½
-#define GPIO_T(p,i)					{p->ODR ^=i;}												//Êä³ö·´×ª×´Ì¬
+//æ§åˆ¶ä½¿èƒ½å¼•è„š
+#define	GPIO_H(p,i)					{p->BSRR=i;}			  								//è®¾ç½®ä¸ºé«˜ç”µå¹³		
+#define GPIO_L(p,i)					{p->BSRR=(uint32_t)i << 16;}				//è¾“å‡ºä½ç”µå¹³
+#define GPIO_T(p,i)					{p->ODR ^=i;}												//è¾“å‡ºåè½¬çŠ¶æ€
 
 #define MOTOR_EN(x)					if(x)																			\
 														{GPIO_H(MOTOR_EN_GPIO_PORT,MOTOR_EN_PIN);}\
@@ -173,7 +173,7 @@
 	
 
 
-//º¯ÊıÒÔ¼°±äÁ¿ÉùÃ÷
+//å‡½æ•°ä»¥åŠå˜é‡å£°æ˜
 extern TIM_HandleTypeDef TIM_TimeBaseStructure;
 void stepper_Init(void);
 void stepper_start_run(void);

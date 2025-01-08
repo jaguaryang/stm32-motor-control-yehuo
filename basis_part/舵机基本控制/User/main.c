@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2017-xx-xx
-  * @brief   GPIOÊä³ö--Ê¹ÓÃ¹Ì¼ş¿âµãÁÁLEDµÆ
+  * @brief   GPIOè¾“å‡º--ä½¿ç”¨å›ºä»¶åº“ç‚¹äº®LEDç¯
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -27,60 +27,60 @@ int pulse_num=0;
 
 __IO uint16_t ChannelPulse = 0.5/20.0*PWM_PERIOD_COUNT;
 	
-void Delay(__IO uint32_t nCount)	 //¼òµ¥µÄÑÓÊ±º¯Êı
+void Delay(__IO uint32_t nCount)	 //ç®€å•çš„å»¶æ—¶å‡½æ•°
 {
 	for(; nCount != 0; nCount--);
 }	
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-  /* HAL ¿â³õÊ¼»¯ */
+  /* HAL åº“åˆå§‹åŒ– */
   HAL_Init();
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
   
-  /* ³õÊ¼»¯´®¿Ú */
+  /* åˆå§‹åŒ–ä¸²å£ */
   DEBUG_USART_Config();
 
-  /* Í¨ÓÃ¶¨Ê±Æ÷³õÊ¼»¯²¢ÅäÖÃPWMÊä³ö¹¦ÄÜ */
+  /* é€šç”¨å®šæ—¶å™¨åˆå§‹åŒ–å¹¶é…ç½®PWMè¾“å‡ºåŠŸèƒ½ */
   TIMx_Configuration();
   
-  printf("Ò°»ğ¶æ»ú¿ØÖÆÊµÑé\r\n");
+  printf("é‡ç«èˆµæœºæ§åˆ¶å®éªŒ\r\n");
 
   show_help();
 	
 	while(1)
 	{
-    /* ´¦ÀíÊı¾İ */
+    /* å¤„ç†æ•°æ® */
     if (Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      ChannelPulse -= 10;    // ¼õÉÙÕ¼¿Õ±È
+      ChannelPulse -= 10;    // å‡å°‘å ç©ºæ¯”
       
-      ChannelPulse = 0.5/20.0*PWM_PERIOD_COUNT > ChannelPulse ? 0.5/20.0*PWM_PERIOD_COUNT : ChannelPulse;    // ¼ì²éÕ¼¿Õ±ÈµÄºÏ·¨ĞÔ
+      ChannelPulse = 0.5/20.0*PWM_PERIOD_COUNT > ChannelPulse ? 0.5/20.0*PWM_PERIOD_COUNT : ChannelPulse;    // æ£€æŸ¥å ç©ºæ¯”çš„åˆæ³•æ€§
       
-      set_steering_gear_dutyfactor(ChannelPulse);    // ÉèÖÃÕ¼¿Õ±È
+      set_steering_gear_dutyfactor(ChannelPulse);    // è®¾ç½®å ç©ºæ¯”
     }
     
-    /* ´¦ÀíÊı¾İ */
+    /* å¤„ç†æ•°æ® */
     if (Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
-      ChannelPulse += 10;    // Ôö¼ÓÕ¼¿Õ±È
+      ChannelPulse += 10;    // å¢åŠ å ç©ºæ¯”
       
-      ChannelPulse = (2.5/20.0*PWM_PERIOD_COUNT) < ChannelPulse ? (2.5/20.0*PWM_PERIOD_COUNT) : ChannelPulse;    // ¼ì²éÕ¼¿Õ±ÈµÄºÏ·¨ĞÔ
+      ChannelPulse = (2.5/20.0*PWM_PERIOD_COUNT) < ChannelPulse ? (2.5/20.0*PWM_PERIOD_COUNT) : ChannelPulse;    // æ£€æŸ¥å ç©ºæ¯”çš„åˆæ³•æ€§
       
-      set_steering_gear_dutyfactor(ChannelPulse);    // ÉèÖÃÕ¼¿Õ±È
+      set_steering_gear_dutyfactor(ChannelPulse);    // è®¾ç½®å ç©ºæ¯”
     }
     
-    /* ´®¿Ú´¦Àí */
+    /* ä¸²å£å¤„ç† */
     deal_serial_data();
 	}
 }

@@ -166,10 +166,10 @@ void SysTick_Handler(void)
   */
 
 /**
-  * @brief  Íâ²¿ÖÐ¶Ï15_10·þÎñº¯Êý
-	*	@note   ÖÐ¶ÏÏß15¡ª¡ª10¡¢9¡ª¡ª5·Ö±ð¹²ÓÃÒ»¸öÖÐ¶Ï·þÎñº¯Êý
-  *         Èç¹ûÊÇÍâ²¿ÖÐ¶Ï4¡ª¡ª0±ØÐëÃ¿¸öÖÐ¶ÏÏß¶ÔÓ¦¶ÀÁ¢µÄÖÐ¶Ï·þÎñº¯Êý
-  * @retval ÎÞ
+  * @brief  å¤–éƒ¨ä¸­æ–­15_10æœåŠ¡å‡½æ•°
+	*	@note   ä¸­æ–­çº¿15â€”â€”10ã€9â€”â€”5åˆ†åˆ«å…±ç”¨ä¸€ä¸ªä¸­æ–­æœåŠ¡å‡½æ•°
+  *         å¦‚æžœæ˜¯å¤–éƒ¨ä¸­æ–­4â€”â€”0å¿…é¡»æ¯ä¸ªä¸­æ–­çº¿å¯¹åº”ç‹¬ç«‹çš„ä¸­æ–­æœåŠ¡å‡½æ•°
+  * @retval æ— 
   */
 void SWITCH1_IRQHandler(void)
 {
@@ -179,9 +179,9 @@ void SWITCH1_IRQHandler(void)
 }
 
 /**
-  * @brief  Íâ²¿ÖÐ¶Ï0·þÎñº¯Êý
-	*	@note   ÎÞ
-  * @retval ÎÞ
+  * @brief  å¤–éƒ¨ä¸­æ–­0æœåŠ¡å‡½æ•°
+	*	@note   æ— 
+  * @retval æ— 
   */
 void SWITCH4_IRQHandler(void)
 {

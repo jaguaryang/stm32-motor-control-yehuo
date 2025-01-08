@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   TIM--¸ß¼¶¶¨Ê±Æ÷Êä³ö±È½Ï
+  * @brief   TIM--é«˜çº§å®šæ—¶å™¨è¾“å‡ºæ¯”è¾ƒ
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -23,24 +23,24 @@
 #include "./delay/core_delay.h"
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-  /*³õÊ¼»¯Ê±»ù*/
+  /*åˆå§‹åŒ–æ—¶åŸº*/
   HAL_InitTick(5);
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/* ³õÊ¼»¯LED */
+	/* åˆå§‹åŒ–LED */
 	LED_GPIO_Config();
-  /* ³õÊ¼»¯¸ß¼¶¶¨Ê±Æ÷ */
+  /* åˆå§‹åŒ–é«˜çº§å®šæ—¶å™¨ */
 	TIMx_AdvanceConfig();
   
 	while(1)
 	{
-//    /*ĞŞ¸Ä±È½ÏÊä³öµÄ¼ÆÊıÖµ*/
+//    /*ä¿®æ”¹æ¯”è¾ƒè¾“å‡ºçš„è®¡æ•°å€¼*/
 //    OC_Pulse_num_Channel1 += 200;
 //    OC_Pulse_num_Channel2 += 120;
 //    

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   PIDËã·¨ÊµÏÖ
+  * @brief   PIDç®—æ³•å®žçŽ°
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ð  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®žéªŒå¹³å°:é‡Žç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -20,19 +20,19 @@
 #include "math.h"
 #include "./protocol/protocol.h"
 
-/* ¶¨ÒåÈ«¾Ö±äÁ¿ */
+/* å®šä¹‰å…¨å±€å˜é‡ */
 _pid speed_pid,move_pid;
 float set_point=0.0;
 int pid_status=0;
 
 /**
-  * @brief  PID²ÎÊý³õÊ¼»¯
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  PIDå‚æ•°åˆå§‹åŒ–
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void PID_param_init()
 {
-	/* ³õÊ¼»¯Î»ÖÃ»·PID²ÎÊý */
+	/* åˆå§‹åŒ–ä½ç½®çŽ¯PIDå‚æ•° */
   move_pid.target_val=0.0;				
   move_pid.actual_val=0.0;
   move_pid.err=0.0;
@@ -44,10 +44,10 @@ void PID_param_init()
 		
   #if PID_ASSISTANT_EN
     float move_pid_temp[3] = {move_pid.Kp, move_pid.Ki, move_pid.Kd};
-    set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, move_pid_temp, 3);// ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+    set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, move_pid_temp, 3);// ç»™é€šé“ 1 å‘é€ P I D å€¼
   #endif
 	HAL_Delay(10);
-	/* ³õÊ¼»¯ËÙ¶È»·PID²ÎÊý */
+	/* åˆå§‹åŒ–é€Ÿåº¦çŽ¯PIDå‚æ•° */
   speed_pid.target_val=0.0;				
   speed_pid.actual_val=0.0;
   speed_pid.err=0.0;
@@ -59,67 +59,67 @@ void PID_param_init()
 
   #if PID_ASSISTANT_EN
     float speed_pid_temp[3] = {speed_pid.Kp, speed_pid.Ki, speed_pid.Kd};
-    set_computer_value(SEND_P_I_D_CMD, CURVES_CH2, speed_pid_temp, 3);// ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+    set_computer_value(SEND_P_I_D_CMD, CURVES_CH2, speed_pid_temp, 3);// ç»™é€šé“ 1 å‘é€ P I D å€¼
   #endif
 }
 
 /**
-  * @brief  ÉèÖÃÄ¿±êÖµ
-  * @param  val		Ä¿±êÖµ
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®ç›®æ ‡å€¼
+  * @param  val		ç›®æ ‡å€¼
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_pid_target(_pid *pid, float temp_val)
 {
-  pid->target_val = temp_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  pid->target_val = temp_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  »ñÈ¡Ä¿±êÖµ
-  * @param  ÎÞ
-	*	@note 	ÎÞ
-  * @retval Ä¿±êÖµ
+  * @brief  èŽ·å–ç›®æ ‡å€¼
+  * @param  æ— 
+	*	@note 	æ— 
+  * @retval ç›®æ ‡å€¼
   */
 float get_pid_actual(_pid *pid)
 {
-  return pid->target_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  return pid->target_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  ÉèÖÃ±ÈÀý¡¢»ý·Ö¡¢Î¢·ÖÏµÊý
-  * @param  p£º±ÈÀýÏµÊý P
-  * @param  i£º»ý·ÖÏµÊý i
-  * @param  d£ºÎ¢·ÖÏµÊý d
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
+  * @param  pï¼šæ¯”ä¾‹ç³»æ•° P
+  * @param  iï¼šç§¯åˆ†ç³»æ•° i
+  * @param  dï¼šå¾®åˆ†ç³»æ•° d
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_p_i_d(_pid *pid, float p, float i, float d)
 {
-  	pid->Kp = p;    // ÉèÖÃ±ÈÀýÏµÊý P
-		pid->Ki = i;    // ÉèÖÃ»ý·ÖÏµÊý I
-		pid->Kd = d;    // ÉèÖÃÎ¢·ÖÏµÊý D
+  	pid->Kp = p;    // è®¾ç½®æ¯”ä¾‹ç³»æ•° P
+		pid->Ki = i;    // è®¾ç½®ç§¯åˆ†ç³»æ•° I
+		pid->Kd = d;    // è®¾ç½®å¾®åˆ†ç³»æ•° D
 }
 
 /**
-  * @brief  Î»ÖÃÊ½PIDËã·¨ÊµÏÖ
-  * @param  val£ºµ±Ç°Êµ¼ÊÖµ
-	*	@note 	ÎÞ
-  * @retval Í¨¹ýPID¼ÆËãºóµÄÊä³ö
+  * @brief  ä½ç½®å¼PIDç®—æ³•å®žçŽ°
+  * @param  valï¼šå½“å‰å®žé™…å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åŽçš„è¾“å‡º
   */
 float PID_realize(_pid *pid, float actual_val) 
 {
-  /*´«ÈëÊµ¼ÊÖµ*/
+  /*ä¼ å…¥å®žé™…å€¼*/
   pid->actual_val = actual_val;
-  /*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+  /*è®¡ç®—ç›®æ ‡å€¼ä¸Žå®žé™…å€¼çš„è¯¯å·®*/
   pid->err = pid->target_val - pid->actual_val;
 
-  /*Îó²îÀÛ»ý*/
+  /*è¯¯å·®ç´¯ç§¯*/
   pid->integral += pid->err;
-  /*PIDËã·¨ÊµÏÖ*/
+  /*PIDç®—æ³•å®žçŽ°*/
   pid->actual_val = pid->Kp*pid->err+ pid->Ki*pid->integral+ pid->Kd*(pid->err-pid->err_last);
-  /*Îó²î´«µÝ*/
+  /*è¯¯å·®ä¼ é€’*/
   pid->err_last = pid->err;
-  /*PIDËã·¨ÊµÏÖ£¬²¢·µ»Ø¼ÆËãÖµ*/
+  /*PIDç®—æ³•å®žçŽ°ï¼Œå¹¶è¿”å›žè®¡ç®—å€¼*/
   return pid->actual_val;
 }
 

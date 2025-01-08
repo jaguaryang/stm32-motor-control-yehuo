@@ -43,7 +43,7 @@
 #include "./tim/bsp_basic_tim.h"
 #include "./usart/bsp_debug_usart.h"
 
-//接收数组指针
+//鎺ユ敹鏁扮粍鎸囬拡
 extern unsigned char UART_RxPtr;
 
 /** @addtogroup STM32F4xx_HAL_Examples
@@ -195,7 +195,7 @@ void BASIC_TIM_IRQHandler (void)
 	HAL_TIM_IRQHandler(&TIM_TimeBaseStructure);	 	
 }
 
-// 串口中断服务函数
+// 涓插彛涓柇鏈嶅姟鍑芥暟
 void DEBUG_USART_IRQHandler(void)
 {
   uint8_t dr = __HAL_UART_FLUSH_DRREGISTER(&UartHandle);

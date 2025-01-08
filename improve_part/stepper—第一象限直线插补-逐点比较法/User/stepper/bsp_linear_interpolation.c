@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   µÚÒ»ÏóÏŞÖ±Ïß²å²¹-Öğµã±È½Ï·¨
+  * @brief   ç¬¬ä¸€è±¡é™ç›´çº¿æ’è¡¥-é€ç‚¹æ¯”è¾ƒæ³•
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -20,81 +20,81 @@ Axis_TypeDef axis;
 LinearInterpolation_TypeDef interpolation_para = {0};
 
 /**
-  * @brief  Ö±ÏßÔöÁ¿²å²¹ÔË¶¯
-  * @param  inc_x£ºÖÕµã×ø±êXµÄÔöÁ¿
-  * @param  inc_y£ºÖÕµã×ø±êYµÄÔöÁ¿
-  * @param  speed£º½ø¸øËÙ¶È
-  * @retval ÎŞ
+  * @brief  ç›´çº¿å¢é‡æ’è¡¥è¿åŠ¨
+  * @param  inc_xï¼šç»ˆç‚¹åæ ‡Xçš„å¢é‡
+  * @param  inc_yï¼šç»ˆç‚¹åæ ‡Yçš„å¢é‡
+  * @param  speedï¼šè¿›ç»™é€Ÿåº¦
+  * @retval æ— 
   */
 void InterPolation_Move(uint32_t inc_x, uint32_t inc_y, uint16_t speed)
 {
-  /* Æ«²îÇåÁã */
+  /* åå·®æ¸…é›¶ */
   interpolation_para.deviation = 0;
   
-  /* ÉèÖÃÖÕµã×ø±ê */
+  /* è®¾ç½®ç»ˆç‚¹åæ ‡ */
   interpolation_para.endpoint_x = inc_x;
   interpolation_para.endpoint_y = inc_y;
-  /* ËùĞèÂö³åÊıÎªX¡¢Y×ø±êÔöÁ¿Ö®ºÍ */
+  /* æ‰€éœ€è„‰å†²æ•°ä¸ºXã€Yåæ ‡å¢é‡ä¹‹å’Œ */
   interpolation_para.endpoint_pulse = inc_x + inc_y;
   
-  /* µÚÒ»²½½ø¸øµÄ»î¶¯ÖáÎªXÖá */
+  /* ç¬¬ä¸€æ­¥è¿›ç»™çš„æ´»åŠ¨è½´ä¸ºXè½´ */
   interpolation_para.active_axis = x_axis;
-  /* ¼ÆËãÆ«²î */
+  /* è®¡ç®—åå·® */
   interpolation_para.deviation -= interpolation_para.endpoint_y;
   
-  /* ÉèÖÃËÙ¶È */
+  /* è®¾ç½®é€Ÿåº¦ */
   __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, step_motor[x_axis].pul_channel, speed);
   __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, step_motor[y_axis].pul_channel, speed);
   __HAL_TIM_SET_AUTORELOAD(&TIM_StepperHandle, speed * 2);
   
-  /* Ê¹ÄÜÖ÷Êä³ö */
+  /* ä½¿èƒ½ä¸»è¾“å‡º */
   __HAL_TIM_MOE_ENABLE(&TIM_StepperHandle);
-  /* ¿ªÆôXÖá±È½ÏÍ¨µÀÊä³ö */
+  /* å¼€å¯Xè½´æ¯”è¾ƒé€šé“è¾“å‡º */
   TIM_CCxChannelCmd(MOTOR_PUL_TIM, step_motor[interpolation_para.active_axis].pul_channel, TIM_CCx_ENABLE);
   HAL_TIM_Base_Start_IT(&TIM_StepperHandle);
 }
 
 /**
-  * @brief  ¶¨Ê±Æ÷±È½ÏÖĞ¶Ï»Øµ÷º¯Êı
-  * @param  htim£º¶¨Ê±Æ÷¾ä±úÖ¸Õë
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨æ¯”è¾ƒä¸­æ–­å›è°ƒå‡½æ•°
+  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„æŒ‡é’ˆ
+	*	@note   æ— 
+  * @retval æ— 
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint32_t last_axis = 0;
   
-  /* ¼ÇÂ¼ÉÏÒ»²½µÄ½ø¸ø»î¶¯Öá */
+  /* è®°å½•ä¸Šä¸€æ­¥çš„è¿›ç»™æ´»åŠ¨è½´ */
   last_axis = interpolation_para.active_axis;
   
-  /* ¸ù¾İÉÏÒ»²½µÄÆ«²î£¬ÅĞ¶ÏµÄ½ø¸ø·½Ïò£¬²¢¼ÆËãÏÂÒ»²½µÄÆ«²î */
+  /* æ ¹æ®ä¸Šä¸€æ­¥çš„åå·®ï¼Œåˆ¤æ–­çš„è¿›ç»™æ–¹å‘ï¼Œå¹¶è®¡ç®—ä¸‹ä¸€æ­¥çš„åå·® */
   if(interpolation_para.deviation >= 0)
   {
-    /* Æ«²î>0£¬ÔÚÖ±ÏßÉÏ·½£¬½ø¸øXÖá£¬¼ÆËãÆ«²î */
+    /* åå·®>0ï¼Œåœ¨ç›´çº¿ä¸Šæ–¹ï¼Œè¿›ç»™Xè½´ï¼Œè®¡ç®—åå·® */
     interpolation_para.active_axis = x_axis;
     interpolation_para.deviation -= interpolation_para.endpoint_y;
   }
   else
   {
-    /* Æ«²î<0£¬ÔÚÖ±ÏßÏÂ·½£¬½ø¸øYÖá£¬¼ÆËãÆ«²î */
+    /* åå·®<0ï¼Œåœ¨ç›´çº¿ä¸‹æ–¹ï¼Œè¿›ç»™Yè½´ï¼Œè®¡ç®—åå·® */
     interpolation_para.active_axis = y_axis;
     interpolation_para.deviation += interpolation_para.endpoint_x;
   }
   
-  /* ÏÂÒ»²½µÄ»î¶¯ÖáÓëÉÏÒ»²½µÄ²»Ò»ÖÂÊ±£¬ĞèÒª»»Öá */
+  /* ä¸‹ä¸€æ­¥çš„æ´»åŠ¨è½´ä¸ä¸Šä¸€æ­¥çš„ä¸ä¸€è‡´æ—¶ï¼Œéœ€è¦æ¢è½´ */
   if(last_axis != interpolation_para.active_axis)
   {
     TIM_CCxChannelCmd(htim->Instance, step_motor[last_axis].pul_channel, TIM_CCx_DISABLE);
     TIM_CCxChannelCmd(htim->Instance, step_motor[interpolation_para.active_axis].pul_channel, TIM_CCx_ENABLE);
   }
   
-  /* ½ø¸ø×Ü²½Êı¼õ1 */
+  /* è¿›ç»™æ€»æ­¥æ•°å‡1 */
   interpolation_para.endpoint_pulse--;
 
-  /* ÅĞ¶ÏÊÇ·ñÍê³É²å²¹ */
+  /* åˆ¤æ–­æ˜¯å¦å®Œæˆæ’è¡¥ */
   if(interpolation_para.endpoint_pulse == 0)
   {
-    /* ¹Ø±Õ¶¨Ê±Æ÷ */
+    /* å…³é—­å®šæ—¶å™¨ */
     TIM_CCxChannelCmd(htim->Instance, step_motor[last_axis].pul_channel, TIM_CCx_DISABLE);
     TIM_CCxChannelCmd(htim->Instance, step_motor[interpolation_para.active_axis].pul_channel, TIM_CCx_DISABLE);
     __HAL_TIM_MOE_DISABLE(htim);

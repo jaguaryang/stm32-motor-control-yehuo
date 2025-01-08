@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   PIDËã·¨ÊµÏÖ
+  * @brief   PIDç®—æ³•å®ç°
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -20,19 +20,19 @@
 #include "math.h"
 #include "./stepper/bsp_stepper_ctrl.h"
 
-/* ¶¨ÒåÈ«¾Ö±äÁ¿ */
+/* å®šä¹‰å…¨å±€å˜é‡ */
 _pid pid;
 float set_point=0.0;
 int pid_status=0;
 
 /**
-  * @brief  PID²ÎÊı³õÊ¼»¯
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  PIDå‚æ•°åˆå§‹åŒ–
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void PID_param_init()
 {
-	/* ³õÊ¼»¯²ÎÊı */
+	/* åˆå§‹åŒ–å‚æ•° */
   pid.target_val=0.0;				
   pid.actual_val=0.0;
   pid.err=0.0;
@@ -44,69 +44,69 @@ void PID_param_init()
 
   #if PID_ASSISTANT_EN
     float pid_temp[3] = {pid.Kp, pid.Ki, pid.Kd};
-    set_computer_value(SEED_P_I_D_CMD, CURVES_CH1, pid_temp, 3);// ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+    set_computer_value(SEED_P_I_D_CMD, CURVES_CH1, pid_temp, 3);// ç»™é€šé“ 1 å‘é€ P I D å€¼
   #endif
 }
 
 /**
-  * @brief  ÉèÖÃÄ¿±êÖµ
-  * @param  val		Ä¿±êÖµ
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç›®æ ‡å€¼
+  * @param  val		ç›®æ ‡å€¼
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_pid_actual(float temp_val)
 {
-  pid.target_val = temp_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  pid.target_val = temp_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  »ñÈ¡Ä¿±êÖµ
-  * @param  ÎŞ
-	*	@note 	ÎŞ
-  * @retval Ä¿±êÖµ
+  * @brief  è·å–ç›®æ ‡å€¼
+  * @param  æ— 
+	*	@note 	æ— 
+  * @retval ç›®æ ‡å€¼
   */
 float get_pid_actual(void)
 {
-  return pid.target_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  return pid.target_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  ÉèÖÃ±ÈÀı¡¢»ı·Ö¡¢Î¢·ÖÏµÊı
-  * @param  p£º±ÈÀıÏµÊı P
-  * @param  i£º»ı·ÖÏµÊı i
-  * @param  d£ºÎ¢·ÖÏµÊı d
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
+  * @param  pï¼šæ¯”ä¾‹ç³»æ•° P
+  * @param  iï¼šç§¯åˆ†ç³»æ•° i
+  * @param  dï¼šå¾®åˆ†ç³»æ•° d
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_p_i_d(float p, float i, float d)
 {
-  	pid.Kp = p;    // ÉèÖÃ±ÈÀıÏµÊı P
-		pid.Ki = i;    // ÉèÖÃ»ı·ÖÏµÊı I
-		pid.Kd = d;    // ÉèÖÃÎ¢·ÖÏµÊı D
+  	pid.Kp = p;    // è®¾ç½®æ¯”ä¾‹ç³»æ•° P
+		pid.Ki = i;    // è®¾ç½®ç§¯åˆ†ç³»æ•° I
+		pid.Kd = d;    // è®¾ç½®å¾®åˆ†ç³»æ•° D
 }
 
 /**
-  * @brief  Î»ÖÃÊ½PIDËã·¨ÊµÏÖ
-  * @param  actual_val£ºµ±Ç°Êµ¼ÊÖµ
-	*	@note 	ÎŞ
-  * @retval Í¨¹ıPID¼ÆËãºóµÄÊä³ö
+  * @brief  ä½ç½®å¼PIDç®—æ³•å®ç°
+  * @param  actual_valï¼šå½“å‰å®é™…å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åçš„è¾“å‡º
   */
 float PID_realize(float actual_val) 
 {
-  /*´«ÈëÊµ¼ÊÖµ*/
+  /*ä¼ å…¥å®é™…å€¼*/
   pid.actual_val = actual_val;
-  /*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+  /*è®¡ç®—ç›®æ ‡å€¼ä¸å®é™…å€¼çš„è¯¯å·®*/
   pid.err = pid.target_val - pid.actual_val;
 
-  /*Îó²îÀÛ»ı*/
+  /*è¯¯å·®ç´¯ç§¯*/
   pid.integral += pid.err;
-  /*PIDËã·¨ÊµÏÖ*/
+  /*PIDç®—æ³•å®ç°*/
   pid.actual_val = pid.Kp*pid.err
                  + pid.Ki*pid.integral
                  + pid.Kd*(pid.err-pid.err_last);
-  /*Îó²î´«µİ*/
+  /*è¯¯å·®ä¼ é€’*/
   pid.err_last = pid.err;
-  /*PIDËã·¨ÊµÏÖ£¬²¢·µ»Ø¼ÆËãÖµ*/
+  /*PIDç®—æ³•å®ç°ï¼Œå¹¶è¿”å›è®¡ç®—å€¼*/
   return pid.actual_val;
 }
 

@@ -4,13 +4,13 @@
   * @author  STMicroelectronics
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   »ù±¾¶¨Ê±Æ÷¶¨Ê±·¶Àı
+  * @brief   åŸºæœ¬å®šæ—¶å™¨å®šæ—¶èŒƒä¾‹
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -19,57 +19,57 @@
 
 TIM_HandleTypeDef TIM_TimeBaseStructure;
  /**
-  * @brief  »ù±¾¶¨Ê±Æ÷ TIMx,x[6,7]ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åŸºæœ¬å®šæ—¶å™¨ TIMx,x[6,7]ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_NVIC_Configuration(void)
 {
-	//ÉèÖÃÇÀÕ¼ÓÅÏÈ¼¶£¬×ÓÓÅÏÈ¼¶
+	//è®¾ç½®æŠ¢å ä¼˜å…ˆçº§ï¼Œå­ä¼˜å…ˆçº§
 	HAL_NVIC_SetPriority(BASIC_TIM_IRQn, 0, 3);
-	// ÉèÖÃÖĞ¶ÏÀ´Ô´
+	// è®¾ç½®ä¸­æ–­æ¥æº
 	HAL_NVIC_EnableIRQ(BASIC_TIM_IRQn);
 }
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓĞ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓĞ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ğè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈı¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓĞ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æ„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓĞ
- * TIM_CounterMode			 TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓĞ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓĞ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode			 TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 static void TIM_Mode_Config(void)
 {
-	// ¿ªÆôTIMx_CLK,x[6,7] 
+	// å¼€å¯TIMx_CLK,x[6,7] 
 	BASIC_TIM_CLK_ENABLE(); 
 
 	TIM_TimeBaseStructure.Instance = BASIC_TIM;
-	/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üĞÂ»òÕßÖĞ¶Ï*/		
-	//µ±¶¨Ê±Æ÷´Ó0¼ÆÊıµ½4999£¬¼´Îª5000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+	/* ç´¯è®¡ TIM_Periodä¸ªåäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/		
+	//å½“å®šæ—¶å™¨ä»0è®¡æ•°åˆ°4999ï¼Œå³ä¸º5000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
 	TIM_TimeBaseStructure.Init.Period = 5000-1;       
 
-	//¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = 2 * PCLK1  
+	//å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = 2 * PCLK1  
 	//				PCLK1 = HCLK / 4 
 	//				=> TIMxCLK=HCLK/2=SystemCoreClock/2=84MHz
-	// Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=10000Hz
+	// è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=10000Hz
 	TIM_TimeBaseStructure.Init.Prescaler = 8400-1;	
 
-	// ³õÊ¼»¯¶¨Ê±Æ÷TIMx, x[2,3,4,5]
+	// åˆå§‹åŒ–å®šæ—¶å™¨TIMx, x[2,3,4,5]
 	HAL_TIM_Base_Init(&TIM_TimeBaseStructure);
 
-	// ¿ªÆô¶¨Ê±Æ÷¸üĞÂÖĞ¶Ï
+	// å¼€å¯å®šæ—¶å™¨æ›´æ–°ä¸­æ–­
 	HAL_TIM_Base_Start_IT(&TIM_TimeBaseStructure);	
 }
 
 /**
-  * @brief  ³õÊ¼»¯»ù±¾¶¨Ê±Æ÷¶¨Ê±£¬1ms²úÉúÒ»´ÎÖĞ¶Ï
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–åŸºæœ¬å®šæ—¶å™¨å®šæ—¶ï¼Œ1msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­
+  * @param  æ— 
+  * @retval æ— 
   */
 void TIMx_Configuration(void)
 {

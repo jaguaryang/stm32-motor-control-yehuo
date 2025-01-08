@@ -4,20 +4,20 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 
-/*ºê¶¨Òå*/
+/*å®å®šä¹‰*/
 /*******************************************************/
 
-//Motor ·½Ïò
+//Motor æ–¹å‘
 #define MOTOR_DIR_PIN                   GPIO_PIN_1
 #define MOTOR_DIR_GPIO_PORT             GPIOE
 #define MOTOR_DIR_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ
+//Motor ä½¿èƒ½
 #define MOTOR_EN_PIN                    GPIO_PIN_0
 #define MOTOR_EN_GPIO_PORT              GPIOE
 #define MOTOR_EN_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Âö³å
+//Motor è„‰å†²
 #define MOTOR_PUL_IRQn                  TIM8_CC_IRQn
 #define MOTOR_PUL_IRQHandler            TIM8_CC_IRQHandler
 
@@ -31,7 +31,7 @@
 #define MOTOR_PUL_GPIO_AF               GPIO_AF3_TIM8
 #define MOTOR_PUL_CHANNEL_x             TIM_CHANNEL_1
 
-// ¶¨Òå¶¨Ê±Æ÷ÖÜÆÚ£¬Êä³ö±È½ÏÄ£Ê½ÖÜÆÚÉèÖÃÎª0xFFFF
+// å®šä¹‰å®šæ—¶å™¨å‘¨æœŸï¼Œè¾“å‡ºæ¯”è¾ƒæ¨¡å¼å‘¨æœŸè®¾ç½®ä¸º0xFFFF
 #define TIM_PERIOD                   0xFFFF
 
 
@@ -40,17 +40,17 @@ extern void TIM8_SetPWM_pulse(int channel,int compare);
 
 
 /************************************************************/
-#define HIGH GPIO_PIN_SET       //¸ßµçÆ½
-#define LOW  GPIO_PIN_RESET     //µÍµçÆ½
+#define HIGH GPIO_PIN_SET       //é«˜ç”µå¹³
+#define LOW  GPIO_PIN_RESET     //ä½ç”µå¹³
 
-#define ON  LOW                 //¿ª
-#define OFF HIGH                //¹Ø
+#define ON  LOW                 //å¼€
+#define OFF HIGH                //å…³
 
-#define CW  HIGH                //Ë³Ê±Õë
-#define CCW LOW                 //ÄæÊ±Õë
+#define CW  HIGH                //é¡ºæ—¶é’ˆ
+#define CCW LOW                 //é€†æ—¶é’ˆ
 
-//¿ØÖÆÊ¹ÄÜÒı½Å
-/* ´ø²Îºê£¬¿ÉÒÔÏñÄÚÁªº¯ÊıÒ»ÑùÊ¹ÓÃ */
+//æ§åˆ¶ä½¿èƒ½å¼•è„š
+/* å¸¦å‚å®ï¼Œå¯ä»¥åƒå†…è”å‡½æ•°ä¸€æ ·ä½¿ç”¨ */
 #define MOTOR_EN(x)         HAL_GPIO_WritePin(MOTOR_EN_GPIO_PORT,MOTOR_EN_PIN,x)
 #define MOTOR_PLU(x)        HAL_GPIO_WritePin(MOTOR_PUL_GPIO_PORT,MOTOR_PUL_PIN,x)
 #define MOTOR_DIR(x)        HAL_GPIO_WritePin(MOTOR_DIR_GPIO_PORT,MOTOR_DIR_PIN,x)

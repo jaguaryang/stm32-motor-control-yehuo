@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ÎŞË¢µç»ú¿ØÖÆ½Ó¿Ú
+  * @brief   æ— åˆ·ç”µæœºæ§åˆ¶æ¥å£
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -19,66 +19,66 @@
 #include "./pid/bsp_pid.h"
 #include "./tim/bsp_basic_tim.h"
 
-/* Ë½ÓĞ±äÁ¿ */
+/* ç§æœ‰å˜é‡ */
 static bldcm_data_t bldcm_data;
 
-/* ¾Ö²¿º¯Êı */
+/* å±€éƒ¨å‡½æ•° */
 static void sd_gpio_config(void);
 
 /**
-  * @brief  µç»ú³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 void bldcm_init(void)
 {
-  PWM_TIMx_Configuration();    // µç»ú¿ØÖÆ¶¨Ê±Æ÷£¬Òı½Å³õÊ¼»¯
-  hall_tim_config();           // »ô¶û´«¸ĞÆ÷³õÊ¼»¯
-  sd_gpio_config();        // sd Òı½Å³õÊ¼»¯
+  PWM_TIMx_Configuration();    // ç”µæœºæ§åˆ¶å®šæ—¶å™¨ï¼Œå¼•è„šåˆå§‹åŒ–
+  hall_tim_config();           // éœå°”ä¼ æ„Ÿå™¨åˆå§‹åŒ–
+  sd_gpio_config();        // sd å¼•è„šåˆå§‹åŒ–
 }
 
 /**
-  * @brief  µç»ú SD ¿ØÖÆÒı½Å³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœº SD æ§åˆ¶å¼•è„šåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 static void sd_gpio_config(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒı½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	SHUTDOWN_GPIO_CLK_ENABLE();
   
-  /* Òı½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàĞÍ*/
+  /* å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»å‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	/*ÉèÖÃÒı½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = SHUTDOWN_PIN;
   
-	/*µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(SHUTDOWN_GPIO_PORT, &GPIO_InitStruct);
   
-  BLDCM_ENABLE_SD();     // Ä¬ÈÏ¿ªÆô
+  BLDCM_ENABLE_SD();     // é»˜è®¤å¼€å¯
 }
 
 /**
-  * @brief  ÉèÖÃµç»úËÙ¶È
-  * @param  v: ËÙ¶È£¨Õ¼¿Õ±È£©
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºé€Ÿåº¦
+  * @param  v: é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰
+  * @retval æ— 
   */
 void set_bldcm_speed(uint16_t v)
 {
 	bldcm_data.dutyfactor = v;
 	
-  set_pwm_pulse(v);     // ÉèÖÃËÙ¶È
+  set_pwm_pulse(v);     // è®¾ç½®é€Ÿåº¦
 }
 
 /**
-  * @brief  ÉèÖÃµç»ú·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºæ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_bldcm_direction(motor_dir_t dir)
 {
@@ -86,9 +86,9 @@ void set_bldcm_direction(motor_dir_t dir)
 }
 
 /**
-  * @brief  »ñÈ¡µç»úµ±Ç°·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è·å–ç”µæœºå½“å‰æ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 motor_dir_t get_bldcm_direction(void)
 {
@@ -96,9 +96,9 @@ motor_dir_t get_bldcm_direction(void)
 }
 
 /**
-  * @brief  Ê¹ÄÜµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä½¿èƒ½ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_bldcm_enable(void)
 {
@@ -107,33 +107,33 @@ void set_bldcm_enable(void)
 }
 
 /**
-  * @brief  ½ûÓÃµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¦ç”¨ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_bldcm_disable(void)
 {
-  /* ½ûÓÃ»ô¶û´«¸ĞÆ÷½Ó¿Ú */
+  /* ç¦ç”¨éœå°”ä¼ æ„Ÿå™¨æ¥å£ */
   hall_disable();
   
-  /* Í£Ö¹ PWM Êä³ö */
+  /* åœæ­¢ PWM è¾“å‡º */
   stop_pwm_output();
   
   bldcm_data.is_enable = 0;
 }
 
 /**
-  * @brief  µç»úÎ»ÖÃÊ½ PID ¿ØÖÆÊµÏÖ(¶¨Ê±µ÷ÓÃ)
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºä½ç½®å¼ PID æ§åˆ¶å®ç°(å®šæ—¶è°ƒç”¨)
+  * @param  æ— 
+  * @retval æ— 
   */
 void bldcm_pid_control(void)
 {
-  int32_t speed_actual = get_motor_speed();   // µç»úĞı×ªµÄµ±Ç°ËÙ¶È
+  int32_t speed_actual = get_motor_speed();   // ç”µæœºæ—‹è½¬çš„å½“å‰é€Ÿåº¦
 
   if (bldcm_data.is_enable)
   {
-    float cont_val = 0;    // µ±Ç°¿ØÖÆÖµ
+    float cont_val = 0;    // å½“å‰æ§åˆ¶å€¼
 
     cont_val = PID_realize(speed_actual);
 
@@ -147,23 +147,23 @@ void bldcm_pid_control(void)
 				bldcm_data.direction = MOTOR_FWD;
 		}
 	
-		cont_val = (cont_val > PWM_PERIOD_COUNT) ? PWM_PERIOD_COUNT : cont_val;  // ÉÏÏŞ´¦Àí
+		cont_val = (cont_val > PWM_PERIOD_COUNT) ? PWM_PERIOD_COUNT : cont_val;  // ä¸Šé™å¤„ç†
 
     set_bldcm_speed(cont_val);
     
   #ifdef PID_ASSISTANT_EN
-    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &speed_actual, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÊµ¼ÊÖµ
+    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &speed_actual, 1);     // ç»™é€šé“ 1 å‘é€å®é™…å€¼
   #else
-    printf("Êµ¼ÊÖµ£º%d, Ä¿±êÖµ£º%.0f£¬¿ØÖÆÖµ: %.0f\n", speed_actual, get_pid_target(), cont_val);
+    printf("å®é™…å€¼ï¼š%d, ç›®æ ‡å€¼ï¼š%.0fï¼Œæ§åˆ¶å€¼: %.0f\n", speed_actual, get_pid_target(), cont_val);
   #endif
   }
 }
 
  
 ///**
-//  * @brief  ¶¨Ê±Æ÷Ã¿100ms²úÉúÒ»´ÎÖĞ¶Ï»Øµ÷º¯Êı
-//  * @param  htim£º¶¨Ê±Æ÷¾ä±ú
-//  * @retval ÎŞ
+//  * @brief  å®šæ—¶å™¨æ¯100msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­å›è°ƒå‡½æ•°
+//  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„
+//  * @retval æ— 
 //  */
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //{

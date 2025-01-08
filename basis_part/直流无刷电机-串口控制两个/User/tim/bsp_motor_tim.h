@@ -4,88 +4,88 @@
 #include "stm32f4xx.h"
 #include ".\bldcm_control\bsp_bldcm_control.h"
 
-/*****************************µç»ú½Ó¿Ú1ºê¶¨Òå*******************************************/
-/* µç»ú¿ØÖÆ¶¨Ê±Æ÷ */
+/*****************************ç”µæœºæŽ¥å£1å®å®šä¹‰*******************************************/
+/* ç”µæœºæŽ§åˆ¶å®šæ—¶å™¨ */
 #define MOTOR1_TIM           				      TIM1
 #define MOTOR1_TIM_CLK_ENABLE()  			    __TIM1_CLK_ENABLE()
 extern TIM_HandleTypeDef  motor1_htimx_bldcm;
 
-/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï		
-	µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½5599£¬¼´Îª5600´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ */
+/* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­		
+	å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°5599ï¼Œå³ä¸º5600æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ */
 #define MOTOR1_PWM_PERIOD_COUNT     (5600)
 
 #define MOTOR1_PWM_MAX_PERIOD_COUNT    (MOTOR1_PWM_PERIOD_COUNT - 100)
 
-/* ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK = 168MHz 
-	 Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(PWM_PRESCALER_COUNT+1)/PWM_PERIOD_COUNT = 15KHz*/
+/* é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK = 168MHz 
+	 è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º=TIMxCLK/(PWM_PRESCALER_COUNT+1)/PWM_PERIOD_COUNT = 15KHz*/
 #define MOTOR1_PWM_PRESCALER_COUNT     (2)
 
-/* TIM1Í¨µÀ1Êä³öÒý½Å */
+/* TIM1é€šé“1è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCPWM1_PIN           		    GPIO_PIN_8
 #define MOTOR1_OCPWM1_GPIO_PORT     		    GPIOA
 #define MOTOR1_OCPWM1_GPIO_CLK_ENABLE() 	  __GPIOA_CLK_ENABLE()
 #define MOTOR1_OCPWM1_AF					          GPIO_AF1_TIM1
 
-/* TIM1Í¨µÀ2Êä³öÒý½Å */
+/* TIM1é€šé“2è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCPWM2_PIN           		    GPIO_PIN_9
 #define MOTOR1_OCPWM2_GPIO_PORT     		    GPIOA
 #define MOTOR1_OCPWM2_GPIO_CLK_ENABLE() 	  __GPIOA_CLK_ENABLE()
 #define MOTOR1_OCPWM2_AF					          GPIO_AF1_TIM1
 
-/* TIM1Í¨µÀ3Êä³öÒý½Å */
+/* TIM1é€šé“3è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCPWM3_PIN           		    GPIO_PIN_10
 #define MOTOR1_OCPWM3_GPIO_PORT     		    GPIOA
 #define MOTOR1_OCPWM3_GPIO_CLK_ENABLE() 	  __GPIOA_CLK_ENABLE()
 #define MOTOR1_OCPWM3_AF					          GPIO_AF1_TIM1
 
-/* TIM1Í¨µÀ1»¥²¹Êä³öÒý½Å */
+/* TIM1é€šé“1äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCNPWM1_PIN            		  GPIO_PIN_13
 #define MOTOR1_OCNPWM1_GPIO_PORT      		  GPIOB
 #define MOTOR1_OCNPWM1_GPIO_CLK_ENABLE()	  __GPIOB_CLK_ENABLE()
 #define MOTOR1_OCNPWM1_AF					        	GPIO_AF1_TIM1
 
-/* TIM1Í¨µÀ2»¥²¹Êä³öÒý½Å */
+/* TIM1é€šé“2äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCNPWM2_PIN            		  GPIO_PIN_14
 #define MOTOR1_OCNPWM2_GPIO_PORT      		  GPIOB
 #define MOTOR1_OCNPWM2_GPIO_CLK_ENABLE()	  __GPIOB_CLK_ENABLE()
 #define MOTOR1_OCNPWM2_AF					       	  GPIO_AF1_TIM1
 
-/* TIM1Í¨µÀ3»¥²¹Êä³öÒý½Å */
+/* TIM1é€šé“3äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR1_OCNPWM3_PIN            		  GPIO_PIN_15
 #define MOTOR1_OCNPWM3_GPIO_PORT      		  GPIOB
 #define MOTOR1_OCNPWM3_GPIO_CLK_ENABLE()	  __GPIOB_CLK_ENABLE()
 #define MOTOR1_OCNPWM3_AF					        	GPIO_AF1_TIM1
 
-#define MOTOR1_TIM_COM_TS_ITRx              TIM_TS_ITR3    // ÄÚ²¿´¥·¢ÅäÖÃ(TIM1->ITR2->TIM3)
+#define MOTOR1_TIM_COM_TS_ITRx              TIM_TS_ITR3    // å†…éƒ¨è§¦å‘é…ç½®(TIM1->ITR2->TIM3)
 
-/* »ô¶û´«¸ÐÆ÷¶¨Ê±Æ÷ */
+/* éœå°”ä¼ æ„Ÿå™¨å®šæ—¶å™¨ */
 #define MOTOR1_HALL_TIM           				  TIM3
 #define MOTOR1_HALL_TIM_CLK_ENABLE()  			__TIM3_CLK_ENABLE()
 
 extern TIM_HandleTypeDef motor1_htimx_hall;
 
-/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï		
-	µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½4999£¬¼´Îª5000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ */
+/* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­		
+	å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°4999ï¼Œå³ä¸º5000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ */
 #define MOTOR1_HALL_PERIOD_COUNT     (0xFFFF)
 
-/* ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK / 2 = 84MHz
-	 Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª = TIMxCLK / (PWM_PRESCALER_COUNT + 1) / PWM_PERIOD_COUNT = 10.01Hz
-   ÖÜÆÚ T = 100ms */
+/* é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK / 2 = 84MHz
+	 è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º = TIMxCLK / (PWM_PRESCALER_COUNT + 1) / PWM_PERIOD_COUNT = 10.01Hz
+   å‘¨æœŸ T = 100ms */
 #define MOTOR1_HALL_PRESCALER_COUNT     (128)
 
-/* TIM3 Í¨µÀ 1 Òý½Å */
+/* TIM3 é€šé“ 1 å¼•è„š */
 #define MOTOR1_HALL_INPUTU_PIN           		    GPIO_PIN_6
 #define MOTOR1_HALL_INPUTU_GPIO_PORT     		    GPIOC
 #define MOTOR1_HALL_INPUTU_GPIO_CLK_ENABLE() 	  __GPIOC_CLK_ENABLE()
 #define MOTOR1_HALL_INPUTU_AF					          GPIO_AF2_TIM3
 
-/* TIM3 Í¨µÀ 2 Òý½Å */
+/* TIM3 é€šé“ 2 å¼•è„š */
 #define MOTOR1_HALL_INPUTV_PIN           		    GPIO_PIN_7
 #define MOTOR1_HALL_INPUTV_GPIO_PORT     		    GPIOC
 #define MOTOR1_HALL_INPUTV_GPIO_CLK_ENABLE() 	  __GPIOC_CLK_ENABLE()
 #define MOTOR1_HALL_INPUTV_AF					          GPIO_AF2_TIM3
 
-/* TIM3 Í¨µÀ 3 Òý½Å */
+/* TIM3 é€šé“ 3 å¼•è„š */
 #define MOTOR1_HALL_INPUTW_PIN           		    GPIO_PIN_8
 #define MOTOR1_HALL_INPUTW_GPIO_PORT     		    GPIOC
 #define MOTOR1_HALL_INPUTW_GPIO_CLK_ENABLE() 	  __GPIOC_CLK_ENABLE()
@@ -97,88 +97,88 @@ extern TIM_HandleTypeDef motor1_htimx_hall;
 
 /***************************************************************************************/
 
-/*****************************µç»ú½Ó¿Ú2ºê¶¨Òå*******************************************/
-/* µç»ú¿ØÖÆ¶¨Ê±Æ÷ */
+/*****************************ç”µæœºæŽ¥å£2å®å®šä¹‰*******************************************/
+/* ç”µæœºæŽ§åˆ¶å®šæ—¶å™¨ */
 #define MOTOR2_TIM           				      TIM8
 #define MOTOR2_TIM_CLK_ENABLE()  			    __TIM8_CLK_ENABLE()
 extern TIM_HandleTypeDef  motor2_htimx_bldcm;
 
-/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï		
-	µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½5599£¬¼´Îª5600´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ */
+/* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­		
+	å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°5599ï¼Œå³ä¸º5600æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ */
 #define MOTOR2_PWM_PERIOD_COUNT     (5600)
 
 #define MOTOR2_PWM_MAX_PERIOD_COUNT    (MOTOR2_PWM_PERIOD_COUNT - 100)
 
-/* ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK = 168MHz 
-	 Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(PWM_PRESCALER_COUNT+1)/PWM_PERIOD_COUNT = 15KHz*/
+/* é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK = 168MHz 
+	 è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º=TIMxCLK/(PWM_PRESCALER_COUNT+1)/PWM_PERIOD_COUNT = 15KHz*/
 #define MOTOR2_PWM_PRESCALER_COUNT     (2)
 
-/* TIM8Í¨µÀ1Êä³öÒý½Å */
+/* TIM8é€šé“1è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCPWM1_PIN           		    GPIO_PIN_5
 #define MOTOR2_OCPWM1_GPIO_PORT     		    GPIOI
 #define MOTOR2_OCPWM1_GPIO_CLK_ENABLE() 	  __GPIOI_CLK_ENABLE()
 #define MOTOR2_OCPWM1_AF					          GPIO_AF3_TIM8
 
-/* TIM8Í¨µÀ2Êä³öÒý½Å */
+/* TIM8é€šé“2è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCPWM2_PIN           		    GPIO_PIN_6
 #define MOTOR2_OCPWM2_GPIO_PORT     		    GPIOI
 #define MOTOR2_OCPWM2_GPIO_CLK_ENABLE() 	  __GPIOI_CLK_ENABLE()
 #define MOTOR2_OCPWM2_AF					          GPIO_AF3_TIM8
 
-/* TIM8Í¨µÀ3Êä³öÒý½Å */
+/* TIM8é€šé“3è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCPWM3_PIN           		    GPIO_PIN_7
 #define MOTOR2_OCPWM3_GPIO_PORT     		    GPIOI
 #define MOTOR2_OCPWM3_GPIO_CLK_ENABLE() 	  __GPIOI_CLK_ENABLE()
 #define MOTOR2_OCPWM3_AF					          GPIO_AF3_TIM8
 
-/* TIM8Í¨µÀ1»¥²¹Êä³öÒý½Å */
+/* TIM8é€šé“1äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCNPWM1_PIN            		  GPIO_PIN_13
 #define MOTOR2_OCNPWM1_GPIO_PORT      		  GPIOH
 #define MOTOR2_OCNPWM1_GPIO_CLK_ENABLE()	  __GPIOH_CLK_ENABLE()
 #define MOTOR2_OCNPWM1_AF					        	GPIO_AF3_TIM8
 
-/* TIM8Í¨µÀ2»¥²¹Êä³öÒý½Å */
+/* TIM8é€šé“2äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCNPWM2_PIN            		  GPIO_PIN_14
 #define MOTOR2_OCNPWM2_GPIO_PORT      		  GPIOH
 #define MOTOR2_OCNPWM2_GPIO_CLK_ENABLE()	  __GPIOH_CLK_ENABLE()
 #define MOTOR2_OCNPWM2_AF					        	GPIO_AF3_TIM8
 
-/* TIM8Í¨µÀ3»¥²¹Êä³öÒý½Å */
+/* TIM8é€šé“3äº’è¡¥è¾“å‡ºå¼•è„š */
 #define MOTOR2_OCNPWM3_PIN            		  GPIO_PIN_15
 #define MOTOR2_OCNPWM3_GPIO_PORT      		  GPIOH
 #define MOTOR2_OCNPWM3_GPIO_CLK_ENABLE()	  __GPIOH_CLK_ENABLE()
 #define MOTOR2_OCNPWM3_AF					        	GPIO_AF3_TIM8
 
-#define MOTOR2_TIM_COM_TS_ITRx              TIM_TS_ITR3    // ÄÚ²¿´¥·¢ÅäÖÃ(TIM8->ITR3->TIM5)
+#define MOTOR2_TIM_COM_TS_ITRx              TIM_TS_ITR3    // å†…éƒ¨è§¦å‘é…ç½®(TIM8->ITR3->TIM5)
 
-/* »ô¶û´«¸ÐÆ÷¶¨Ê±Æ÷ */
+/* éœå°”ä¼ æ„Ÿå™¨å®šæ—¶å™¨ */
 #define MOTOR2_HALL_TIM           				  TIM5
 #define MOTOR2_HALL_TIM_CLK_ENABLE()  			__TIM5_CLK_ENABLE()
 
 extern TIM_HandleTypeDef motor2_htimx_hall;
 
-/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï		
-	µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½4999£¬¼´Îª5000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ */
+/* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­		
+	å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°4999ï¼Œå³ä¸º5000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ */
 #define MOTOR2_HALL_PERIOD_COUNT     (0xFFFF)
 
-/* ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK / 2 = 84MHz
-	 Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª = TIMxCLK / (PWM_PRESCALER_COUNT + 1) / PWM_PERIOD_COUNT = 10.01Hz
-   ÖÜÆÚ T = 100ms */
+/* é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK / 2 = 84MHz
+	 è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º = TIMxCLK / (PWM_PRESCALER_COUNT + 1) / PWM_PERIOD_COUNT = 10.01Hz
+   å‘¨æœŸ T = 100ms */
 #define MOTOR2_HALL_PRESCALER_COUNT     (128)
 
-/* TIM5 Í¨µÀ 1 Òý½Å */
+/* TIM5 é€šé“ 1 å¼•è„š */
 #define MOTOR2_HALL_INPUTU_PIN           		    GPIO_PIN_10
 #define MOTOR2_HALL_INPUTU_GPIO_PORT     		    GPIOH
 #define MOTOR2_HALL_INPUTU_GPIO_CLK_ENABLE() 	  __GPIOH_CLK_ENABLE()
 #define MOTOR2_HALL_INPUTU_AF					          GPIO_AF2_TIM5
 
-/* TIM5 Í¨µÀ 2 Òý½Å */
+/* TIM5 é€šé“ 2 å¼•è„š */
 #define MOTOR2_HALL_INPUTV_PIN           		    GPIO_PIN_11
 #define MOTOR2_HALL_INPUTV_GPIO_PORT     		    GPIOH
 #define MOTOR2_HALL_INPUTV_GPIO_CLK_ENABLE() 	  __GPIOH_CLK_ENABLE()
 #define MOTOR2_HALL_INPUTV_AF					          GPIO_AF2_TIM5
 
-/* TIM5 Í¨µÀ 3 Òý½Å */
+/* TIM5 é€šé“ 3 å¼•è„š */
 #define MOTOR2_HALL_INPUTW_PIN           		    GPIO_PIN_12
 #define MOTOR2_HALL_INPUTW_GPIO_PORT     		    GPIOH
 #define MOTOR2_HALL_INPUTW_GPIO_CLK_ENABLE() 	  __GPIOH_CLK_ENABLE()

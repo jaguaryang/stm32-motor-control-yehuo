@@ -10,61 +10,61 @@
 #include "string.h"
 
 
-#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // ¸ù¾İµç»ú×ªËÙ£¨r/min£©£¬¼ÆËãµç»ú²½ËÙ£¨step/s£©
+#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // æ ¹æ®ç”µæœºè½¬é€Ÿï¼ˆr/minï¼‰ï¼Œè®¡ç®—ç”µæœºæ­¥é€Ÿï¼ˆstep/sï¼‰
 
 #define FORM_LEN 	   1000
 
 typedef struct {
-	uint8_t 	status;			/*×´Ì¬*/
-	uint8_t 	dir;				/*·½Ïò*/
-	uint32_t 	pos;				/*Î»ÖÃ*/
-	uint32_t  pluse_time; /*Âö³åÊ±¼ä*/
+	uint8_t 	status;			/*çŠ¶æ€*/
+	uint8_t 	dir;				/*æ–¹å‘*/
+	uint32_t 	pos;				/*ä½ç½®*/
+	uint32_t  pluse_time; /*è„‰å†²æ—¶é—´*/
 }Stepper_Typedef;
 
-/*S¼Ó¼õËÙËùÓÃµ½µÄ²ÎÊı*/
+/*SåŠ å‡é€Ÿæ‰€ç”¨åˆ°çš„å‚æ•°*/
 typedef struct {
-  int32_t   Vo;                	/*³õÊ¼ËÙ¶È*/
-  int32_t   Vt;               	/*Ä©ËÙ¶È*/
-  int32_t 	AccelTotalStep;   	/*¼ÓËÙ×Ü²½Êı*/  
-	int32_t		INC_AccelTotalStep;	/*¼Ó¼ÓËÙ¶È²½Êı*/
-	int32_t 	Dec_AccelTotalStep;	/*¼õ¼ÓËÙ¶È²½Êı*/
-  float   	Form[FORM_LEN];     /*S¼Ó¼õËÙ ËÙ¶È±í*/ 
+  int32_t   Vo;                	/*åˆå§‹é€Ÿåº¦*/
+  int32_t   Vt;               	/*æœ«é€Ÿåº¦*/
+  int32_t 	AccelTotalStep;   	/*åŠ é€Ÿæ€»æ­¥æ•°*/  
+	int32_t		INC_AccelTotalStep;	/*åŠ åŠ é€Ÿåº¦æ­¥æ•°*/
+	int32_t 	Dec_AccelTotalStep;	/*å‡åŠ é€Ÿåº¦æ­¥æ•°*/
+  float   	Form[FORM_LEN];     /*SåŠ å‡é€Ÿ é€Ÿåº¦è¡¨*/ 
 }SpeedCalc_TypeDef;
 
 extern SpeedCalc_TypeDef Speed ;
 
-#define CW                		0 // Ë³Ê±Õë
-#define CCW               		1 // ÄæÊ±Õë
+#define CW                		0 // é¡ºæ—¶é’ˆ
+#define CCW               		1 // é€†æ—¶é’ˆ
 
-/*µç»úËÙ¶È¾ö²ßÖĞµÄËÄ¸ö×´Ì¬*/
-#define ACCEL                 1   //  ¼ÓËÙ×´Ì¬
-#define AVESPEED              2   //  ÔÈËÙ×´Ì¬
-#define DECEL                 3   //  ¼õËÙ×´Ì¬
-#define STOP                  0   //  Í£Ö¹×´Ì¬
+/*ç”µæœºé€Ÿåº¦å†³ç­–ä¸­çš„å››ä¸ªçŠ¶æ€*/
+#define ACCEL                 1   //  åŠ é€ŸçŠ¶æ€
+#define AVESPEED              2   //  åŒ€é€ŸçŠ¶æ€
+#define DECEL                 3   //  å‡é€ŸçŠ¶æ€
+#define STOP                  0   //  åœæ­¢çŠ¶æ€
 																												  
 
-/*ÆµÂÊÏà¹Ø²ÎÊı*/
-//¶¨Ê±Æ÷Êµ¼ÊÊ±ÖÓÆµÂÊÎª£º168MHz/(TIM_PRESCALER+1)
-//ÆäÖĞ ¸ß¼¶¶¨Ê±Æ÷µÄ ÆµÂÊÎª168MHz,ÆäËû¶¨Ê±Æ÷Îª84MHz
+/*é¢‘ç‡ç›¸å…³å‚æ•°*/
+//å®šæ—¶å™¨å®é™…æ—¶é’Ÿé¢‘ç‡ä¸ºï¼š168MHz/(TIM_PRESCALER+1)
+//å…¶ä¸­ é«˜çº§å®šæ—¶å™¨çš„ é¢‘ç‡ä¸º168MHz,å…¶ä»–å®šæ—¶å™¨ä¸º84MHz
 //168/(168)=1Mhz
-//¾ßÌåĞèÒªµÄÆµÂÊ¿ÉÒÔ×Ô¼º¼ÆËã
+//å…·ä½“éœ€è¦çš„é¢‘ç‡å¯ä»¥è‡ªå·±è®¡ç®—
 #define TIM_PRESCALER         168-1 
-#define T1_FREQ               (SystemCoreClock/(TIM_PRESCALER+1)) // ÆµÂÊftÖµ
+#define T1_FREQ               (SystemCoreClock/(TIM_PRESCALER+1)) // é¢‘ç‡ftå€¼
 
 
-/*µç»úµ¥È¦²ÎÊı*/
-#define STEP_ANGLE						1.8									//²½½øµç»úµÄ²½¾à½Ç µ¥Î»£º¶È
-#define FSPR              		(360.0f/1.8f)         //²½½øµç»úµÄÒ»È¦ËùĞèÂö³åÊı
+/*ç”µæœºå•åœˆå‚æ•°*/
+#define STEP_ANGLE						1.8									//æ­¥è¿›ç”µæœºçš„æ­¥è·è§’ å•ä½ï¼šåº¦
+#define FSPR              		(360.0f/1.8f)         //æ­¥è¿›ç”µæœºçš„ä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 			
-#define MICRO_STEP        		32          				//Ï¸·ÖÆ÷Ï¸·ÖÊı 
-#define SPR               		(FSPR*MICRO_STEP)   //Ï¸·ÖºóÒ»È¦ËùĞèÂö³åÊı
+#define MICRO_STEP        		32          				//ç»†åˆ†å™¨ç»†åˆ†æ•° 
+#define SPR               		(FSPR*MICRO_STEP)   //ç»†åˆ†åä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // ¸ù¾İµç»ú×ªËÙ£¨r/min£©£¬¼ÆËãµç»ú²½ËÙ£¨step/s£©
+#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // æ ¹æ®ç”µæœºè½¬é€Ÿï¼ˆr/minï¼‰ï¼Œè®¡ç®—ç”µæœºæ­¥é€Ÿï¼ˆstep/sï¼‰
 
 #define TRUE                  1
 #define FALSE                 0
 
-#define MIN_SPEED                              (T1_FREQ / (65535.0f))// ×îµÍÆµÂÊ/ËÙ¶È
+#define MIN_SPEED                              (T1_FREQ / (65535.0f))// æœ€ä½é¢‘ç‡/é€Ÿåº¦
 
 extern uint8_t print_flag;
 void CalcSpeed(int32_t Vo, int32_t Vt, float T);

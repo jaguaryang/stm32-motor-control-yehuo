@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   stepper-Î»ÖÃËÙ¶ÈË«»·¿ØÖÆÊµÏÖ-ÔöÁ¿Ê½PID
+  * @brief   stepper-ä½ç½®é€Ÿåº¦åŒç¯æ§åˆ¶å®ç°-å¢é‡å¼PID
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -33,118 +33,118 @@ extern _pid move_pid,speed_pid;
 extern int pid_status;
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-  /* Ğ­Òé³õÊ¼»¯ */
+  /* åè®®åˆå§‹åŒ– */
   protocol_init();
-	/*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+	/*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
 	DEBUG_USART_Config();
-	printf("»¶Ó­Ê¹ÓÃÒ°»ğ µç»ú¿ª·¢°å ²½½øµç»úÎ»ÖÃËÙ¶ÈË«»·¿ØÖÆ Àı³Ì\r\n");
-	printf("°´ÏÂ°´¼ü1Æô¶¯µç»ú£¬°´ÏÂ°´¼ü2Í£Ö¹µç»ú\r\n");	
-	printf("°´ÏÂ°´¼ü3Ôö´óÎ»ÖÃ£¬°´ÏÂ°´¼ü4¼õĞ¡Î»ÖÃ\r\n");	
-  /* ³õÊ¼»¯Ê±¼ä´Á */
+	printf("æ¬¢è¿ä½¿ç”¨é‡ç« ç”µæœºå¼€å‘æ¿ æ­¥è¿›ç”µæœºä½ç½®é€Ÿåº¦åŒç¯æ§åˆ¶ ä¾‹ç¨‹\r\n");
+	printf("æŒ‰ä¸‹æŒ‰é”®1å¯åŠ¨ç”µæœºï¼ŒæŒ‰ä¸‹æŒ‰é”®2åœæ­¢ç”µæœº\r\n");	
+	printf("æŒ‰ä¸‹æŒ‰é”®3å¢å¤§ä½ç½®ï¼ŒæŒ‰ä¸‹æŒ‰é”®4å‡å°ä½ç½®\r\n");	
+  /* åˆå§‹åŒ–æ—¶é—´æˆ³ */
   HAL_InitTick(5);
-	/*°´¼üÖĞ¶Ï³õÊ¼»¯*/
+	/*æŒ‰é”®ä¸­æ–­åˆå§‹åŒ–*/
 	Key_GPIO_Config();	
-	/*led³õÊ¼»¯*/
+	/*ledåˆå§‹åŒ–*/
 	LED_GPIO_Config();
-  /* ³õÊ¼»¯»ù±¾¶¨Ê±Æ÷¶¨Ê±£¬20ms²úÉúÒ»´ÎÖĞ¶Ï */
+  /* åˆå§‹åŒ–åŸºæœ¬å®šæ—¶å™¨å®šæ—¶ï¼Œ20msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­ */
 	TIMx_Configuration();
-  /* ±àÂëÆ÷½Ó¿Ú³õÊ¼»¯ */
+  /* ç¼–ç å™¨æ¥å£åˆå§‹åŒ– */
 	Encoder_Init();
-	/*²½½øµç»ú³õÊ¼»¯*/
+	/*æ­¥è¿›ç”µæœºåˆå§‹åŒ–*/
 	stepper_Init();
-  /* ÉÏµçÄ¬ÈÏÍ£Ö¹µç»ú */
+  /* ä¸Šç”µé»˜è®¤åœæ­¢ç”µæœº */
   Set_Stepper_Stop();
-  /* PIDËã·¨²ÎÊı³õÊ¼»¯ */
+  /* PIDç®—æ³•å‚æ•°åˆå§‹åŒ– */
   PID_param_init();
 
-  /* Ä¿±êËÙ¶È×ª»»Îª±àÂëÆ÷µÄÂö³åÊı×÷ÎªpidÄ¿±êÖµ */
+  /* ç›®æ ‡é€Ÿåº¦è½¬æ¢ä¸ºç¼–ç å™¨çš„è„‰å†²æ•°ä½œä¸ºpidç›®æ ‡å€¼ */
   move_pid.target_val = TARGET_DISP * ENCODER_TOTAL_RESOLUTION;
 	
 
 #if PID_ASSISTANT_EN
 	int32_t Temp = TARGET_DISP * ENCODER_TOTAL_RESOLUTION;
-  set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);    // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
-  set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &Temp, 1);// ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+  set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);    // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
+  set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &Temp, 1);// ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
 #endif
 
 	while(1)
 	{
-    /* ½ÓÊÕÊı¾İ´¦Àí */
+    /* æ¥æ”¶æ•°æ®å¤„ç† */
     receiving_process();
     
-    /* É¨ÃèKEY1£¬Æô¶¯µç»ú */
+    /* æ‰«æKEY1ï¼Œå¯åŠ¨ç”µæœº */
     if( Key_Scan(KEY1_GPIO_PORT,KEY1_PIN) == KEY_ON  )
 		{
     #if PID_ASSISTANT_EN
       Set_Stepper_Start();
-      set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);// Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+      set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);// åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
     #else
       Set_Stepper_Start();
     #endif
 		}
-    /* É¨ÃèKEY2£¬Í£Ö¹µç»ú */
+    /* æ‰«æKEY2ï¼Œåœæ­¢ç”µæœº */
     if( Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON  )
 		{
     #if PID_ASSISTANT_EN
       Set_Stepper_Stop();
-      set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);// Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+      set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);// åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
     #else
       Set_Stepper_Stop();     
     #endif
 		}
-    /* É¨ÃèKEY3£¬Ôö´óÄ¿±êÎ»ÖÃ*/
+    /* æ‰«æKEY3ï¼Œå¢å¤§ç›®æ ‡ä½ç½®*/
     if( Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON  )
 		{
-      /* Ä¿±êÎ»ÖÃÔö¼Ó60000£¬¶ÔÓ¦µç»úÎ»ÖÃÔö¼Ó15È¦ */
+      /* ç›®æ ‡ä½ç½®å¢åŠ 60000ï¼Œå¯¹åº”ç”µæœºä½ç½®å¢åŠ 15åœˆ */
       move_pid.target_val += 60000;
       
     #if PID_ASSISTANT_EN
       int temp = move_pid.target_val;
-      set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);// ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+      set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);// ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
     #endif
 		}
-    /* É¨ÃèKEY4£¬¼õĞ¡Ä¿±êÎ»ÖÃ */
+    /* æ‰«æKEY4ï¼Œå‡å°ç›®æ ‡ä½ç½® */
     if( Key_Scan(KEY4_GPIO_PORT,KEY4_PIN) == KEY_ON  )
 		{
-      /* Ä¿±êÎ»ÖÃ¼õĞ¡60000£¬¶ÔÓ¦µç»úÎ»ÖÃ¼õÉÙ15È¦ */
+      /* ç›®æ ‡ä½ç½®å‡å°60000ï¼Œå¯¹åº”ç”µæœºä½ç½®å‡å°‘15åœˆ */
       move_pid.target_val -= 60000;
       
     #if PID_ASSISTANT_EN
       int temp = move_pid.target_val;
-      set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);// ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+      set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);// ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
     #endif
 		}
 	}
 } 	
 
 /**
-  * @brief  ¶¨Ê±Æ÷¸üĞÂÊÂ¼ş»Øµ÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨æ›´æ–°äº‹ä»¶å›è°ƒå‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  /* ÅĞ¶Ï´¥·¢ÖĞ¶ÏµÄ¶¨Ê±Æ÷ */
+  /* åˆ¤æ–­è§¦å‘ä¸­æ–­çš„å®šæ—¶å™¨ */
   if(htim->Instance == BASIC_TIM)
   {
     Stepper_Ctrl();
   }
   else if(htim->Instance == ENCODER_TIM)
   {  
-    /* ÅĞ¶Ïµ±Ç°¼ÆÊı·½Ïò */
+    /* åˆ¤æ–­å½“å‰è®¡æ•°æ–¹å‘ */
     if(__HAL_TIM_IS_TIM_COUNTING_DOWN(htim))
-      /* ÏÂÒç */
+      /* ä¸‹æº¢ */
       encoder_overflow_count--;
     else
-      /* ÉÏÒç */
+      /* ä¸Šæº¢ */
       encoder_overflow_count++;
   }
 }

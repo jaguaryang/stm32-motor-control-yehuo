@@ -1,18 +1,18 @@
 #include "./pid/bsp_pid.h"
 #include ".\bldcm_control\bsp_bldcm_control.h"
 
-//¶¨ÒåÈ«¾Ö±äÁ¿
+//å®šä¹‰å…¨å±€å˜é‡
 
 _pid pid;
 
 /**
-  * @brief  PID²ÎÊı³õÊ¼»¯
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  PIDå‚æ•°åˆå§‹åŒ–
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void PID_param_init()
 {
-  /* ³õÊ¼»¯²ÎÊı */
+  /* åˆå§‹åŒ–å‚æ•° */
   pid.target_val=0.0;				
   pid.actual_val=0.0;
   pid.err=0.0;
@@ -25,15 +25,15 @@ void PID_param_init()
 
 #if defined(PID_ASSISTANT_EN)
   float pid_temp[3] = {pid.Kp, pid.Ki, pid.Kd};
-  set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, pid_temp, 3);     // ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+  set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, pid_temp, 3);     // ç»™é€šé“ 1 å‘é€ P I D å€¼
 #endif
 }
 
 /**
-  * @brief  ÉèÖÃÄ¿±êÖµ
-  * @param  val		Ä¿±êÖµ
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç›®æ ‡å€¼
+  * @param  val		ç›®æ ‡å€¼
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_pid_target(float temp_val)
 {
@@ -47,56 +47,56 @@ void set_pid_target(float temp_val)
 //    set_bldcm_direction(MOTOR_FWD);
 //  }
 //    
-  pid.target_val = temp_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  pid.target_val = temp_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  »ñÈ¡Ä¿±êÖµ
-  * @param  ÎŞ
-	*	@note 	ÎŞ
-  * @retval Ä¿±êÖµ
+  * @brief  è·å–ç›®æ ‡å€¼
+  * @param  æ— 
+	*	@note 	æ— 
+  * @retval ç›®æ ‡å€¼
   */
 float get_pid_target(void)
 {
-  return pid.target_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  return pid.target_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  ÉèÖÃ±ÈÀı¡¢»ı·Ö¡¢Î¢·ÖÏµÊı
-  * @param  p£º±ÈÀıÏµÊı P
-  * @param  i£º»ı·ÖÏµÊı i
-  * @param  d£ºÎ¢·ÖÏµÊı d
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
+  * @param  pï¼šæ¯”ä¾‹ç³»æ•° P
+  * @param  iï¼šç§¯åˆ†ç³»æ•° i
+  * @param  dï¼šå¾®åˆ†ç³»æ•° d
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_p_i_d(float p, float i, float d)
 {
-  pid.Kp = p;    // ÉèÖÃ±ÈÀıÏµÊı P
-  pid.Ki = i;    // ÉèÖÃ»ı·ÖÏµÊı I
-  pid.Kd = d;    // ÉèÖÃÎ¢·ÖÏµÊı D
+  pid.Kp = p;    // è®¾ç½®æ¯”ä¾‹ç³»æ•° P
+  pid.Ki = i;    // è®¾ç½®ç§¯åˆ†ç³»æ•° I
+  pid.Kd = d;    // è®¾ç½®å¾®åˆ†ç³»æ•° D
 }
 
 /**
-  * @brief  PIDËã·¨ÊµÏÖ
-  * @param  actual_val:Êµ¼ÊÖµ
-	*	@note 	ÎŞ
-  * @retval Í¨¹ıPID¼ÆËãºóµÄÊä³ö
+  * @brief  PIDç®—æ³•å®ç°
+  * @param  actual_val:å®é™…å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åçš„è¾“å‡º
   */
 float PID_realize(float actual_val)
 {
-  /*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+  /*è®¡ç®—ç›®æ ‡å€¼ä¸å®é™…å€¼çš„è¯¯å·®*/
   pid.err = pid.target_val - actual_val;
   pid.integral += pid.err;
 
-  /*PIDËã·¨ÊµÏÖ*/
+  /*PIDç®—æ³•å®ç°*/
   pid.actual_val = pid.Kp * pid.err + 
                    pid.Ki * pid.integral + 
                    pid.Kd * (pid.err - pid.err_last);
 
-  /*Îó²î´«µİ*/
+  /*è¯¯å·®ä¼ é€’*/
   pid.err_last = pid.err;
 
-  /*·µ»Øµ±Ç°Êµ¼ÊÖµ*/
+  /*è¿”å›å½“å‰å®é™…å€¼*/
   return pid.actual_val;
 }
 

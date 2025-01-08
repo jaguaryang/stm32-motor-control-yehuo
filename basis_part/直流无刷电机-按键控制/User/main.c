@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÎŞË¢µç»ú¿ØÖÆ
+  * @brief   ç›´æµæ— åˆ·ç”µæœºæ§åˆ¶
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,54 +24,54 @@
 #include "./usart/bsp_debug_usart.h"
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   __IO uint16_t ChannelPulse = PWM_MAX_PERIOD_COUNT/10;
   uint8_t i = 0;
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
   
-  /* LED µÆ³õÊ¼»¯ */
+  /* LED ç¯åˆå§‹åŒ– */
   LED_GPIO_Config();
   
-  /* µ÷ÊÔ´®¿Ú³õÊ¼»¯ */
+  /* è°ƒè¯•ä¸²å£åˆå§‹åŒ– */
   DEBUG_USART_Config();
   
-  printf("Ò°»ğÖ±Á÷ÎŞË¢µç»ú°´¼ü¿ØÖÆÀı³Ì\r\n");
+  printf("é‡ç«ç›´æµæ— åˆ·ç”µæœºæŒ‰é”®æ§åˆ¶ä¾‹ç¨‹\r\n");
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   bldcm_init();
 	printf("%d", sizeof(MOTOR_FWD));
 	while(1)
 	{
-    /* É¨ÃèKEY1 */
+    /* æ‰«æKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      /* Ê¹ÄÜµç»ú */
+      /* ä½¿èƒ½ç”µæœº */
       set_bldcm_speed(ChannelPulse);
       set_bldcm_enable();
     }
     
-    /* É¨ÃèKEY2 */
+    /* æ‰«æKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
-      /* Í£Ö¹µç»ú */
+      /* åœæ­¢ç”µæœº */
       set_bldcm_disable();
     }
     
-    /* É¨ÃèKEY3 */
+    /* æ‰«æKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* Ôö´óÕ¼¿Õ
-			±È */
+      /* å¢å¤§å ç©º
+			æ¯” */
       ChannelPulse += PWM_MAX_PERIOD_COUNT/10;
       
       if(ChannelPulse > PWM_MAX_PERIOD_COUNT)
@@ -80,7 +80,7 @@ int main(void)
       set_bldcm_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY4 */
+    /* æ‰«æKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
       if(ChannelPulse < PWM_MAX_PERIOD_COUNT/10)
@@ -91,10 +91,10 @@ int main(void)
       set_bldcm_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY5 */
+    /* æ‰«æKEY5 */
     if( Key_Scan(KEY5_GPIO_PORT, KEY5_PIN) == KEY_ON)
     {
-      /* ×ª»»·½Ïò */
+      /* è½¬æ¢æ–¹å‘ */
       set_bldcm_direction( (++i % 2) ? MOTOR_FWD : MOTOR_REV);
     }
 	}

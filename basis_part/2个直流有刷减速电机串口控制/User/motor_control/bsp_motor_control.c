@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   µç»ú¿ØÖÆ½Ó¿Ú
+  * @brief   ç”µæœºæ§åˆ¶æ¥å£
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -20,30 +20,30 @@
 #include <math.h>
 #include <stdlib.h>
 
-/* Ë½ÓĞ±äÁ¿ */
-static motor_dir_t direction  = MOTOR_FWD;      // ¼ÇÂ¼µç»ú1·½Ïò
-static uint16_t    dutyfactor = 0;              // ¼ÇÂ¼µç»ú1Õ¼¿Õ±È
-static motor_dir_t direction2  = MOTOR_FWD;     // ¼ÇÂ¼µç»ú2·½Ïò
-static uint16_t    dutyfactor2 = 0;             // ¼ÇÂ¼µç»ú2Õ¼¿Õ±È
+/* ç§æœ‰å˜é‡ */
+static motor_dir_t direction  = MOTOR_FWD;      // è®°å½•ç”µæœº1æ–¹å‘
+static uint16_t    dutyfactor = 0;              // è®°å½•ç”µæœº1å ç©ºæ¯”
+static motor_dir_t direction2  = MOTOR_FWD;     // è®°å½•ç”µæœº2æ–¹å‘
+static uint16_t    dutyfactor2 = 0;             // è®°å½•ç”µæœº2å ç©ºæ¯”
 
 void sd_gpio_config(void)
 {
    GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒı½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	
 	ENA_GPIO_CLK_ENABLE();
 	ENB_GPIO_CLK_ENABLE();
   
-  /* ¶¨Ê±Æ÷Í¨µÀ1¹¦ÄÜÒı½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàĞÍ*/
+  /* å®šæ—¶å™¨é€šé“1åŠŸèƒ½å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»å‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	/*ÉèÖÃÒı½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 	
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = ENA_PIN;
-	/*µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(ENA_GPIO_PORT, &GPIO_InitStruct);
 
   GPIO_InitStruct.Pin = ENB_PIN;	
@@ -51,21 +51,21 @@ void sd_gpio_config(void)
 }
 
 /**
-  * @brief  µç»ú³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 void motor_init(void)
 {
-  TIMx_Configuration();     // ³õÊ¼»¯µç»ú 1
-  TIMx_Configuration2();    // ³õÊ¼»¯µç»ú 2
+  TIMx_Configuration();     // åˆå§‹åŒ–ç”µæœº 1
+  TIMx_Configuration2();    // åˆå§‹åŒ–ç”µæœº 2
   sd_gpio_config();
 }
 
 /**
-  * @brief  ÉèÖÃµç»úËÙ¶È
-  * @param  v: ËÙ¶È£¨Õ¼¿Õ±È£©
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºé€Ÿåº¦
+  * @param  v: é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰
+  * @retval æ— 
   */
 void set_motor_speed(uint16_t v)
 {
@@ -73,18 +73,18 @@ void set_motor_speed(uint16_t v)
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  ÉèÖÃµç»ú·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºæ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_direction(motor_dir_t dir)
 {
@@ -92,20 +92,20 @@ void set_motor_direction(motor_dir_t dir)
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(0);              // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_FWD_COMPAER(0);              // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  Ê¹ÄÜµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä½¿èƒ½ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_enable(void)
 {
@@ -115,9 +115,9 @@ void set_motor_enable(void)
 }
 
 /**
-  * @brief  ½ûÓÃµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¦ç”¨ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_disable(void)
 {
@@ -127,9 +127,9 @@ void set_motor_disable(void)
 }
 
 /**
-  * @brief  ÉèÖÃµç»úËÙ¶È
-  * @param  v: ËÙ¶È£¨Õ¼¿Õ±È£©
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºé€Ÿåº¦
+  * @param  v: é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰
+  * @retval æ— 
   */
 void set_motor2_speed(uint16_t v)
 {
@@ -137,18 +137,18 @@ void set_motor2_speed(uint16_t v)
   
   if (direction2 == MOTOR_FWD)
   {
-    SET2_FWD_COMPAER(dutyfactor2);     // ÉèÖÃËÙ¶È
+    SET2_FWD_COMPAER(dutyfactor2);     // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET2_REV_COMPAER(dutyfactor2);     // ÉèÖÃËÙ¶È
+    SET2_REV_COMPAER(dutyfactor2);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  ÉèÖÃµç»ú·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºæ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor2_direction(motor_dir_t dir)
 {
@@ -156,20 +156,20 @@ void set_motor2_direction(motor_dir_t dir)
   
   if (direction2 == MOTOR_FWD)
   {
-    SET2_FWD_COMPAER(dutyfactor2);     // ÉèÖÃËÙ¶È
-    SET2_REV_COMPAER(0);              // ÉèÖÃËÙ¶È
+    SET2_FWD_COMPAER(dutyfactor2);     // è®¾ç½®é€Ÿåº¦
+    SET2_REV_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET2_FWD_COMPAER(0);              // ÉèÖÃËÙ¶È
-    SET2_REV_COMPAER(dutyfactor2);     // ÉèÖÃËÙ¶È
+    SET2_FWD_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
+    SET2_REV_COMPAER(dutyfactor2);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  Ê¹ÄÜµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä½¿èƒ½ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor2_enable(void)
 {
@@ -179,9 +179,9 @@ void set_motor2_enable(void)
 }
 
 /**
-  * @brief  ½ûÓÃµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¦ç”¨ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor2_disable(void)
 {
@@ -191,25 +191,25 @@ void set_motor2_disable(void)
 }
 
 /**
-  * @brief  ´òÓ¡°ïÖúÃüÁî
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  æ‰“å°å¸®åŠ©å‘½ä»¤
+  * @param  æ— 
+  * @retval æ— 
   */
 void show_help(void)
 {
-    printf("¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ªÒ°»ğÖ±Á÷¼õËÙµç»úÇı¶¯ÑİÊ¾³ÌĞò¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\r");
-    printf("ÊäÈëÃüÁî(ÒÔ»Ø³µ½áÊø)£º\n\r");
-    printf("< ? >       -°ïÖú²Ëµ¥\n\r");
-    printf("v1[data]     -ÉèÖÃµç»úµÄËÙ¶È£¨·¶Î§£º0¡ª%d£©\n\r", PWM_MAX_PERIOD_COUNT);
-    printf("d1[data]     -ÉèÖÃµç»úµÄ·½Ïò£¬%d:ÕıÏò×ª£¬%d:·´Ïò×ª\n\r", MOTOR_FWD, MOTOR_REV);
-    printf("v2[data]     -ÉèÖÃµç»úµÄËÙ¶È£¨·¶Î§£º0¡ª%d£©\n\r", PWM2_MAX_PERIOD_COUNT);
-    printf("d2[data]     -ÉèÖÃµç»úµÄ·½Ïò£¬%d:ÕıÏò×ª£¬%d:·´Ïò×ª\n\r", MOTOR_FWD, MOTOR_REV);
+    printf("â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”é‡ç«ç›´æµå‡é€Ÿç”µæœºé©±åŠ¨æ¼”ç¤ºç¨‹åºâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”\n\r");
+    printf("è¾“å…¥å‘½ä»¤(ä»¥å›è½¦ç»“æŸ)ï¼š\n\r");
+    printf("< ? >       -å¸®åŠ©èœå•\n\r");
+    printf("v1[data]     -è®¾ç½®ç”µæœºçš„é€Ÿåº¦ï¼ˆèŒƒå›´ï¼š0â€”%dï¼‰\n\r", PWM_MAX_PERIOD_COUNT);
+    printf("d1[data]     -è®¾ç½®ç”µæœºçš„æ–¹å‘ï¼Œ%d:æ­£å‘è½¬ï¼Œ%d:åå‘è½¬\n\r", MOTOR_FWD, MOTOR_REV);
+    printf("v2[data]     -è®¾ç½®ç”µæœºçš„é€Ÿåº¦ï¼ˆèŒƒå›´ï¼š0â€”%dï¼‰\n\r", PWM2_MAX_PERIOD_COUNT);
+    printf("d2[data]     -è®¾ç½®ç”µæœºçš„æ–¹å‘ï¼Œ%d:æ­£å‘è½¬ï¼Œ%d:åå‘è½¬\n\r", MOTOR_FWD, MOTOR_REV);
 }
 
 /**
-  * @brief  ´¦Àí´®¿Ú½ÓÊÕµ½µÄÊı¾İ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  å¤„ç†ä¸²å£æ¥æ”¶åˆ°çš„æ•°æ®
+  * @param  æ— 
+  * @retval æ— 
   */
 void deal_serial_data(void)
 {
@@ -217,7 +217,7 @@ void deal_serial_data(void)
     int dec_temp=0;
     int speed_temp=0;
     
-    //½ÓÊÕµ½ÕıÈ·µÄÖ¸Áî²ÅÎª1
+    //æ¥æ”¶åˆ°æ­£ç¡®çš„æŒ‡ä»¤æ‰ä¸º1
     char okCmd = 0;
   
     if (showflag)
@@ -226,12 +226,12 @@ void deal_serial_data(void)
       showflag = !showflag;
     }
 
-    //¼ì²éÊÇ·ñ½ÓÊÕµ½Ö¸Áî
+    //æ£€æŸ¥æ˜¯å¦æ¥æ”¶åˆ°æŒ‡ä»¤
     if(receive_cmd == 1)
     {
       if(UART_RxBuffer[0] == 'v' || UART_RxBuffer[0] == 'V')
       {
-        //ÉèÖÃËÙ¶È
+        //è®¾ç½®é€Ÿåº¦
         if(UART_RxBuffer[1] == '1')
         {
           if (UART_RxBuffer[2] == ' ')
@@ -240,12 +240,12 @@ void deal_serial_data(void)
             if(speed_temp>=0 && speed_temp <= PWM_MAX_PERIOD_COUNT)
             {
               set_motor_speed(speed_temp);
-              printf("\n\rµç»ú1ËÙ¶È: %d\n\r", speed_temp);
+              printf("\n\rç”µæœº1é€Ÿåº¦: %d\n\r", speed_temp);
               okCmd = 1;
             }
           }
         }
-        //ÉèÖÃËÙ¶È
+        //è®¾ç½®é€Ÿåº¦
         if(UART_RxBuffer[1] == '2')
         {
           if (UART_RxBuffer[2] == ' ')
@@ -254,7 +254,7 @@ void deal_serial_data(void)
             if(speed_temp>=0 && speed_temp <= PWM2_MAX_PERIOD_COUNT)
             {
               set_motor2_speed(speed_temp);
-              printf("\n\rµç»ú2ËÙ¶È: %d\n\r", speed_temp);
+              printf("\n\rç”µæœº2é€Ÿåº¦: %d\n\r", speed_temp);
               okCmd = 1;
             }
           }
@@ -264,7 +264,7 @@ void deal_serial_data(void)
       {
         if (UART_RxBuffer[1] == '1')
         {
-          //ÉèÖÃ·½Ïò
+          //è®¾ç½®æ–¹å‘
           if(UART_RxBuffer[2] == ' ')
           {
             dec_temp = atoi((char const *)UART_RxBuffer+3);
@@ -272,14 +272,14 @@ void deal_serial_data(void)
             if(dec_temp>=0)
             {
               set_motor_direction(dec_temp);
-              printf("\n\rµç»ú1·½Ïò:%s\n\r", dec_temp ? "·´Ïò×ª" : "ÕıÏò×ª");
+              printf("\n\rç”µæœº1æ–¹å‘:%s\n\r", dec_temp ? "åå‘è½¬" : "æ­£å‘è½¬");
               okCmd = 1;
             }
           }
         }
         if (UART_RxBuffer[1] == '2')
         {
-          //ÉèÖÃ·½Ïò
+          //è®¾ç½®æ–¹å‘
           if(UART_RxBuffer[2] == ' ')
           {
             dec_temp = atoi((char const *)UART_RxBuffer+3);
@@ -287,7 +287,7 @@ void deal_serial_data(void)
             if(dec_temp>=0)
             {
               set_motor2_direction(dec_temp);
-              printf("\n\rµç»ú2·½Ïò:%s\n\r", dec_temp ? "·´Ïò×ª" : "ÕıÏò×ª");
+              printf("\n\rç”µæœº2æ–¹å‘:%s\n\r", dec_temp ? "åå‘è½¬" : "æ­£å‘è½¬");
               okCmd = 1;
             }
           }
@@ -295,18 +295,18 @@ void deal_serial_data(void)
       }
       else if(UART_RxBuffer[0] == '?')
       {
-        //´òÓ¡°ïÖúÃüÁî
+        //æ‰“å°å¸®åŠ©å‘½ä»¤
         show_help();
         okCmd = 1;
       }
-      //Èç¹ûÖ¸ÁîÓĞÎŞÔò´òÓ¡°ïÖúÃüÁî
+      //å¦‚æœæŒ‡ä»¤æœ‰æ— åˆ™æ‰“å°å¸®åŠ©å‘½ä»¤
       if(okCmd != 1)
       {
-        printf("\n\r ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë...\n\r");
+        printf("\n\r è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥...\n\r");
         show_help();
       }
 
-      //Çå¿Õ´®¿Ú½ÓÊÕ»º³åÊı×é
+      //æ¸…ç©ºä¸²å£æ¥æ”¶ç¼“å†²æ•°ç»„
       receive_cmd = 0;
       uart_FlushRxBuffer();
 

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Êä³ö±È½Ï·¶Àý
+  * @brief   é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨è¾“å‡ºæ¯”è¾ƒèŒƒä¾‹
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ð  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®žéªŒå¹³å°:é‡Žç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -18,41 +18,41 @@
 
 TIM_HandleTypeDef TIM_AdvanceHandle;
 
-__IO uint16_t OC_Pulse_num_Channel1 = 25;    /* Í¨µÀ1µÄ±È½ÏÖµ */
-__IO uint16_t OC_Pulse_num_Channel2 = 51;    /* Í¨µÀ2µÄ±È½ÏÖµ */
-__IO uint16_t OC_Pulse_num_Channel3 = 77;    /* Í¨µÀ3µÄ±È½ÏÖµ */
-__IO uint16_t OC_Pulse_num_Channel4 = 103;   /* Í¨µÀ4µÄ±È½ÏÖµ */
+__IO uint16_t OC_Pulse_num_Channel1 = 25;    /* é€šé“1çš„æ¯”è¾ƒå€¼ */
+__IO uint16_t OC_Pulse_num_Channel2 = 51;    /* é€šé“2çš„æ¯”è¾ƒå€¼ */
+__IO uint16_t OC_Pulse_num_Channel3 = 77;    /* é€šé“3çš„æ¯”è¾ƒå€¼ */
+__IO uint16_t OC_Pulse_num_Channel4 = 103;   /* é€šé“4çš„æ¯”è¾ƒå€¼ */
 
 /**
-  * @brief  ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷ TIMx,x[1,8]ÖÐ¶ÏÓÅÏÈ¼¶ÅäÖÃ
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨ TIMx,x[1,8]ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_NVIC_Configuration(void)
 {
-	/* ÉèÖÃÇÀÕ¼ÓÅÏÈ¼¶£¬×ÓÓÅÏÈ¼¶ */
+	/* è®¾ç½®æŠ¢å ä¼˜å…ˆçº§ï¼Œå­ä¼˜å…ˆçº§ */
 	HAL_NVIC_SetPriority(ADVANCE_TIM_IRQn, 0, 0);
-	/* ÉèÖÃÖÐ¶ÏÔ´ */
+	/* è®¾ç½®ä¸­æ–­æº */
 	HAL_NVIC_EnableIRQ(ADVANCE_TIM_IRQn);
 }
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_GPIO_Config(void) 
 {
-	/*¶¨ÒåÒ»¸öGPIO_InitTypeDefÀàÐÍµÄ½á¹¹Ìå*/
+	/*å®šä¹‰ä¸€ä¸ªGPIO_InitTypeDefç±»åž‹çš„ç»“æž„ä½“*/
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	/*¿ªÆô¶¨Ê±Æ÷Ïà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+	/*å¼€å¯å®šæ—¶å™¨ç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
 	CHANNEL1_OC_GPIO_CLK_ENABLE();
 	CHANNEL2_OC_GPIO_CLK_ENABLE();
   CHANNEL3_OC_GPIO_CLK_ENABLE();
   CHANNEL4_OC_GPIO_CLK_ENABLE();
 
-	/* ¶¨Ê±Æ÷¹¦ÄÜÒý½Å³õÊ¼»¯ */															   
+	/* å®šæ—¶å™¨åŠŸèƒ½å¼•è„šåˆå§‹åŒ– */															   
 	GPIO_InitStructure.Pin = CHANNEL1_OC_PIN;	
 	GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;    
 	GPIO_InitStructure.Pull = GPIO_NOPULL;
@@ -74,90 +74,90 @@ static void TIMx_GPIO_Config(void)
 }
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓÐ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓÐ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ðè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈý¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓÐ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æž„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓÐ
- * TIM_CounterMode			 TIMx,x[6,7]Ã»ÓÐ£¬ÆäËû¶¼ÓÐ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓÐ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓÐ£¬ÆäËû¶¼ÓÐ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓÐ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode			 TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 static void TIM_Mode_Config(void)
 {
 	TIM_OC_InitTypeDef  TIM_OCInitStructure;
   
-	/*Ê¹ÄÜ¶¨Ê±Æ÷*/
+	/*ä½¿èƒ½å®šæ—¶å™¨*/
 	ADVANCE_TIM_CLK_ENABLE();
 
 	TIM_AdvanceHandle.Instance = ADVANCE_TIM;    
-	/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï */		
-	//µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½TIM_PERIOD£¬¼´ÎªTIM_PERIOD´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+	/* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­ */		
+	//å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°TIM_PERIODï¼Œå³ä¸ºTIM_PERIODæ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
 	TIM_AdvanceHandle.Init.Period = TIM_PERIOD; 
-	// ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=168MHz 
-	// Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_PRESCALER-1)
+	// é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=168MHz 
+	// è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º=TIMxCLK/(TIM_PRESCALER-1)
 	TIM_AdvanceHandle.Init.Prescaler = TIM_PRESCALER-1;
-	/* ¼ÆÊý·½Ê½ */
+	/* è®¡æ•°æ–¹å¼ */
 	TIM_AdvanceHandle.Init.CounterMode = TIM_COUNTERMODE_UP;            
-	/* ²ÉÑùÊ±ÖÓ·ÖÆµ */	
+	/* é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘ */	
 	TIM_AdvanceHandle.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;   
 	TIM_AdvanceHandle.Init.RepetitionCounter = 0 ;  		
-	/* ³õÊ¼»¯¶¨Ê±Æ÷ */
+	/* åˆå§‹åŒ–å®šæ—¶å™¨ */
 	HAL_TIM_OC_Init(&TIM_AdvanceHandle);
 
-	/* PWMÄ£Ê½ÅäÖÃ--ÕâÀïÅäÖÃÎªÊä³ö±È½ÏÄ£Ê½ */
+	/* PWMæ¨¡å¼é…ç½®--è¿™é‡Œé…ç½®ä¸ºè¾“å‡ºæ¯”è¾ƒæ¨¡å¼ */
 	TIM_OCInitStructure.OCMode = TIM_OCMODE_TOGGLE; 
-	/* ±È½ÏÊä³öµÄ¼ÆÊýÖµ */
+	/* æ¯”è¾ƒè¾“å‡ºçš„è®¡æ•°å€¼ */
 	TIM_OCInitStructure.Pulse = OC_Pulse_num_Channel1;
-	/* µ±¶¨Ê±Æ÷¼ÆÊýÖµÐ¡ÓÚCCR1_ValÊ±Îª¸ßµçÆ½ */
+	/* å½“å®šæ—¶å™¨è®¡æ•°å€¼å°äºŽCCR1_Valæ—¶ä¸ºé«˜ç”µå¹³ */
 	TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH;
-	/* ÉèÖÃ»¥²¹Í¨µÀÊä³öµÄ¼«ÐÔ */
+	/* è®¾ç½®äº’è¡¥é€šé“è¾“å‡ºçš„æžæ€§ */
 	TIM_OCInitStructure.OCNPolarity = TIM_OCNPOLARITY_LOW; 
-	/* ¿ìËÙÄ£Ê½ÉèÖÃ */
+	/* å¿«é€Ÿæ¨¡å¼è®¾ç½® */
 	TIM_OCInitStructure.OCFastMode = TIM_OCFAST_DISABLE;   
-	/* ¿ÕÏÐµçÆ½ */
+	/* ç©ºé—²ç”µå¹³ */
 	TIM_OCInitStructure.OCIdleState = TIM_OCIDLESTATE_RESET;  
-	/* »¥²¹Í¨µÀÉèÖÃ */
+	/* äº’è¡¥é€šé“è®¾ç½® */
 	TIM_OCInitStructure.OCNIdleState = TIM_OCNIDLESTATE_RESET; 
 	HAL_TIM_OC_ConfigChannel(&TIM_AdvanceHandle, &TIM_OCInitStructure, ADVANCE_TIM_CHANNEL_1);
   
-  /* Í¨µÀ2ÅäÖÃ */
+  /* é€šé“2é…ç½® */
   TIM_OCInitStructure.Pulse = OC_Pulse_num_Channel2;
   HAL_TIM_OC_ConfigChannel(&TIM_AdvanceHandle, &TIM_OCInitStructure, ADVANCE_TIM_CHANNEL_2);
     
-  /* Í¨µÀ3ÅäÖÃ */
+  /* é€šé“3é…ç½® */
   TIM_OCInitStructure.Pulse = OC_Pulse_num_Channel3;
   HAL_TIM_OC_ConfigChannel(&TIM_AdvanceHandle, &TIM_OCInitStructure, ADVANCE_TIM_CHANNEL_3);
   
-  /* Í¨µÀ4ÅäÖÃ */
+  /* é€šé“4é…ç½® */
   TIM_OCInitStructure.Pulse = OC_Pulse_num_Channel4;
   HAL_TIM_OC_ConfigChannel(&TIM_AdvanceHandle, &TIM_OCInitStructure, ADVANCE_TIM_CHANNEL_4);
 
-	/* Æô¶¯±È½ÏÊä³ö²¢Ê¹ÄÜÖÐ¶Ï */
+	/* å¯åŠ¨æ¯”è¾ƒè¾“å‡ºå¹¶ä½¿èƒ½ä¸­æ–­ */
 	HAL_TIM_OC_Start_IT(&TIM_AdvanceHandle, ADVANCE_TIM_CHANNEL_1);
-  /* Æô¶¯±È½ÏÊä³ö²¢Ê¹ÄÜÖÐ¶Ï */
+  /* å¯åŠ¨æ¯”è¾ƒè¾“å‡ºå¹¶ä½¿èƒ½ä¸­æ–­ */
 	HAL_TIM_OC_Start_IT(&TIM_AdvanceHandle, ADVANCE_TIM_CHANNEL_2);
-  /* Æô¶¯±È½ÏÊä³ö²¢Ê¹ÄÜÖÐ¶Ï */
+  /* å¯åŠ¨æ¯”è¾ƒè¾“å‡ºå¹¶ä½¿èƒ½ä¸­æ–­ */
 	HAL_TIM_OC_Start_IT(&TIM_AdvanceHandle, ADVANCE_TIM_CHANNEL_3);
-  /* Æô¶¯±È½ÏÊä³ö²¢Ê¹ÄÜÖÐ¶Ï */
+  /* å¯åŠ¨æ¯”è¾ƒè¾“å‡ºå¹¶ä½¿èƒ½ä¸­æ–­ */
 	HAL_TIM_OC_Start_IT(&TIM_AdvanceHandle, ADVANCE_TIM_CHANNEL_4);
   
-	/* Ê¹ÄÜ±È½ÏÍ¨µÀ1 */
+	/* ä½¿èƒ½æ¯”è¾ƒé€šé“1 */
 	TIM_CCxChannelCmd(ADVANCE_TIM, ADVANCE_TIM_CHANNEL_1, TIM_CCx_ENABLE);
-  /* Ê¹ÄÜ±È½ÏÍ¨µÀ2 */
+  /* ä½¿èƒ½æ¯”è¾ƒé€šé“2 */
 	TIM_CCxChannelCmd(ADVANCE_TIM, ADVANCE_TIM_CHANNEL_2, TIM_CCx_ENABLE);
-  /* Ê¹ÄÜ±È½ÏÍ¨µÀ3 */
+  /* ä½¿èƒ½æ¯”è¾ƒé€šé“3 */
 	TIM_CCxChannelCmd(ADVANCE_TIM, ADVANCE_TIM_CHANNEL_3, TIM_CCx_ENABLE);
-  /* Ê¹ÄÜ±È½ÏÍ¨µÀ4 */
+  /* ä½¿èƒ½æ¯”è¾ƒé€šé“4 */
 	TIM_CCxChannelCmd(ADVANCE_TIM, ADVANCE_TIM_CHANNEL_4, TIM_CCx_ENABLE);
 }
 
 /**
-  * @brief  ³õÊ¼»¯¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷ÍâÉè
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  åˆå§‹åŒ–é«˜çº§æŽ§åˆ¶å®šæ—¶å™¨å¤–è®¾
+  * @param  æ— 
+  * @retval æ— 
   */
 void TIMx_AdvanceConfig(void)
 {
@@ -170,19 +170,19 @@ void TIMx_AdvanceConfig(void)
 
 
 /**
-  * @brief  ¶¨Ê±Æ÷±È½ÏÖÐ¶Ï
-  * @param  htim£º¶¨Ê±Æ÷¾ä±úÖ¸Õë
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  å®šæ—¶å™¨æ¯”è¾ƒä¸­æ–­
+  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„æŒ‡é’ˆ
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
   __IO uint16_t count;
   
-  /*»ñÈ¡µ±Ç°¼ÆÊý*/
+  /*èŽ·å–å½“å‰è®¡æ•°*/
   count = __HAL_TIM_GET_COUNTER(htim);
   
-  /*ÅÐ¶Ï´¥·¢ÖÐ¶ÏµÄÊä³öÍ¨µÀ²¢ÉèÖÃÐÂµÄ±È½ÏÊýÖµ*/
+  /*åˆ¤æ–­è§¦å‘ä¸­æ–­çš„è¾“å‡ºé€šé“å¹¶è®¾ç½®æ–°çš„æ¯”è¾ƒæ•°å€¼*/
   if(htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
   {
     __HAL_TIM_SET_COMPARE(htim, ADVANCE_TIM_CHANNEL_1, count + OC_Pulse_num_Channel1);

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   �����������������
+  * @brief   步进电机编码器测速
   ******************************************************************************
   * @attention
   *
-  * ʵ��ƽ̨:Ұ��  STM32 F407 ������ 
-  * ��̳    :http://www.firebbs.cn
-  * �Ա�    :http://firestm32.taobao.com
+  * 实验平台:野火  STM32 F407 开发板 
+  * 论坛    :http://www.firebbs.cn
+  * 淘宝    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -27,60 +27,60 @@
 #include "./led/bsp_led.h"
 #include "./Encoder/bsp_encoder.h"
 
-/* �����ת���� */
+/* 电机旋转方向 */
 __IO int8_t motor_direction = 0;
-/* ��ǰʱ���ܼ���ֵ */
+/* 当前时刻总计数值 */
 __IO int32_t capture_count = 0;
-/* ��һʱ���ܼ���ֵ */
+/* 上一时刻总计数值 */
 __IO int32_t last_count = 0;
-/* ��λʱ�����ܼ���ֵ */
+/* 单位时间内总计数值 */
 __IO int32_t count_per_unit = 0;
-/* ���ת��ת�� */
+/* 电机转轴转速 */
 __IO float shaft_speed = 0.0f;
-/* �ۻ�Ȧ�� */
+/* 累积圈数 */
 __IO float number_of_rotations = 0.0f;
 
 /**
-  * @brief  ������
-  * @param  ��
-  * @retval ��
+  * @brief  主函数
+  * @param  无
+  * @retval 无
   */
 int main(void) 
 {
   int i = 0;
   
-	/* ��ʼ��ϵͳʱ��Ϊ168MHz */
+	/* 初始化系统时钟为168MHz */
 	SystemClock_Config();
-	/*��ʼ��USART ����ģʽΪ 115200 8-N-1���жϽ���*/
+	/*初始化USART 配置模式为 115200 8-N-1，中断接收*/
 	DEBUG_USART_Config();
-	printf("��ӭʹ��Ұ�� ��������� ������� ���������� ����\r\n");
-	printf("���°���1�������������2ֹͣ������3�ı䷽��\r\n");	
-  /* ��ʼ��ʱ��� */
+	printf("欢迎使用野火 电机开发板 步进电机 编码器测速 例程\r\n");
+	printf("按下按键1启动电机、按键2停止、按键3改变方向\r\n");	
+  /* 初始化时间戳 */
   HAL_InitTick(5);
-	/*������ʼ��*/
+	/*按键初始化*/
 	Key_GPIO_Config();	
-	/*led��ʼ��*/
+	/*led初始化*/
 	LED_GPIO_Config();
-	/*���������ʼ��*/
+	/*步进电机初始化*/
 	stepper_Init();
-  /* �ϵ�Ĭ��ֹͣ���������1���� */
+  /* 上电默认停止电机，按键1启动 */
   MOTOR_EN(OFF);
-  /* �������ӿڳ�ʼ�� */
+  /* 编码器接口初始化 */
 	Encoder_Init();
   
 	while(1)
 	{
-    /* ɨ��KEY1��������� */
+    /* 扫描KEY1，启动电机 */
     if(Key_Scan(KEY1_GPIO_PORT,KEY1_PIN) == KEY_ON)
     {
       MOTOR_EN(ON);
     }
-    /* ɨ��KEY2��ֹͣ��� */
+    /* 扫描KEY2，停止电机 */
     if(Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON)
     {
       MOTOR_EN(OFF);
     }
-    /* ɨ��KEY3���ı䷽�� */
+    /* 扫描KEY3，改变方向 */
     if(Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON)
     {
       static int j = 0;
@@ -88,31 +88,31 @@ int main(void)
       j=!j;
     }
     
-    /* 20ms����һ�� */
-    /* �����ת���� = �������������� */
+    /* 20ms计算一次 */
+    /* 电机旋转方向 = 计数器计数方向 */
     motor_direction = __HAL_TIM_IS_TIM_COUNTING_DOWN(&TIM_EncoderHandle);
     
-    /* ��ǰʱ���ܼ���ֵ = ������ֵ + ����������� * ENCODER_TIM_PERIOD  */
+    /* 当前时刻总计数值 = 计数器值 + 计数溢出次数 * ENCODER_TIM_PERIOD  */
     capture_count =__HAL_TIM_GET_COUNTER(&TIM_EncoderHandle) + (Encoder_Overflow_Count * ENCODER_TIM_PERIOD);
     
-    /* ��λʱ�����ܼ���ֵ = ��ǰʱ���ܼ���ֵ - ��һʱ���ܼ���ֵ */
+    /* 单位时间内总计数值 = 当前时刻总计数值 - 上一时刻总计数值 */
     count_per_unit = capture_count - last_count;
     
-    /* ת��ת�� = ��λʱ���ڵļ���ֵ / �������ֱܷ��� * ʱ��ϵ��  */
+    /* 转轴转速 = 单位时间内的计数值 / 编码器总分辨率 * 时间系数  */
     shaft_speed = (float)count_per_unit / ENCODER_TOTAL_RESOLUTION * 50 ;
     
-    /* �ۻ�Ȧ�� = ��ǰʱ���ܼ���ֵ / �������ֱܷ���  */
+    /* 累积圈数 = 当前时刻总计数值 / 编码器总分辨率  */
     number_of_rotations = (float)capture_count / ENCODER_TOTAL_RESOLUTION;
 
-    /* ��¼��ǰ�ܼ���ֵ������һʱ�̼���ʹ�� */
+    /* 记录当前总计数值，供下一时刻计算使用 */
     last_count = capture_count;
     
-    if(i == 50)/* 1s����һ�� */
+    if(i == 50)/* 1s报告一次 */
     {
-      printf("\r\n�������%d\r\n", motor_direction);
-      printf("��λʱ������Ч����ֵ��%d\r\n", (count_per_unit<0 ? abs(count_per_unit) : count_per_unit));
-      printf("�������ת�٣�%.2f ת/��\r\n", shaft_speed);
-      printf("�ۼ�Ȧ����%.2f Ȧ\r\n", number_of_rotations);
+      printf("\r\n电机方向：%d\r\n", motor_direction);
+      printf("单位时间内有效计数值：%d\r\n", (count_per_unit<0 ? abs(count_per_unit) : count_per_unit));
+      printf("步进电机转速：%.2f 转/秒\r\n", shaft_speed);
+      printf("累计圈数：%.2f 圈\r\n", number_of_rotations);
       i = 0;
     }
     delay_ms(20);

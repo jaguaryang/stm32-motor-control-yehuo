@@ -4,16 +4,16 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 
-//´®¿Ú½ÓÊÕ»º³åÊı×é´óĞ¡
+//ä¸²å£æ¥æ”¶ç¼“å†²æ•°ç»„å¤§å°
 #define UART_RX_BUFFER_SIZE 256 
 
 extern unsigned char UART_RxBuffer[UART_RX_BUFFER_SIZE];
 extern uint8_t receive_cmd;
 
-//´®¿Ú²¨ÌØÂÊ
+//ä¸²å£æ³¢ç‰¹ç‡
 #define DEBUG_USART_BAUDRATE                    115200
 
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
 /*******************************************************/
 #define DEBUG_USART                             USART1
 #define DEBUG_USART_CLK_ENABLE()                __USART1_CLK_ENABLE();
@@ -35,59 +35,59 @@ extern uint8_t receive_cmd;
 #define DEBUG_USART_IRQ                 		    USART1_IRQn
 /************************************************************/
 
-/* ÉÏÎ»»úºê¶¨Òå */
+/* ä¸Šä½æœºå®å®šä¹‰ */
 
-/* Êı¾İÍ·½á¹¹Ìå */
+/* æ•°æ®å¤´ç»“æ„ä½“ */
 typedef __packed struct
 {
-  uint32_t head;    // °üÍ·
-  uint8_t ch;       // Í¨µÀ
-  uint32_t len;     // °ü³¤¶È
-  uint8_t cmd;      // ÃüÁî
-//  uint8_t sum;      // Ğ£ÑéºÍ
+  uint32_t head;    // åŒ…å¤´
+  uint8_t ch;       // é€šé“
+  uint32_t len;     // åŒ…é•¿åº¦
+  uint8_t cmd;      // å‘½ä»¤
+//  uint8_t sum;      // æ ¡éªŒå’Œ
   
 }packet_head_t;
 
-#define PACKET_HEAD     0x59485A53    // °üÍ·
+#define PACKET_HEAD     0x59485A53    // åŒ…å¤´
 
-/* Í¨µÀºê¶¨Òå */
+/* é€šé“å®å®šä¹‰ */
 #define CURVES_CH1      0x01
 #define CURVES_CH2      0x02
 #define CURVES_CH3      0x03
 #define CURVES_CH4      0x04
 #define CURVES_CH5      0x05
 
-/* Ö¸Áî(ÏÂÎ»»ú -> ÉÏÎ»»ú) */
-#define SEED_TARGET_CMD      0x01     // ·¢ËÍÉÏÎ»»úÍ¨µÀµÄÄ¿±êÖµ
-#define SEED_FACT_CMD        0x02     // ·¢ËÍÍ¨µÀÊµ¼ÊÖµ
-#define SEED_P_I_D_CMD       0x03     // ·¢ËÍ PID Öµ£¨Í¬²½ÉÏÎ»»úÏÔÊ¾µÄÖµ£©
-#define SEED_START_CMD       0x04     // ·¢ËÍÆô¶¯Ö¸Áî£¨Í¬²½ÉÏÎ»»ú°´Å¥×´Ì¬£©
-#define SEED_STOP_CMD        0x05     // ·¢ËÍÍ£Ö¹Ö¸Áî£¨Í¬²½ÉÏÎ»»ú°´Å¥×´Ì¬£©
-#define SEED_PERIOD_CMD      0x06     // ·¢ËÍÖÜÆÚ£¨Í¬²½ÉÏÎ»»úÏÔÊ¾µÄÖµ£©
+/* æŒ‡ä»¤(ä¸‹ä½æœº -> ä¸Šä½æœº) */
+#define SEED_TARGET_CMD      0x01     // å‘é€ä¸Šä½æœºé€šé“çš„ç›®æ ‡å€¼
+#define SEED_FACT_CMD        0x02     // å‘é€é€šé“å®é™…å€¼
+#define SEED_P_I_D_CMD       0x03     // å‘é€ PID å€¼ï¼ˆåŒæ­¥ä¸Šä½æœºæ˜¾ç¤ºçš„å€¼ï¼‰
+#define SEED_START_CMD       0x04     // å‘é€å¯åŠ¨æŒ‡ä»¤ï¼ˆåŒæ­¥ä¸Šä½æœºæŒ‰é’®çŠ¶æ€ï¼‰
+#define SEED_STOP_CMD        0x05     // å‘é€åœæ­¢æŒ‡ä»¤ï¼ˆåŒæ­¥ä¸Šä½æœºæŒ‰é’®çŠ¶æ€ï¼‰
+#define SEED_PERIOD_CMD      0x06     // å‘é€å‘¨æœŸï¼ˆåŒæ­¥ä¸Šä½æœºæ˜¾ç¤ºçš„å€¼ï¼‰
 
-/* Ö¸Áî(ÉÏÎ»»ú -> ÏÂÎ»»ú) */
-#define SET_P_I_D_CMD        0x10     // ÉèÖÃ PID Öµ
-#define SET_TARGET_CMD       0x11     // ÉèÖÃÄ¿±êÖµ
-#define START_CMD            0x12     // Æô¶¯Ö¸Áî
-#define STOP_CMD             0x13     // Í£Ö¹Ö¸Áî
-#define RESET_CMD            0x14     // ¸´Î»Ö¸Áî
-#define SET_PERIOD_CMD       0x15     // ÉèÖÃÖÜÆÚ
+/* æŒ‡ä»¤(ä¸Šä½æœº -> ä¸‹ä½æœº) */
+#define SET_P_I_D_CMD        0x10     // è®¾ç½® PID å€¼
+#define SET_TARGET_CMD       0x11     // è®¾ç½®ç›®æ ‡å€¼
+#define START_CMD            0x12     // å¯åŠ¨æŒ‡ä»¤
+#define STOP_CMD             0x13     // åœæ­¢æŒ‡ä»¤
+#define RESET_CMD            0x14     // å¤ä½æŒ‡ä»¤
+#define SET_PERIOD_CMD       0x15     // è®¾ç½®å‘¨æœŸ
 
-/* Ë÷ÒıÖµºê¶¨Òå */
-#define HEAD_INDEX_VAL       0x3u     // °üÍ·Ë÷ÒıÖµ£¨4×Ö½Ú£©
-#define CHX_INDEX_VAL        0x4u     // Í¨µÀË÷ÒıÖµ£¨1×Ö½Ú£©
-#define LEN_INDEX_VAL        0x8u     // °ü³¤Ë÷ÒıÖµ£¨4×Ö½Ú£©
-#define CMD_INDEX_VAL        0x9u     // ÃüÁîË÷ÒıÖµ£¨1×Ö½Ú£©
+/* ç´¢å¼•å€¼å®å®šä¹‰ */
+#define HEAD_INDEX_VAL       0x3u     // åŒ…å¤´ç´¢å¼•å€¼ï¼ˆ4å­—èŠ‚ï¼‰
+#define CHX_INDEX_VAL        0x4u     // é€šé“ç´¢å¼•å€¼ï¼ˆ1å­—èŠ‚ï¼‰
+#define LEN_INDEX_VAL        0x8u     // åŒ…é•¿ç´¢å¼•å€¼ï¼ˆ4å­—èŠ‚ï¼‰
+#define CMD_INDEX_VAL        0x9u     // å‘½ä»¤ç´¢å¼•å€¼ï¼ˆ1å­—èŠ‚ï¼‰
 
 #define EXCHANGE_H_L_BIT(data)      ((((data) << 24) & 0xFF000000) |\
                                      (((data) <<  8) & 0x00FF0000) |\
                                      (((data) >>  8) & 0x0000FF00) |\
-                                     (((data) >> 24) & 0x000000FF))     // ½»»»¸ßµÍ×Ö½Ú
+                                     (((data) >> 24) & 0x000000FF))     // äº¤æ¢é«˜ä½å­—èŠ‚
 
 #define COMPOUND_32BIT(data)        (((*(data-0) << 24) & 0xFF000000) |\
                                      ((*(data-1) << 16) & 0x00FF0000) |\
                                      ((*(data-2) <<  8) & 0x0000FF00) |\
-                                     ((*(data-3) <<  0) & 0x000000FF))      // ºÏ³ÉÎªÒ»¸ö×Ö
+                                     ((*(data-3) <<  0) & 0x000000FF))      // åˆæˆä¸ºä¸€ä¸ªå­—
 
 void uart_FlushRxBuffer(void);
 void Usart_SendByte(uint8_t str);

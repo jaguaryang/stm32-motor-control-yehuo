@@ -1,18 +1,18 @@
 #include "./pid/bsp_pid.h"
 
-//¶¨ÒåÈ«¾Ö±äÁ¿
+//å®šä¹‰å…¨å±€å˜é‡
 
 _pid pid_location;
 _pid pid_curr;
 
 /**
-  * @brief  PID²ÎÊý³õÊ¼»¯
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  PIDå‚æ•°åˆå§‹åŒ–
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void PID_param_init(void)
 {
-		/* Î»ÖÃÏà¹Ø³õÊ¼»¯²ÎÊý */
+		/* ä½ç½®ç›¸å…³åˆå§‹åŒ–å‚æ•° */
     pid_location.target_val=0.0;				
     pid_location.actual_val=0.0;
     pid_location.err=0.0;
@@ -23,7 +23,7 @@ void PID_param_init(void)
 		pid_location.Ki = 0.0;
 		pid_location.Kd = 0.12;
   
-  	/* ËÙ¶ÈÏà¹Ø³õÊ¼»¯²ÎÊý */
+  	/* é€Ÿåº¦ç›¸å…³åˆå§‹åŒ–å‚æ•° */
     pid_curr.target_val=100.0;				
     pid_curr.actual_val=0.0;
     pid_curr.err=0.0;
@@ -36,76 +36,76 @@ void PID_param_init(void)
 
 #if defined(PID_ASSISTANT_EN)
     float pid_temp[3] = {pid_location.Kp, pid_location.Ki, pid_location.Kd};
-//    set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, pid_temp, 3);     // ¸øÍ¨µÀ 1 ·¢ËÍ P I D Öµ
+//    set_computer_value(SEND_P_I_D_CMD, CURVES_CH1, pid_temp, 3);     // ç»™é€šé“ 1 å‘é€ P I D å€¼
     
     pid_temp[0] = pid_curr.Kp;
     pid_temp[1] = pid_curr.Ki;
     pid_temp[2] = pid_curr.Kd;
-    set_computer_value(SEND_P_I_D_CMD, CURVES_CH2, pid_temp, 3);     // ¸øÍ¨µÀ 2 ·¢ËÍ P I D Öµ
+    set_computer_value(SEND_P_I_D_CMD, CURVES_CH2, pid_temp, 3);     // ç»™é€šé“ 2 å‘é€ P I D å€¼
 #endif
 } 
 
 /**
-  * @brief  ÉèÖÃÄ¿±êÖµ
-  * @param  val		Ä¿±êÖµ
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®ç›®æ ‡å€¼
+  * @param  val		ç›®æ ‡å€¼
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_pid_target(_pid *pid, float temp_val)
 {
-  pid->target_val = temp_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  pid->target_val = temp_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  »ñÈ¡Ä¿±êÖµ
-  * @param  ÎÞ
-	*	@note 	ÎÞ
-  * @retval Ä¿±êÖµ
+  * @brief  èŽ·å–ç›®æ ‡å€¼
+  * @param  æ— 
+	*	@note 	æ— 
+  * @retval ç›®æ ‡å€¼
   */
 float get_pid_target(_pid *pid)
 {
-  return pid->target_val;    // ÉèÖÃµ±Ç°µÄÄ¿±êÖµ
+  return pid->target_val;    // è®¾ç½®å½“å‰çš„ç›®æ ‡å€¼
 }
 
 /**
-  * @brief  ÉèÖÃ±ÈÀý¡¢»ý·Ö¡¢Î¢·ÖÏµÊý
-  * @param  p£º±ÈÀýÏµÊý P
-  * @param  i£º»ý·ÖÏµÊý i
-  * @param  d£ºÎ¢·ÖÏµÊý d
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
+  * @param  pï¼šæ¯”ä¾‹ç³»æ•° P
+  * @param  iï¼šç§¯åˆ†ç³»æ•° i
+  * @param  dï¼šå¾®åˆ†ç³»æ•° d
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void set_p_i_d(_pid *pid, float p, float i, float d)
 {
-  	pid->Kp = p;    // ÉèÖÃ±ÈÀýÏµÊý P
-		pid->Ki = i;    // ÉèÖÃ»ý·ÖÏµÊý I
-		pid->Kd = d;    // ÉèÖÃÎ¢·ÖÏµÊý D
+  	pid->Kp = p;    // è®¾ç½®æ¯”ä¾‹ç³»æ•° P
+		pid->Ki = i;    // è®¾ç½®ç§¯åˆ†ç³»æ•° I
+		pid->Kd = d;    // è®¾ç½®å¾®åˆ†ç³»æ•° D
 }
 
 /**
-  * @brief  Î»ÖÃPIDËã·¨ÊµÏÖ
-  * @param  actual_val:Êµ¼ÊÖµ
-	*	@note 	ÎÞ
-  * @retval Í¨¹ýPID¼ÆËãºóµÄÊä³ö
+  * @brief  ä½ç½®PIDç®—æ³•å®žçŽ°
+  * @param  actual_val:å®žé™…å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åŽçš„è¾“å‡º
   */
 float location_pid_realize(_pid *pid, float actual_val)
 {
-		/*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+		/*è®¡ç®—ç›®æ ‡å€¼ä¸Žå®žé™…å€¼çš„è¯¯å·®*/
     pid->err = pid->target_val - actual_val;
   
-    /* ÏÞ¶¨±Õ»·ËÀÇø */
+    /* é™å®šé—­çŽ¯æ­»åŒº */
     if((pid->err >= -40) && (pid->err <= 40))
     {
       pid->err = 0;
       pid->integral = 0;
     }
     
-    /* »ý·Ö·ÖÀë£¬Æ«²î½Ï´óÊ±È¥µô»ý·Ö×÷ÓÃ */
+    /* ç§¯åˆ†åˆ†ç¦»ï¼Œåå·®è¾ƒå¤§æ—¶åŽ»æŽ‰ç§¯åˆ†ä½œç”¨ */
     if (pid->err > -1500 && pid->err < 1500)
     {
-      pid->integral += pid->err;    // Îó²îÀÛ»ý
+      pid->integral += pid->err;    // è¯¯å·®ç´¯ç§¯
       
-      /* ÏÞ¶¨»ý·Ö·¶Î§£¬·ÀÖ¹»ý·Ö±¥ºÍ */
+      /* é™å®šç§¯åˆ†èŒƒå›´ï¼Œé˜²æ­¢ç§¯åˆ†é¥±å’Œ */
       if (pid->integral > 4000) 
       {
         pid->integral = 4000;
@@ -116,32 +116,32 @@ float location_pid_realize(_pid *pid, float actual_val)
       }
     }
 
-		/*PIDËã·¨ÊµÏÖ*/
+		/*PIDç®—æ³•å®žçŽ°*/
     pid->actual_val = pid->Kp * pid->err + 
                       pid->Ki * pid->integral + 
                       pid->Kd * (pid->err - pid->err_last);
   
-		/*Îó²î´«µÝ*/
+		/*è¯¯å·®ä¼ é€’*/
     pid->err_last = pid->err;
     
-		/*·µ»Øµ±Ç°Êµ¼ÊÖµ*/
+		/*è¿”å›žå½“å‰å®žé™…å€¼*/
     return pid->actual_val;
 }
 
 /**
-  * @brief  µçÁ÷»·PIDËã·¨ÊµÏÖ
-  * @param  actual_val:Êµ¼ÊÖµ
-	*	@note 	ÎÞ
-  * @retval Í¨¹ýPID¼ÆËãºóµÄÊä³ö
+  * @brief  ç”µæµçŽ¯PIDç®—æ³•å®žçŽ°
+  * @param  actual_val:å®žé™…å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åŽçš„è¾“å‡º
   */
 float curr_pid_realize(_pid *pid, float actual_val)
 {
-		/*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+		/*è®¡ç®—ç›®æ ‡å€¼ä¸Žå®žé™…å€¼çš„è¯¯å·®*/
     pid->err=pid->target_val-actual_val;
 
-    pid->integral += pid->err;    // Îó²îÀÛ»ý
+    pid->integral += pid->err;    // è¯¯å·®ç´¯ç§¯
   
-    /* ÏÞ¶¨»ý·Ö·¶Î§£¬·ÀÖ¹»ý·Ö±¥ºÍ */
+    /* é™å®šç§¯åˆ†èŒƒå›´ï¼Œé˜²æ­¢ç§¯åˆ†é¥±å’Œ */
     if (pid->integral > 2000) 
     {
         pid->integral = 2000;
@@ -151,13 +151,13 @@ float curr_pid_realize(_pid *pid, float actual_val)
         pid->integral = -2000;
     }
 
-		/*PIDËã·¨ÊµÏÖ*/
+		/*PIDç®—æ³•å®žçŽ°*/
     pid->actual_val = pid->Kp*pid->err+pid->Ki*pid->integral+pid->Kd*(pid->err-pid->err_last);
   
-		/*Îó²î´«µÝ*/
+		/*è¯¯å·®ä¼ é€’*/
     pid->err_last=pid->err;
     
-		/*·µ»Øµ±Ç°Êµ¼ÊÖµ*/
+		/*è¿”å›žå½“å‰å®žé™…å€¼*/
     return pid->actual_val;
 }
 

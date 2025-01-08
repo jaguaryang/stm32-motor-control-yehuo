@@ -172,7 +172,7 @@ void SysTick_Handler(void)
 }*/
 
 /**
-  * @brief ±àÂëÆ÷½Ó¿ÚÖÐ¶Ï·þÎñº¯Êý
+  * @brief ç¼–ç å™¨æŽ¥å£ä¸­æ–­æœåŠ¡å‡½æ•°
   */
 void ENCODER_TIM_IRQHandler(void)
 {
@@ -180,9 +180,9 @@ void ENCODER_TIM_IRQHandler(void)
 }
 
 /**
-  * @brief  ¸ß¼¶¶¨Ê±Æ÷ÖÐ¶Ï·þÎñº¯Êý
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  é«˜çº§å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void MOTOR_PUL_IRQHandler(void)
 {
@@ -190,7 +190,7 @@ void MOTOR_PUL_IRQHandler(void)
 }
 
 /**
-  * @brief  »ù±¾¶¨Ê±Æ÷ÖÐ¶Ï·þÎñº¯Êý
+  * @brief  åŸºæœ¬å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
   * @param  None
   * @retval None
   */	
@@ -200,14 +200,14 @@ void BASIC_TIM_IRQHandler (void)
 }
 
 /**
-  * @brief ´®¿ÚÖÐ¶Ï·þÎñº¯Êý
+  * @brief ä¸²å£ä¸­æ–­æœåŠ¡å‡½æ•°
   */
 void DEBUG_USART_IRQHandler(void)
 {
   //  if(__HAL_UART_GET_FLAG(&UartHandle, USART_IT_IDLE) != RESET)
   if((((&UartHandle)->Instance->SR & (1 << 4)) == (1 << 4)) != RESET)
 	{
-    /* ¶Á SR ºÍ DR Çå³ý¿ÕÏÐÖÐ¶Ï±êÖ¾ */
+    /* è¯» SR å’Œ DR æ¸…é™¤ç©ºé—²ä¸­æ–­æ ‡å¿— */
     UartHandle.Instance->SR;
     UartHandle.Instance->DR;
 

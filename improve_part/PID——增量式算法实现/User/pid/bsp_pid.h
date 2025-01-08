@@ -8,12 +8,12 @@
 /*pid*/
 typedef struct
 {
-  float target_val;     //Ä¿±êÖµ
-	float actual_val;     //Êµ¼ÊÖµ
-	float err;            //¶¨Òåµ±Ç°Æ«²îÖµ
-	float err_next;       //¶¨ÒåÏÂÒ»¸öÆ«²îÖµ
-	float err_last;       //¶¨Òå×îºóÒ»¸öÆ«²îÖµ
-	float Kp, Ki, Kd;     //¶¨Òå±ÈÀı¡¢»ı·Ö¡¢Î¢·ÖÏµÊı
+  float target_val;     //ç›®æ ‡å€¼
+	float actual_val;     //å®é™…å€¼
+	float err;            //å®šä¹‰å½“å‰åå·®å€¼
+	float err_next;       //å®šä¹‰ä¸‹ä¸€ä¸ªåå·®å€¼
+	float err_last;       //å®šä¹‰æœ€åä¸€ä¸ªåå·®å€¼
+	float Kp, Ki, Kd;     //å®šä¹‰æ¯”ä¾‹ã€ç§¯åˆ†ã€å¾®åˆ†ç³»æ•°
 }_pid;
 
 

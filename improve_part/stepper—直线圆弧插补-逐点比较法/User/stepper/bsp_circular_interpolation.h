@@ -3,19 +3,19 @@
 
 #include "./stepper/bsp_stepper_init.h"
 
-/* ²å²¹Ä£Ê½Ã¶¾Ù */
+/* æ’è¡¥æ¨¡å¼æšä¸¾ */
 typedef enum{
   Circular = 0U,
   Linear
 }InterpolationMODE_TypeDef;
 
-/* ×ø±êÖáÃ¶¾Ù */
+/* åæ ‡è½´æšä¸¾ */
 typedef enum{
   x_axis = 0U,
   y_axis
 }Axis_TypeDef;
 
-/* ×ø±êÖáÏóÏŞÃ¶¾Ù */
+/* åæ ‡è½´è±¡é™æšä¸¾ */
 typedef enum{
   quadrant_1st = 0U,
   quadrant_2nd,
@@ -23,20 +23,20 @@ typedef enum{
   quadrant_4th
 }Quadrant_TypeDef;
 
-/* Ô²»¡²å²¹²ÎÊı½á¹¹Ìå */
+/* åœ†å¼§æ’è¡¥å‚æ•°ç»“æ„ä½“ */
 typedef struct{
-  __IO int32_t startpoint[2];        //Æğµã×ø±êX¡¢Y
-  __IO int32_t endpoint_x;           //ÖÕµã×ø±êX
-  __IO int32_t endpoint_y;           //ÖÕµã×ø±êY
-  __IO uint32_t endpoint_pulse;      //µ½´ïÖÕµãÎ»ÖÃĞèÒªµÄÂö³åÊı
-  __IO uint32_t active_axis;         //µ±Ç°ÔË¶¯µÄÖá
-  __IO int32_t deviation;            //Æ«²î²ÎÊıF
-  __IO int8_t devi_sign[2];          //Æ«²î·½³ÌµÄÔËËã·ûºÅ£¬Õı¸º
-  __IO uint8_t motionstatus : 1;     //²å²¹ÔË¶¯×´Ì¬
-  __IO uint8_t dir_x : 1;            //XÖáÔË¶¯·½Ïò
-  __IO uint8_t dir_y : 1;            //YÖáÔË¶¯·½Ïò
-  __IO uint8_t dir_interpo : 1;      //²å²¹ÕûÌåÔË¶¯·½Ïò
-  __IO uint8_t crood_pos : 2;        //Æğµã×ø±êËùÔÚµÄÏóÏŞ
+  __IO int32_t startpoint[2];        //èµ·ç‚¹åæ ‡Xã€Y
+  __IO int32_t endpoint_x;           //ç»ˆç‚¹åæ ‡X
+  __IO int32_t endpoint_y;           //ç»ˆç‚¹åæ ‡Y
+  __IO uint32_t endpoint_pulse;      //åˆ°è¾¾ç»ˆç‚¹ä½ç½®éœ€è¦çš„è„‰å†²æ•°
+  __IO uint32_t active_axis;         //å½“å‰è¿åŠ¨çš„è½´
+  __IO int32_t deviation;            //åå·®å‚æ•°F
+  __IO int8_t devi_sign[2];          //åå·®æ–¹ç¨‹çš„è¿ç®—ç¬¦å·ï¼Œæ­£è´Ÿ
+  __IO uint8_t motionstatus : 1;     //æ’è¡¥è¿åŠ¨çŠ¶æ€
+  __IO uint8_t dir_x : 1;            //Xè½´è¿åŠ¨æ–¹å‘
+  __IO uint8_t dir_y : 1;            //Yè½´è¿åŠ¨æ–¹å‘
+  __IO uint8_t dir_interpo : 1;      //æ’è¡¥æ•´ä½“è¿åŠ¨æ–¹å‘
+  __IO uint8_t crood_pos : 2;        //èµ·ç‚¹åæ ‡æ‰€åœ¨çš„è±¡é™
 }CircularInterpolation_TypeDef;
 
 extern InterpolationMODE_TypeDef mode;

@@ -173,7 +173,7 @@ void SysTick_Handler(void)
 }*/
 
 /**
-  * @brief ±àÂëÆ÷½Ó¿ÚÖĞ¶Ï·şÎñº¯Êı
+  * @brief ç¼–ç å™¨æ¥å£ä¸­æ–­æœåŠ¡å‡½æ•°
   */
 void ENCODER_TIM_IRQHandler(void)
 {
@@ -181,9 +181,9 @@ void ENCODER_TIM_IRQHandler(void)
 }
 
 /**
-  * @brief  ¸ß¼¶¶¨Ê±Æ÷ÖĞ¶Ï·şÎñº¯Êı
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  é«˜çº§å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void MOTOR_PUL_IRQHandler(void)
 {
@@ -191,7 +191,7 @@ void MOTOR_PUL_IRQHandler(void)
 }
 
 /**
-  * @brief  »ù±¾¶¨Ê±Æ÷ÖĞ¶Ï·şÎñº¯Êı
+  * @brief  åŸºæœ¬å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
   * @param  None
   * @retval None
   */	
@@ -201,7 +201,7 @@ void  BASIC_TIM_IRQHandler (void)
 }
 
 /**
-  * @brief ´®¿ÚÖĞ¶Ï·şÎñº¯Êı
+  * @brief ä¸²å£ä¸­æ–­æœåŠ¡å‡½æ•°
   */
 void DEBUG_USART_IRQHandler(void)
 {

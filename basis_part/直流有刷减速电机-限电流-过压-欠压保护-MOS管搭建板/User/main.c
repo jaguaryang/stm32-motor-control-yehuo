@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÓĞË¢¼õËÙµç»ú-ÏŞµçÁ÷-¹ıÑ¹-Ç·Ñ¹±£»¤-MOS¹Ü´î½¨°å
+  * @brief   ç›´æµæœ‰åˆ·å‡é€Ÿç”µæœº-é™ç”µæµ-è¿‡å‹-æ¬ å‹ä¿æŠ¤-MOSç®¡æ­å»ºæ¿
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,13 +25,13 @@
 #include "./usart/bsp_debug_usart.h"
 #include "./adc/bsp_adc.h"
 
-/* ºê¶¨Òå */
-#define CURR_MAX    500    // ×î´óµçÁ÷£¨µ¥Î»mA£©
+/* å®å®šä¹‰ */
+#define CURR_MAX    500    // æœ€å¤§ç”µæµï¼ˆå•ä½mAï¼‰
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
@@ -42,49 +42,49 @@ int main(void)
 
   HAL_Init();
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
   
-  /* ³õÊ¼»¯ LED */
+  /* åˆå§‹åŒ– LED */
   LED_GPIO_Config();
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   motor_init();
   
-  /* ´®¿Ú³õÊ¼»¯ */
+  /* ä¸²å£åˆå§‹åŒ– */
   DEBUG_USART_Config();
 //	for(volatile int i=0x2fffff;i>0;i--){}
 
-  /* ADC Ê¼»¯ */
+  /* ADC å§‹åŒ– */
   ADC_Init();
   
   set_motor_speed(ChannelPulse);
-  set_motor_disable();    // ½ûÓÃµç»ú
-  printf("Ò°»ğÖ±Á÷ÓĞË¢µç»ú-ÏŞÁ÷-¹ıÑ¹-Ç·Ñ¹±£»¤ÊµÑé\r\n");
+  set_motor_disable();    // ç¦ç”¨ç”µæœº
+  printf("é‡ç«ç›´æµæœ‰åˆ·ç”µæœº-é™æµ-è¿‡å‹-æ¬ å‹ä¿æŠ¤å®éªŒ\r\n");
 	
 	while(1)
 	{
-    /* É¨ÃèKEY1 */
+    /* æ‰«æKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      /* Ê¹ÄÜµç»ú */
+      /* ä½¿èƒ½ç”µæœº */
       set_motor_enable(); 
     }
     
-    /* É¨ÃèKEY2 */
+    /* æ‰«æKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
-      /* ½ûÓÃµç»ú */
+      /* ç¦ç”¨ç”µæœº */
       set_motor_disable();
     }
     
-    /* É¨ÃèKEY3 */
+    /* æ‰«æKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* Ôö´óÕ¼¿Õ±È */
+      /* å¢å¤§å ç©ºæ¯” */
       ChannelPulse += PWM_MAX_PERIOD_COUNT/10;
       
       if(ChannelPulse > PWM_MAX_PERIOD_COUNT)
@@ -93,7 +93,7 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY4 */
+    /* æ‰«æKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
       if(ChannelPulse < PWM_MAX_PERIOD_COUNT/10)
@@ -104,14 +104,14 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY5 */
+    /* æ‰«æKEY5 */
     if( Key_Scan(KEY5_GPIO_PORT, KEY5_PIN) == KEY_ON)
     {
-      /* ×ª»»·½Ïò */
+      /* è½¬æ¢æ–¹å‘ */
       set_motor_direction( (++dir % 2) ? MOTOR_FWD : MOTOR_REV);
     }
     
-    if (HAL_GetTick()%50 == 0 && flag == 0)    // Ã¿50ºÁÃë¶ÁÈ¡Ò»´ÎµçÁ÷¡¢µçÑ¹
+    if (HAL_GetTick()%50 == 0 && flag == 0)    // æ¯50æ¯«ç§’è¯»å–ä¸€æ¬¡ç”µæµã€ç”µå‹
     {
       flag = 1;
       int32_t current = get_curr_val();
@@ -119,17 +119,17 @@ int main(void)
     #if 0//defined(PID_ASSISTANT_EN)
       set_computer_value(SEED_FACT_CMD, CURVES_CH1, &current, 1);
     #else
-      printf("µçÔ´µçÑ¹£º%.2fV£¬µçÁ÷£º%dmA\r\n", get_vbus_val(), current); 
+      printf("ç”µæºç”µå‹ï¼š%.2fVï¼Œç”µæµï¼š%dmA\r\n", get_vbus_val(), current); 
     #endif
       
-      if (current > CURR_MAX)    // ÅĞ¶ÏÊÇ²»ÊÇ³¬¹ıÏŞ¶¨µÄÖµ
+      if (current > CURR_MAX)    // åˆ¤æ–­æ˜¯ä¸æ˜¯è¶…è¿‡é™å®šçš„å€¼
       {
-        if (curr_max_count++ > 5)    // Á¬Ğø5´Î³¬¹ı
+        if (curr_max_count++ > 5)    // è¿ç»­5æ¬¡è¶…è¿‡
         {
           LED2_ON;
           set_motor_disable();
           curr_max_count = 0;
-          printf("µçÁ÷³¬¹ıÏŞÖÆ£¡Çë¼ì²éÔ­Òò£¬¸´Î»¿ª·¢°åÔÚÊÔ£¡\r\n");
+          printf("ç”µæµè¶…è¿‡é™åˆ¶ï¼è¯·æ£€æŸ¥åŸå› ï¼Œå¤ä½å¼€å‘æ¿åœ¨è¯•ï¼\r\n");
           while(1);
         }
       }

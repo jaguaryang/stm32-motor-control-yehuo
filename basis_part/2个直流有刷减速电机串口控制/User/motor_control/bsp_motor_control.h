@@ -5,7 +5,7 @@
 #include "./tim/bsp_motor_tim.h"
 #include "main.h"
 
-/* µç»úÊ¹ÄÜ½Å */
+/* ç”µæœºä½¿èƒ½è„š */
 #define ENA_PIN                  GPIO_PIN_12
 #define ENA_GPIO_PORT            GPIOG
 #define ENA_GPIO_CLK_ENABLE()    __GPIOG_CLK_ENABLE()
@@ -14,42 +14,42 @@
 #define ENB_GPIO_PORT            GPIOE
 #define ENB_GPIO_CLK_ENABLE()    __GPIOE_CLK_ENABLE()
 
-/* µç»ú·½Ïò¿ØÖÆÃ¶¾Ù */
+/* ç”µæœºæ–¹å‘æ§åˆ¶æšä¸¾ */
 typedef enum
 {
   MOTOR_FWD = 0,
   MOTOR_REV,
 }motor_dir_t;
 
-/* ÉèÖÃËÙ¶È£¨Õ¼¿Õ±È£© */
-#define SET_FWD_COMPAER(ChannelPulse)        TIM1_SetPWM_pulse(PWM_CHANNEL_1,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
-#define SET_REV_COMPAER(ChannelPulse)        TIM1_SetPWM_pulse(PWM_CHANNEL_2,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
+/* è®¾ç½®é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰ */
+#define SET_FWD_COMPAER(ChannelPulse)        TIM1_SetPWM_pulse(PWM_CHANNEL_1,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
+#define SET_REV_COMPAER(ChannelPulse)        TIM1_SetPWM_pulse(PWM_CHANNEL_2,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
 
-/* Ê¹ÄÜÊä³ö */
-#define MOTOR_FWD_ENABLE()                   HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_1);    // Ê¹ÄÜ PWM Í¨µÀ 1
-#define MOTOR_REV_ENABLE()                   HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_2);    // Ê¹ÄÜ PWM Í¨µÀ 2
+/* ä½¿èƒ½è¾“å‡º */
+#define MOTOR_FWD_ENABLE()                   HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_1);    // ä½¿èƒ½ PWM é€šé“ 1
+#define MOTOR_REV_ENABLE()                   HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_2);    // ä½¿èƒ½ PWM é€šé“ 2
 
-/* ½ûÓÃÊä³ö */
-#define MOTOR_FWD_DISABLE()                  HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_1);     // ½ûÓÃ PWM Í¨µÀ 1
-#define MOTOR_REV_DISABLE()                  HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_2);     // ½ûÓÃ PWM Í¨µÀ 2
+/* ç¦ç”¨è¾“å‡º */
+#define MOTOR_FWD_DISABLE()                  HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_1);     // ç¦ç”¨ PWM é€šé“ 1
+#define MOTOR_REV_DISABLE()                  HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_2);     // ç¦ç”¨ PWM é€šé“ 2
 
-/* µç»úÊ¹ÄÜ½Å */
+/* ç”µæœºä½¿èƒ½è„š */
 #define MOTOR_ENABLE_A()                     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_PIN, GPIO_PIN_SET)
 #define MOTOR_DISABLE_A()                    HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_PIN, GPIO_PIN_RESET)
 
-/* ÉèÖÃËÙ¶È£¨Õ¼¿Õ±È£©2 */
-#define SET2_FWD_COMPAER(ChannelPulse)       TIM1_SetPWM2_pulse(PWM_CHANNEL_1,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
-#define SET2_REV_COMPAER(ChannelPulse)       TIM1_SetPWM2_pulse(PWM_CHANNEL_2,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
+/* è®¾ç½®é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰2 */
+#define SET2_FWD_COMPAER(ChannelPulse)       TIM1_SetPWM2_pulse(PWM_CHANNEL_1,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
+#define SET2_REV_COMPAER(ChannelPulse)       TIM1_SetPWM2_pulse(PWM_CHANNEL_2,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
 
-/* Ê¹ÄÜÊä³ö2 */
-#define MOTOR2_FWD_ENABLE()                  HAL_TIM_PWM_Start(&TIM_TimeBaseStructure2,PWM_CHANNEL_1);    // Ê¹ÄÜ PWM Í¨µÀ 1
-#define MOTOR2_REV_ENABLE()                  HAL_TIM_PWM_Start(&TIM_TimeBaseStructure2,PWM_CHANNEL_2);    // Ê¹ÄÜ PWM Í¨µÀ 2
+/* ä½¿èƒ½è¾“å‡º2 */
+#define MOTOR2_FWD_ENABLE()                  HAL_TIM_PWM_Start(&TIM_TimeBaseStructure2,PWM_CHANNEL_1);    // ä½¿èƒ½ PWM é€šé“ 1
+#define MOTOR2_REV_ENABLE()                  HAL_TIM_PWM_Start(&TIM_TimeBaseStructure2,PWM_CHANNEL_2);    // ä½¿èƒ½ PWM é€šé“ 2
 
-/* ½ûÓÃÊä³ö2 */
-#define MOTOR2_FWD_DISABLE()                 HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure2,PWM_CHANNEL_1);     // ½ûÓÃ PWM Í¨µÀ 1
-#define MOTOR2_REV_DISABLE()                 HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure2,PWM_CHANNEL_2);     // ½ûÓÃ PWM Í¨µÀ 2
+/* ç¦ç”¨è¾“å‡º2 */
+#define MOTOR2_FWD_DISABLE()                 HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure2,PWM_CHANNEL_1);     // ç¦ç”¨ PWM é€šé“ 1
+#define MOTOR2_REV_DISABLE()                 HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure2,PWM_CHANNEL_2);     // ç¦ç”¨ PWM é€šé“ 2
 
-/* µç»ú2Ê¹ÄÜ½Å */
+/* ç”µæœº2ä½¿èƒ½è„š */
 #define MOTOR_ENABLE_B()                     HAL_GPIO_WritePin(ENB_GPIO_PORT, ENB_PIN, GPIO_PIN_SET)
 #define MOTOR_DISABLE_B()                    HAL_GPIO_WritePin(ENB_GPIO_PORT, ENB_PIN, GPIO_PIN_RESET)
 

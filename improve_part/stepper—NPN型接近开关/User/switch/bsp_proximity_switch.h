@@ -3,16 +3,16 @@
 
 #include "stm32f4xx_hal.h"
 
-/* ½Ó½ü¿ª¹Ø½á¹¹Ìå */
+/* æ¥è¿‘å¼€å…³ç»“æ„ä½“ */
 typedef struct{
-  GPIO_TypeDef *port;            //¶Ë¿ÚºÅ
-  uint16_t pin;                  //Òı½ÅĞòºÅ
-  uint32_t gpio_mode;            //´¥·¢Ä£Ê½
-  IRQn_Type IRQn;                //ÖĞ¶ÏÔ´
+  GPIO_TypeDef *port;            //ç«¯å£å·
+  uint16_t pin;                  //å¼•è„šåºå·
+  uint32_t gpio_mode;            //è§¦å‘æ¨¡å¼
+  IRQn_Type IRQn;                //ä¸­æ–­æº
 }ProximitySwitch_TypeDef;
 
 
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
 /*******************************************************/
 #define SWITCH1_INT_GPIO_PORT                GPIOF
 #define SWITCH1_INT_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOF_CLK_ENABLE()

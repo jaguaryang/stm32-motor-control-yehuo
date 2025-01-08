@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ÷±¡˜ŒﬁÀ¢µÁª˙øÿ÷∆
+  * @brief   Áõ¥ÊµÅÊó†Âà∑ÁîµÊú∫ÊéßÂà∂
   ******************************************************************************
   * @attention
   *
-  *  µ—È∆ΩÃ®:“∞ª  STM32 F407 ø™∑¢∞Â 
-  * ¬€Ã≥    :http://www.firebbs.cn
-  * Ã‘±¶    :http://firestm32.taobao.com
+  * ÂÆûÈ™åÂπ≥Âè∞:ÈáéÁÅ´  STM32 F407 ÂºÄÂèëÊùø 
+  * ËÆ∫Âùõ    :http://www.firebbs.cn
+  * Ê∑òÂÆù    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,9 +24,9 @@
 #include "./usart/bsp_debug_usart.h"
 
 /**
-  * @brief  ÷˜∫Ø ˝
-  * @param  Œﬁ
-  * @retval Œﬁ
+  * @brief  ‰∏ªÂáΩÊï∞
+  * @param  Êó†
+  * @retval Êó†
   */
 int main(void) 
 {
@@ -39,29 +39,29 @@ int main(void)
   uint8_t motor1_en_flag = 0;
   uint8_t motor2_en_flag = 0;
 	
-	/* ≥ı ºªØœµÕ≥ ±÷”Œ™168MHz */
+	/* ÂàùÂßãÂåñÁ≥ªÁªüÊó∂Èíü‰∏∫168MHz */
 	SystemClock_Config();
   
-	/* ≥ı ºªØ∞¥º¸GPIO */
+	/* ÂàùÂßãÂåñÊåâÈîÆGPIO */
 	Key_GPIO_Config();
   
-  /* LED µ∆≥ı ºªØ */
+  /* LED ÁÅØÂàùÂßãÂåñ */
   LED_GPIO_Config();
   
-  /* µ˜ ‘¥Æø⁄≥ı ºªØ */
+  /* Ë∞ÉËØï‰∏≤Âè£ÂàùÂßãÂåñ */
   DEBUG_USART_Config();
   
-  printf("“∞ª÷±¡˜ŒﬁÀ¢µÁª˙∞¥º¸øÿ÷∆¿˝≥Ã\r\n");
+  printf("ÈáéÁÅ´Áõ¥ÊµÅÊó†Âà∑ÁîµÊú∫ÊåâÈîÆÊéßÂà∂‰æãÁ®ã\r\n");
 
-  /* µÁª˙≥ı ºªØ */
+  /* ÁîµÊú∫ÂàùÂßãÂåñ */
   bldcm_init();
 
 	while(1)
 	{
-    /* …®√ËKEY1 */
+    /* Êâ´ÊèèKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      /*  πƒ‹µÁª˙ */
+      /* ‰ΩøËÉΩÁîµÊú∫ */
 			if(!motor1_en_flag)
 			{
 			    set_motor1_bldcm_speed(MOTOR1_ChannelPulse);
@@ -74,10 +74,10 @@ int main(void)
 			motor1_en_flag = !motor1_en_flag;
     }
     
-    /* …®√ËKEY2 */
+    /* Êâ´ÊèèKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
-      /*  πƒ‹µÁª˙ */
+      /* ‰ΩøËÉΩÁîµÊú∫ */
 			if(!motor2_en_flag)
 			{
 			    set_motor2_bldcm_speed(MOTOR2_ChannelPulse);
@@ -89,10 +89,10 @@ int main(void)
 			}
 			motor2_en_flag = !motor2_en_flag;
     }
-    /* …®√ËKEY3 */
+    /* Êâ´ÊèèKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* ‘ˆ¥Û’ºø’±» */
+      /* Â¢ûÂ§ßÂç†Á©∫ÊØî */
       MOTOR1_ChannelPulse += MOTOR1_PWM_MAX_PERIOD_COUNT/10;
       
       if(MOTOR1_ChannelPulse > MOTOR1_PWM_MAX_PERIOD_COUNT)
@@ -108,7 +108,7 @@ int main(void)
       set_motor2_bldcm_speed(MOTOR2_ChannelPulse);
     }
     
-    /* …®√ËKEY4 */
+    /* Êâ´ÊèèKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
       if(MOTOR1_ChannelPulse < MOTOR1_PWM_MAX_PERIOD_COUNT/10)
@@ -126,10 +126,10 @@ int main(void)
       set_motor2_bldcm_speed(MOTOR2_ChannelPulse);
     }
 
-		/* …®√ËKEY5 */
+		/* Êâ´ÊèèKEY5 */
     if( Key_Scan(KEY5_GPIO_PORT, KEY5_PIN) == KEY_ON)
     {
-      /* ◊™ªª∑ΩœÚ */
+      /* ËΩ¨Êç¢ÊñπÂêë */
       set_motor1_bldcm_direction( (++i % 2) ? MOTOR_FWD : MOTOR_REV);
 		
       set_motor2_bldcm_direction( (++j % 2) ? MOTOR_FWD : MOTOR_REV);

@@ -1,17 +1,17 @@
 #include "./pid/bsp_pid.h"
 
-//¶¨ÒåÈ«¾Ö±äÁ¿
+//å®šä¹‰å…¨å±€å˜é‡
 
 _pid pid;
 
 /**
-  * @brief  PID²ÎÊı³õÊ¼»¯
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  PIDå‚æ•°åˆå§‹åŒ–
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void PID_param_init()
 {
-		/* ³õÊ¼»¯²ÎÊı */
+		/* åˆå§‹åŒ–å‚æ•° */
     printf("PID_init begin \n");
     pid.target_val=0.0;				
     pid.actual_val=0.0;
@@ -31,40 +31,40 @@ void PID_param_init()
 
 }
 /**
-  * @brief  PIDËã·¨ÊµÏÖ
-  * @param  val		Ä¿±êÖµ
-	*	@note 	ÎŞ
-  * @retval Í¨¹ıPID¼ÆËãºóµÄÊä³ö
+  * @brief  PIDç®—æ³•å®ç°
+  * @param  val		ç›®æ ‡å€¼
+	*	@note 	æ— 
+  * @retval é€šè¿‡PIDè®¡ç®—åçš„è¾“å‡º
   */
 float PID_realize(float temp_val)
 {
-		/*´«ÈëÄ¿±êÖµ*/
+		/*ä¼ å…¥ç›®æ ‡å€¼*/
     pid.target_val=temp_val;
-		/*¼ÆËãÄ¿±êÖµÓëÊµ¼ÊÖµµÄÎó²î*/
+		/*è®¡ç®—ç›®æ ‡å€¼ä¸å®é™…å€¼çš„è¯¯å·®*/
     pid.err=pid.target_val-pid.actual_val;
-		/*Îó²îÀÛ»ı*/
+		/*è¯¯å·®ç´¯ç§¯*/
     pid.integral+=pid.err;
-		/*PIDËã·¨ÊµÏÖ*/
+		/*PIDç®—æ³•å®ç°*/
     pid.actual_val=pid.Kp*pid.err+pid.Ki*pid.integral+pid.Kd*(pid.err-pid.err_last);
-		/*Îó²î´«µİ*/
+		/*è¯¯å·®ä¼ é€’*/
     pid.err_last=pid.err;
-		/*·µ»Øµ±Ç°Êµ¼ÊÖµ*/
+		/*è¿”å›å½“å‰å®é™…å€¼*/
     return pid.actual_val;
 }
 /**
-  * @brief  ¶¨Ê±Æ÷ÖÜÆÚµ÷ÓÃº¯Êı
-  * @param  ÎŞ
-	*	@note 	ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨å‘¨æœŸè°ƒç”¨å‡½æ•°
+  * @param  æ— 
+	*	@note 	æ— 
+  * @retval æ— 
   */
-//Ò»Ö±µ÷½Ú
+//ä¸€ç›´è°ƒèŠ‚
 //void time_period_fun()
 //{
 //	float set_point=200.0;
 //	float val=PID_realize(set_point);
 //	printf("val,%f;act,%f\n",set_point,val);
 //}
-//µ÷½ÚÇ÷ÓÚÎÈ¶¨ºóÍ£Ö¹
+//è°ƒèŠ‚è¶‹äºç¨³å®šååœæ­¢
 void time_period_fun()
 {
 	static int flag=0;
@@ -81,13 +81,13 @@ void time_period_fun()
 		{
 			num++;
 		}
-		else//±ØĞëÂú×ãÁ¬Ğø´ÎÊı
+		else//å¿…é¡»æ»¡è¶³è¿ç»­æ¬¡æ•°
 		{
 			num=0;
 		}
-		if(num>20)//ÎÈ¶¨´ÎÊı
+		if(num>20)//ç¨³å®šæ¬¡æ•°
 		{
-			printf("PIDËã·¨ÔËĞĞ%d ´ÎºóÎÈ¶¨\r\n",run_i);
+			printf("PIDç®—æ³•è¿è¡Œ%d æ¬¡åç¨³å®š\r\n",run_i);
 			flag=1;
 		}
 	}

@@ -2,11 +2,11 @@
   ******************************************************************************
   * @file    yh_ntc_temperature_sensor.c
   * @author  LONGZR
-  * @brief   ÔÚÕâÀïÊµÏÖÁËST MC SDK²»Ò»ÑùµÄ²¿·Ö£¬ÖØĞÂĞ´ÎÂ¶È»ñÈ¡º¯Êı.
+  * @brief   åœ¨è¿™é‡Œå®ç°äº†ST MC SDKä¸ä¸€æ ·çš„éƒ¨åˆ†ï¼Œé‡æ–°å†™æ¸©åº¦è·å–å‡½æ•°.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 Ò°»ğµç×Ó.
+  * <h2><center>&copy; Copyright (c) 2020 é‡ç«ç”µå­.
   * All rights reserved.</center></h2>
   *
   ******************************************************************************
@@ -115,21 +115,21 @@ uint16_t NTC_CalcAvTemp( NTC_Handle_t * pHandle )
 }
 
 /**
-  * @brief  »ñÈ¡ÎÂ¶È´«¸ĞÆ÷¶ËµÄµçÑ¹Öµ
-  * @param  ÎŞ
-  * @retval ×ª»»µÃµ½µÄµçÑ¹Öµ
+  * @brief  è·å–æ¸©åº¦ä¼ æ„Ÿå™¨ç«¯çš„ç”µå‹å€¼
+  * @param  æ— 
+  * @retval è½¬æ¢å¾—åˆ°çš„ç”µå‹å€¼
   */
 float get_ntc_v_val(NTC_Handle_t * pHandle)
 {
-  float vdc = GET_ADC_VDC_VAL(pHandle->hAvTemp_d);      // »ñÈ¡µçÑ¹Öµ
+  float vdc = GET_ADC_VDC_VAL(pHandle->hAvTemp_d);      // è·å–ç”µå‹å€¼
   
   return vdc;
 }
 
 /**
-  * @brief  »ñÈ¡ÎÂ¶È´«¸ĞÆ÷¶ËµÄµç×èÖµ
-  * @param  ÎŞ
-  * @retval ×ª»»µÃµ½µÄµç×èÖµ
+  * @brief  è·å–æ¸©åº¦ä¼ æ„Ÿå™¨ç«¯çš„ç”µé˜»å€¼
+  * @param  æ— 
+  * @retval è½¬æ¢å¾—åˆ°çš„ç”µé˜»å€¼
   */
 float get_ntc_r_val(NTC_Handle_t * pHandle)
 {
@@ -154,10 +154,10 @@ int16_t NTC_GetAvTemp_C( NTC_Handle_t * pHandle )
 
   if ( pHandle->bSensorType == REAL_SENSOR )
   {
-    float Rt = 0;                   // ²âÁ¿µç×è
-    Rt = get_ntc_r_val(pHandle);    // »ñÈ¡µ±Ç°µç×èÖµ
+    float Rt = 0;                   // æµ‹é‡ç”µé˜»
+    Rt = get_ntc_r_val(pHandle);    // è·å–å½“å‰ç”µé˜»å€¼
 
-    wTemp = NTC_B * NTC_T25 / (NTC_B + log(Rt / NTC_R25) * NTC_T25) - NTC_Ka ;    // Ê¹ÓÃ¹«Ê½¼ÆËã
+    wTemp = NTC_B * NTC_T25 / (NTC_B + log(Rt / NTC_R25) * NTC_T25) - NTC_Ka ;    // ä½¿ç”¨å…¬å¼è®¡ç®—
   }
   else
   {

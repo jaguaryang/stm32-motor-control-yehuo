@@ -4,34 +4,34 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ²½½øµç»úÌİĞÎ¼Ó¼õËÙËã·¨
+  * @brief   æ­¥è¿›ç”µæœºæ¢¯å½¢åŠ å‡é€Ÿç®—æ³•
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
 #include "./stepper/bsp_stepper_T_speed.h"
 #include "./usart/bsp_debug_usart.h"
 
-//ÏµÍ³¼Ó¼õËÙ²ÎÊı
+//ç³»ç»ŸåŠ å‡é€Ÿå‚æ•°
 speedRampData srd;
-//¼ÇÂ¼²½½øµç»úµÄÎ»ÖÃ
+//è®°å½•æ­¥è¿›ç”µæœºçš„ä½ç½®
 int stepPosition = 0;
-//ÏµÍ³µç»ú¡¢´®¿Ú×´Ì¬
+//ç³»ç»Ÿç”µæœºã€ä¸²å£çŠ¶æ€
 struct GLOBAL_FLAGS status = {FALSE, FALSE,TRUE};
 
 /**
-  * @brief  ¸ù¾İÔË¶¯·½ÏòÅĞ¶Ï²½½øµç»úµÄÔËĞĞÎ»ÖÃ
-  * @param  inc ÔË¶¯·½Ïò
-  * @retval ÎŞ
+  * @brief  æ ¹æ®è¿åŠ¨æ–¹å‘åˆ¤æ–­æ­¥è¿›ç”µæœºçš„è¿è¡Œä½ç½®
+  * @param  inc è¿åŠ¨æ–¹å‘
+  * @retval æ— 
   */
 void StepperCounter(signed char inc)
 {
-  //¸ù¾İ·½ÏòÅĞ¶Ïµç»úÎ»ÖÃ
+  //æ ¹æ®æ–¹å‘åˆ¤æ–­ç”µæœºä½ç½®
   if(inc == CCW)
   {
     stepPosition--;
@@ -43,108 +43,108 @@ void StepperCounter(signed char inc)
 }
 
 /**
-  * @brief  Çı¶¯Æ÷½ô¼±Í£Ö¹
-  * @param  NewState£ºÊ¹ÄÜ»òÕß½ûÖ¹
-  * @retval ÎŞ
+  * @brief  é©±åŠ¨å™¨ç´§æ€¥åœæ­¢
+  * @param  NewStateï¼šä½¿èƒ½æˆ–è€…ç¦æ­¢
+  * @retval æ— 
   */
 void MSD_ENA(FunctionalState NewState)
 {
     if(NewState)
     {
-      //ENAÊ§ÄÜ£¬½ûÖ¹Çı¶¯Æ÷Êä³ö
+      //ENAå¤±èƒ½ï¼Œç¦æ­¢é©±åŠ¨å™¨è¾“å‡º
       MOTOR_EN(OFF);
-      //½ô¼±Í£Ö¹±êÖ¾Î»ÎªÕæ
+      //ç´§æ€¥åœæ­¢æ ‡å¿—ä½ä¸ºçœŸ
       status.out_ena = FALSE; 
-      printf("\n\rÇı¶¯Æ÷½ûÖ¹Êä³ö£¨ÍÑ»ú×´Ì¬£©´ËÊ±µç»úÎªÎŞ±£³ÖÁ¦¾Ø×´Ì¬£¬¿ÉÒÔÊÖ¶¯Ğı×ªµç»ú");        
+      printf("\n\ré©±åŠ¨å™¨ç¦æ­¢è¾“å‡ºï¼ˆè„±æœºçŠ¶æ€ï¼‰æ­¤æ—¶ç”µæœºä¸ºæ— ä¿æŒåŠ›çŸ©çŠ¶æ€ï¼Œå¯ä»¥æ‰‹åŠ¨æ—‹è½¬ç”µæœº");        
     }
     else
     {
-      //ENAÊ¹ÄÜ
+      //ENAä½¿èƒ½
       MOTOR_EN(ON);
-      //½ô¼±Í£Ö¹±êÖ¾Î»Îª¼Ù
+      //ç´§æ€¥åœæ­¢æ ‡å¿—ä½ä¸ºå‡
       status.out_ena = TRUE; 
-      printf("\n\rÇı¶¯Æ÷»Ö¸´ÔËĞĞ£¬´ËÊ±µç»úÎª±£³ÖÁ¦¾Ø×´Ì¬£¬´ËÊ±´®¿ÚÖ¸Áî¿ÉÒÔÕı³£¿ØÖÆµç»ú");         
+      printf("\n\ré©±åŠ¨å™¨æ¢å¤è¿è¡Œï¼Œæ­¤æ—¶ç”µæœºä¸ºä¿æŒåŠ›çŸ©çŠ¶æ€ï¼Œæ­¤æ—¶ä¸²å£æŒ‡ä»¤å¯ä»¥æ­£å¸¸æ§åˆ¶ç”µæœº");         
     }
     
 }
 
-/*! \brief ÒÔ¸ø¶¨µÄ²½ÊıÒÆ¶¯²½½øµç»ú
- *  Í¨¹ı¼ÆËã¼ÓËÙµ½×î´óËÙ¶È£¬ÒÔ¸ø¶¨µÄ²½Êı¿ªÊ¼¼õËÙ
- *  Èç¹û¼ÓËÙ¶ÈºÍ¼õËÙ¶ÈºÜĞ¡£¬²½½øµç»ú»áÒÆ¶¯ºÜÂı£¬»¹Ã»´ïµ½×î´óËÙ¶È¾ÍÒª¿ªÊ¼¼õËÙ
- *  \param step   ÒÆ¶¯µÄ²½Êı (ÕıÊıÎªË³Ê±Õë£¬¸ºÊıÎªÄæÊ±Õë).
- *  \param accel  ¼ÓËÙ¶È,Èç¹ûÈ¡ÖµÎª100£¬Êµ¼ÊÖµÎª100*0.01*rad/sec^2=1rad/sec^2
- *  \param decel  ¼õËÙ¶È,Èç¹ûÈ¡ÖµÎª100£¬Êµ¼ÊÖµÎª100*0.01*rad/sec^2=1rad/sec^2
- *  \param speed  ×î´óËÙ¶È,Èç¹ûÈ¡ÖµÎª100£¬Êµ¼ÊÖµÎª100*0.01*rad/sec=1rad/sec
+/*! \brief ä»¥ç»™å®šçš„æ­¥æ•°ç§»åŠ¨æ­¥è¿›ç”µæœº
+ *  é€šè¿‡è®¡ç®—åŠ é€Ÿåˆ°æœ€å¤§é€Ÿåº¦ï¼Œä»¥ç»™å®šçš„æ­¥æ•°å¼€å§‹å‡é€Ÿ
+ *  å¦‚æœåŠ é€Ÿåº¦å’Œå‡é€Ÿåº¦å¾ˆå°ï¼Œæ­¥è¿›ç”µæœºä¼šç§»åŠ¨å¾ˆæ…¢ï¼Œè¿˜æ²¡è¾¾åˆ°æœ€å¤§é€Ÿåº¦å°±è¦å¼€å§‹å‡é€Ÿ
+ *  \param step   ç§»åŠ¨çš„æ­¥æ•° (æ­£æ•°ä¸ºé¡ºæ—¶é’ˆï¼Œè´Ÿæ•°ä¸ºé€†æ—¶é’ˆ).
+ *  \param accel  åŠ é€Ÿåº¦,å¦‚æœå–å€¼ä¸º100ï¼Œå®é™…å€¼ä¸º100*0.01*rad/sec^2=1rad/sec^2
+ *  \param decel  å‡é€Ÿåº¦,å¦‚æœå–å€¼ä¸º100ï¼Œå®é™…å€¼ä¸º100*0.01*rad/sec^2=1rad/sec^2
+ *  \param speed  æœ€å¤§é€Ÿåº¦,å¦‚æœå–å€¼ä¸º100ï¼Œå®é™…å€¼ä¸º100*0.01*rad/sec=1rad/sec
  */
 void stepper_move_T( int32_t step, uint32_t accel, uint32_t decel, uint32_t speed)
 {  
-    //´ïµ½×î´óËÙ¶ÈÊ±µÄ²½Êı.
+    //è¾¾åˆ°æœ€å¤§é€Ÿåº¦æ—¶çš„æ­¥æ•°.
     unsigned int max_s_lim;
-    //±ØĞë¿ªÊ¼¼õËÙµÄ²½Êı(Èç¹û»¹Ã»¼ÓËÙµ½´ï×î´óËÙ¶ÈÊ±)¡£
+    //å¿…é¡»å¼€å§‹å‡é€Ÿçš„æ­¥æ•°(å¦‚æœè¿˜æ²¡åŠ é€Ÿåˆ°è¾¾æœ€å¤§é€Ÿåº¦æ—¶)ã€‚
     unsigned int accel_lim;
 
-		/*¸ù¾İ²½ÊıºÍÕı¸ºÅĞ¶Ï*/
+		/*æ ¹æ®æ­¥æ•°å’Œæ­£è´Ÿåˆ¤æ–­*/
 		if(step == 0)
 		{
 				return ;
 		}
-		else if(step < 0)//ÄæÊ±Õë
+		else if(step < 0)//é€†æ—¶é’ˆ
     {
         srd.dir = CCW;
         step = -step;
     }
-    else//Ë³Ê±Õë
+    else//é¡ºæ—¶é’ˆ
     {
         srd.dir = CW;
-    }	// Êä³öµç»ú·½Ïò
+    }	// è¾“å‡ºç”µæœºæ–¹å‘
 		MOTOR_DIR(srd.dir);
 	
 		    
-    // Èç¹ûÖ»ÒÆ¶¯Ò»²½
+    // å¦‚æœåªç§»åŠ¨ä¸€æ­¥
     if(step == 1)
     {
-        // Ö»ÒÆ¶¯Ò»²½
+        // åªç§»åŠ¨ä¸€æ­¥
         srd.accel_count = -1;
-        // ¼õËÙ×´Ì¬
+        // å‡é€ŸçŠ¶æ€
         srd.run_state = DECEL;
-        // ¶ÌÑÓÊ±
+        // çŸ­å»¶æ—¶
         srd.step_delay = 1000;
-        // ÅäÖÃµç»úÎªÔËĞĞ×´Ì¬
+        // é…ç½®ç”µæœºä¸ºè¿è¡ŒçŠ¶æ€
         status.running = TRUE;
      }
 		
-    // ²½Êı²»ÎªÁã²ÅÒÆ¶¯
+    // æ­¥æ•°ä¸ä¸ºé›¶æ‰ç§»åŠ¨
     else if(step != 0)
     {
-			// ÉèÖÃ×î´óËÙ¶È¼«ÏŞ, ¼ÆËãµÃµ½min_delayÓÃÓÚ¶¨Ê±Æ÷µÄ¼ÆÊıÆ÷µÄÖµ¡£
+			// è®¾ç½®æœ€å¤§é€Ÿåº¦æé™, è®¡ç®—å¾—åˆ°min_delayç”¨äºå®šæ—¶å™¨çš„è®¡æ•°å™¨çš„å€¼ã€‚
 			// min_delay = (alpha / tt)/ w
 			srd.min_delay = (int32_t)(A_T_x10/speed);
 
-			// Í¨¹ı¼ÆËãµÚÒ»¸ö(c0) µÄ²½½øÑÓÊ±À´Éè¶¨¼ÓËÙ¶È£¬ÆäÖĞaccelµ¥Î»Îª0.1rad/sec^2
+			// é€šè¿‡è®¡ç®—ç¬¬ä¸€ä¸ª(c0) çš„æ­¥è¿›å»¶æ—¶æ¥è®¾å®šåŠ é€Ÿåº¦ï¼Œå…¶ä¸­accelå•ä½ä¸º0.1rad/sec^2
 			// step_delay = 1/tt * sqrt(2*alpha/accel)
 			// step_delay = ( tfreq*0.676/10 )*10 * sqrt( (2*alpha*100000) / (accel*10) )/100
 			srd.step_delay = (int32_t)((T1_FREQ_148 * sqrt(A_SQ / accel))/10);
 
-			// ¼ÆËã¶àÉÙ²½Ö®ºó´ïµ½×î´óËÙ¶ÈµÄÏŞÖÆ
+			// è®¡ç®—å¤šå°‘æ­¥ä¹‹åè¾¾åˆ°æœ€å¤§é€Ÿåº¦çš„é™åˆ¶
 			// max_s_lim = speed^2 / (2*alpha*accel)
 			max_s_lim = (uint32_t)(speed*speed/(A_x200*accel/10));
-			// Èç¹û´ïµ½×î´óËÙ¶ÈĞ¡ÓÚ0.5²½£¬ÎÒÃÇ½«ËÄÉáÎåÈëÎª0
-			// µ«Êµ¼ÊÎÒÃÇ±ØĞëÒÆ¶¯ÖÁÉÙÒ»²½²ÅÄÜ´ïµ½ÏëÒªµÄËÙ¶È
+			// å¦‚æœè¾¾åˆ°æœ€å¤§é€Ÿåº¦å°äº0.5æ­¥ï¼Œæˆ‘ä»¬å°†å››èˆäº”å…¥ä¸º0
+			// ä½†å®é™…æˆ‘ä»¬å¿…é¡»ç§»åŠ¨è‡³å°‘ä¸€æ­¥æ‰èƒ½è¾¾åˆ°æƒ³è¦çš„é€Ÿåº¦
 			if(max_s_lim == 0)
 			{
 					max_s_lim = 1;
 			}
 
-    // ¼ÆËã¶àÉÙ²½Ö®ºóÎÒÃÇ±ØĞë¿ªÊ¼¼õËÙ
+    // è®¡ç®—å¤šå°‘æ­¥ä¹‹åæˆ‘ä»¬å¿…é¡»å¼€å§‹å‡é€Ÿ
     // n1 = (n1+n2)decel / (accel + decel)
     accel_lim = ((long)step*decel) / (accel+decel);
-    // ÎÒÃÇ±ØĞë¼ÓËÙÖÁÉÙ1²½²ÅÄÜ²ÅÄÜ¿ªÊ¼¼õËÙ.
+    // æˆ‘ä»¬å¿…é¡»åŠ é€Ÿè‡³å°‘1æ­¥æ‰èƒ½æ‰èƒ½å¼€å§‹å‡é€Ÿ.
     if(accel_lim == 0)
     {
         accel_lim = 1;
     }
-    // Ê¹ÓÃÏŞÖÆÌõ¼şÎÒÃÇ¿ÉÒÔ¼ÆËã³öµÚÒ»´Î¿ªÊ¼¼õËÙµÄÎ»ÖÃ
-    //srd.decel_valÎª¸ºÊı
+    // ä½¿ç”¨é™åˆ¶æ¡ä»¶æˆ‘ä»¬å¯ä»¥è®¡ç®—å‡ºç¬¬ä¸€æ¬¡å¼€å§‹å‡é€Ÿçš„ä½ç½®
+    //srd.decel_valä¸ºè´Ÿæ•°
     if(accel_lim <= max_s_lim)
     {
         srd.decel_val = accel_lim - step;
@@ -153,16 +153,16 @@ void stepper_move_T( int32_t step, uint32_t accel, uint32_t decel, uint32_t spee
     {
         srd.decel_val = -(long)(max_s_lim*accel/decel);
     }
-    // µ±Ö»Ê£ÏÂÒ»²½ÎÒÃÇ±ØĞë¼õËÙ
+    // å½“åªå‰©ä¸‹ä¸€æ­¥æˆ‘ä»¬å¿…é¡»å‡é€Ÿ
     if(srd.decel_val == 0)
     {
         srd.decel_val = -1;
     }
 
-    // ¼ÆËã¿ªÊ¼¼õËÙÊ±µÄ²½Êı
+    // è®¡ç®—å¼€å§‹å‡é€Ÿæ—¶çš„æ­¥æ•°
     srd.decel_start = step + srd.decel_val;
 
-		// Èç¹û×î´óËÙ¶ÈºÜÂı£¬ÎÒÃÇ¾Í²»ĞèÒª½øĞĞ¼ÓËÙÔË¶¯
+		// å¦‚æœæœ€å¤§é€Ÿåº¦å¾ˆæ…¢ï¼Œæˆ‘ä»¬å°±ä¸éœ€è¦è¿›è¡ŒåŠ é€Ÿè¿åŠ¨
 		if(srd.step_delay <= srd.min_delay)
 		{
 			srd.step_delay = srd.min_delay;
@@ -172,67 +172,67 @@ void stepper_move_T( int32_t step, uint32_t accel, uint32_t decel, uint32_t spee
 		{
 			srd.run_state = ACCEL;
 		}
-    // ¸´Î»¼ÓËÙ¶È¼ÆÊıÖµ
+    // å¤ä½åŠ é€Ÿåº¦è®¡æ•°å€¼
     srd.accel_count = 0;
     status.running = TRUE;
   }
-	/*»ñÈ¡µ±Ç°¼ÆÊıÖµ*/
+	/*è·å–å½“å‰è®¡æ•°å€¼*/
   int tim_count=__HAL_TIM_GET_COUNTER(&TIM_TimeBaseStructure);
-	/*ÔÚµ±Ç°¼ÆÊıÖµ»ù´¡ÉÏÉèÖÃ¶¨Ê±Æ÷±È½ÏÖµ*/
+	/*åœ¨å½“å‰è®¡æ•°å€¼åŸºç¡€ä¸Šè®¾ç½®å®šæ—¶å™¨æ¯”è¾ƒå€¼*/
   __HAL_TIM_SET_COMPARE(&TIM_TimeBaseStructure,MOTOR_PUL_CHANNEL_x,tim_count+srd.step_delay); 
-	/*Ê¹ÄÜ¶¨Ê±Æ÷Í¨µÀ*/
+	/*ä½¿èƒ½å®šæ—¶å™¨é€šé“*/
   TIM_CCxChannelCmd(MOTOR_PUL_TIM, MOTOR_PUL_CHANNEL_x, TIM_CCx_ENABLE);
 	MOTOR_EN(ON);
 }
 
 /**
-  * @brief  ËÙ¶È¾ö²ß
-	*	@note 	ÔÚÖĞ¶ÏÖĞÊ¹ÓÃ£¬Ã¿½øÒ»´ÎÖĞ¶Ï£¬¾ö²ßÒ»´Î
-  * @retval ÎŞ
+  * @brief  é€Ÿåº¦å†³ç­–
+	*	@note 	åœ¨ä¸­æ–­ä¸­ä½¿ç”¨ï¼Œæ¯è¿›ä¸€æ¬¡ä¸­æ–­ï¼Œå†³ç­–ä¸€æ¬¡
+  * @retval æ— 
   */
 void speed_decision()
 {
  __IO uint32_t tim_count=0;
   __IO uint32_t tmp = 0;
-  // ±£´æĞÂ£¨ÏÂ£©Ò»¸öÑÓÊ±ÖÜÆÚ
+  // ä¿å­˜æ–°ï¼ˆä¸‹ï¼‰ä¸€ä¸ªå»¶æ—¶å‘¨æœŸ
   uint16_t new_step_delay=0;
-  // ¼ÓËÙ¹ı³ÌÖĞ×îºóÒ»´ÎÑÓÊ±£¨Âö³åÖÜÆÚ£©.
+  // åŠ é€Ÿè¿‡ç¨‹ä¸­æœ€åä¸€æ¬¡å»¶æ—¶ï¼ˆè„‰å†²å‘¨æœŸï¼‰.
   __IO static uint16_t last_accel_delay=0;
-  // ×ÜÒÆ¶¯²½Êı¼ÆÊıÆ÷
+  // æ€»ç§»åŠ¨æ­¥æ•°è®¡æ•°å™¨
   __IO static uint32_t step_count = 0;
-  // ¼ÇÂ¼new_step_delayÖĞµÄÓàÊı£¬Ìá¸ßÏÂÒ»²½¼ÆËãµÄ¾«¶È
+  // è®°å½•new_step_delayä¸­çš„ä½™æ•°ï¼Œæé«˜ä¸‹ä¸€æ­¥è®¡ç®—çš„ç²¾åº¦
   __IO static int32_t rest = 0;
-  //¶¨Ê±Æ÷Ê¹ÓÃ·­×ªÄ£Ê½£¬ĞèÒª½øÈëÁ½´ÎÖĞ¶Ï²ÅÊä³öÒ»¸öÍêÕûÂö³å
+  //å®šæ—¶å™¨ä½¿ç”¨ç¿»è½¬æ¨¡å¼ï¼Œéœ€è¦è¿›å…¥ä¸¤æ¬¡ä¸­æ–­æ‰è¾“å‡ºä¸€ä¸ªå®Œæ•´è„‰å†²
   __IO static uint8_t i=0;
   
   if(__HAL_TIM_GET_IT_SOURCE(&TIM_TimeBaseStructure, MOTOR_TIM_IT_CCx) !=RESET)
   {
-    // Çå³ş¶¨Ê±Æ÷ÖĞ¶Ï
+    // æ¸…æ¥šå®šæ—¶å™¨ä¸­æ–­
     __HAL_TIM_CLEAR_IT(&TIM_TimeBaseStructure, MOTOR_TIM_IT_CCx);
     
-    // ÉèÖÃ±È½ÏÖµ
+    // è®¾ç½®æ¯”è¾ƒå€¼
     tim_count=__HAL_TIM_GET_COUNTER(&TIM_TimeBaseStructure);
     tmp = tim_count+srd.step_delay;
     __HAL_TIM_SET_COMPARE(&TIM_TimeBaseStructure,MOTOR_PUL_CHANNEL_x,tmp);
 
-    i++;     // ¶¨Ê±Æ÷ÖĞ¶Ï´ÎÊı¼ÆÊıÖµ
-    if(i==2) // 2´Î£¬ËµÃ÷ÒÑ¾­Êä³öÒ»¸öÍêÕûÂö³å
+    i++;     // å®šæ—¶å™¨ä¸­æ–­æ¬¡æ•°è®¡æ•°å€¼
+    if(i==2) // 2æ¬¡ï¼Œè¯´æ˜å·²ç»è¾“å‡ºä¸€ä¸ªå®Œæ•´è„‰å†²
     {
-			i=0;   // ÇåÁã¶¨Ê±Æ÷ÖĞ¶Ï´ÎÊı¼ÆÊıÖµ
+			i=0;   // æ¸…é›¶å®šæ—¶å™¨ä¸­æ–­æ¬¡æ•°è®¡æ•°å€¼
 			switch(srd.run_state) 
 			{
-				/*²½½øµç»úÍ£Ö¹×´Ì¬*/
+				/*æ­¥è¿›ç”µæœºåœæ­¢çŠ¶æ€*/
 				case STOP:
 						step_count = 0;
 						rest = 0;
 
-						// ¹Ø±ÕÍ¨µÀ
+						// å…³é—­é€šé“
 						TIM_CCxChannelCmd(MOTOR_PUL_TIM, MOTOR_PUL_CHANNEL_x, TIM_CCx_DISABLE);        
 						__HAL_TIM_CLEAR_FLAG(&TIM_TimeBaseStructure, MOTOR_TIM_FLAG_CCx);
 
 						status.running = FALSE;
 						break;
-				/*²½½øµç»ú¼ÓËÙ×´Ì¬*/
+				/*æ­¥è¿›ç”µæœºåŠ é€ŸçŠ¶æ€*/
 				case ACCEL:
 						StepperCounter(srd.dir);
 						step_count++;
@@ -240,12 +240,12 @@ void speed_decision()
 						new_step_delay = srd.step_delay - (((2 * (long)srd.step_delay) 
 														 + rest)/(4 * srd.accel_count + 1));
 						rest = ((2 * (long)srd.step_delay)+rest)%(4 * srd.accel_count + 1);
-						//¼ì²éÊÇ¹»Ó¦¸Ã¿ªÊ¼¼õËÙ
+						//æ£€æŸ¥æ˜¯å¤Ÿåº”è¯¥å¼€å§‹å‡é€Ÿ
 						if(step_count >= srd.decel_start) {
 							srd.accel_count = srd.decel_val;
 							srd.run_state = DECEL;
 						}
-						//¼ì²éÊÇ·ñµ½´ïÆÚÍûµÄ×î´óËÙ¶È
+						//æ£€æŸ¥æ˜¯å¦åˆ°è¾¾æœŸæœ›çš„æœ€å¤§é€Ÿåº¦
 						else if(new_step_delay <= srd.min_delay) {
 							last_accel_delay = new_step_delay;
 							new_step_delay = srd.min_delay;
@@ -253,22 +253,22 @@ void speed_decision()
 							srd.run_state = RUN;
 						}
 						break;
-				/*²½½øµç»ú×î´óËÙ¶ÈÔËĞĞ×´Ì¬*/
+				/*æ­¥è¿›ç”µæœºæœ€å¤§é€Ÿåº¦è¿è¡ŒçŠ¶æ€*/
 				case RUN:
 
-			      StepperCounter(srd.dir);//¸ù¾İÂö³å¼ÆÊıÎ»ÖÃ
+			      StepperCounter(srd.dir);//æ ¹æ®è„‰å†²è®¡æ•°ä½ç½®
 						step_count++;
 						new_step_delay = srd.min_delay;
-						//¼ì²éÊÇ·ñĞèÒª¿ªÊ¼¼õËÙ
+						//æ£€æŸ¥æ˜¯å¦éœ€è¦å¼€å§‹å‡é€Ÿ
 						if(step_count >= srd.decel_start) 
 						{
 							srd.accel_count = srd.decel_val;
-							//ÒÔ×îºóÒ»´Î¼ÓËÙµÄÑÓÊ±×÷Îª¿ªÊ¼¼õËÙµÄÑÓÊ±
+							//ä»¥æœ€åä¸€æ¬¡åŠ é€Ÿçš„å»¶æ—¶ä½œä¸ºå¼€å§‹å‡é€Ÿçš„å»¶æ—¶
 							new_step_delay = last_accel_delay;
 							srd.run_state = DECEL;
 						}
 						break;
-				/*²½½øµç»ú¼õËÙ×´Ì¬*/
+				/*æ­¥è¿›ç”µæœºå‡é€ŸçŠ¶æ€*/
 				case DECEL:
 
 			      StepperCounter(srd.dir);
@@ -277,14 +277,14 @@ void speed_decision()
 						new_step_delay = srd.step_delay - (((2 * (long)srd.step_delay) 
 														 + rest)/(4 * srd.accel_count + 1));
 						rest = ((2 * (long)srd.step_delay)+rest)%(4 * srd.accel_count + 1);
-						//¼ì²éÊÇ·ñÎª×îºóÒ»²½
+						//æ£€æŸ¥æ˜¯å¦ä¸ºæœ€åä¸€æ­¥
 						if(srd.accel_count >= 0)
 						{
 							srd.run_state = STOP;
 						}
 						break;
 			}
-			/*ÇóµÃÏÂÒ»´Î¼ä¸ôÊ±¼ä*/
+			/*æ±‚å¾—ä¸‹ä¸€æ¬¡é—´éš”æ—¶é—´*/
 			srd.step_delay = new_step_delay;
     }
   }

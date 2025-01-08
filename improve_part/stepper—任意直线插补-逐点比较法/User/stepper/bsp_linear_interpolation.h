@@ -4,22 +4,22 @@
 #include "stm32f4xx_hal.h"
 #include "./stepper/bsp_stepper_init.h"
 
-/* ×ø±êÖáÃ¶¾Ù */
+/* åæ ‡è½´æšä¸¾ */
 typedef enum{
   x_axis = 0U,
   y_axis
 }Axis_TypeDef;
 
-/* Ö±Ïß²å²¹²ÎÊı½á¹¹Ìå */
+/* ç›´çº¿æ’è¡¥å‚æ•°ç»“æ„ä½“ */
 typedef struct{
-  __IO uint32_t endpoint_x;           //ÖÕµã×ø±êX
-  __IO uint32_t endpoint_y;           //ÖÕµã×ø±êY
-  __IO uint32_t endpoint_pulse;       //µ½´ïÖÕµãÎ»ÖÃĞèÒªµÄÂö³åÊı
-  __IO uint32_t active_axis;          //µ±Ç°ÔË¶¯µÄÖá
-  __IO int32_t deviation;             //Æ«²î²ÎÊı
-  __IO uint8_t motionstatus : 1;      //²å²¹ÔË¶¯×´Ì¬
-  __IO uint8_t dir_x : 1;             //XÖáÔË¶¯·½Ïò
-  __IO uint8_t dir_y : 1;             //YÖáÔË¶¯·½Ïò
+  __IO uint32_t endpoint_x;           //ç»ˆç‚¹åæ ‡X
+  __IO uint32_t endpoint_y;           //ç»ˆç‚¹åæ ‡Y
+  __IO uint32_t endpoint_pulse;       //åˆ°è¾¾ç»ˆç‚¹ä½ç½®éœ€è¦çš„è„‰å†²æ•°
+  __IO uint32_t active_axis;          //å½“å‰è¿åŠ¨çš„è½´
+  __IO int32_t deviation;             //åå·®å‚æ•°
+  __IO uint8_t motionstatus : 1;      //æ’è¡¥è¿åŠ¨çŠ¶æ€
+  __IO uint8_t dir_x : 1;             //Xè½´è¿åŠ¨æ–¹å‘
+  __IO uint8_t dir_y : 1;             //Yè½´è¿åŠ¨æ–¹å‘
 }LinearInterpolation_TypeDef;
 
 extern LinearInterpolation_TypeDef interpolation_para;

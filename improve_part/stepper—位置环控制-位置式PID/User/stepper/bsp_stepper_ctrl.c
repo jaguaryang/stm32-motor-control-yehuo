@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ²½½øµç»ú³õÊ¼»¯
+  * @brief   æ­¥è¿›ç”µæœºåˆå§‹åŒ–
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -21,97 +21,97 @@
 #include "./protocol/protocol.h"
 
 extern _pid pid;
-extern __IO uint16_t OC_Pulse_num;     //±È½ÏÊä³öµÄ¼ÆÊıÖµ
+extern __IO uint16_t OC_Pulse_num;     //æ¯”è¾ƒè¾“å‡ºçš„è®¡æ•°å€¼
 
 __SYS_STATUS sys_status = {0};
 
 /**
-  * @brief  Çı¶¯Æ÷½ô¼±Í£Ö¹
-  * @param  NewState£ºÊ¹ÄÜ»òÕß½ûÖ¹
-  * @retval ÎŞ
+  * @brief  é©±åŠ¨å™¨ç´§æ€¥åœæ­¢
+  * @param  NewStateï¼šä½¿èƒ½æˆ–è€…ç¦æ­¢
+  * @retval æ— 
   */
 void MSD_ENA(int NewState)
 {
     if(NewState)
     {
-      //ENAÊ§ÄÜ£¬½ûÖ¹Çı¶¯Æ÷Êä³ö£¬£¨ÍÑ»ú×´Ì¬£©´ËÊ±µç»úÎªÎŞ±£³ÖÁ¦¾Ø×´Ì¬£¬¿ÉÒÔÊÖ¶¯Ğı×ªµç»ú
+      //ENAå¤±èƒ½ï¼Œç¦æ­¢é©±åŠ¨å™¨è¾“å‡ºï¼Œï¼ˆè„±æœºçŠ¶æ€ï¼‰æ­¤æ—¶ç”µæœºä¸ºæ— ä¿æŒåŠ›çŸ©çŠ¶æ€ï¼Œå¯ä»¥æ‰‹åŠ¨æ—‹è½¬ç”µæœº
       MOTOR_EN(OFF);
       sys_status.MSD_ENA = 0;
     }
     else
     {
-      //ENAÊ¹ÄÜ£¬´ËÊ±µç»úÎª±£³ÖÁ¦¾Ø×´Ì¬
+      //ENAä½¿èƒ½ï¼Œæ­¤æ—¶ç”µæœºä¸ºä¿æŒåŠ›çŸ©çŠ¶æ€
       MOTOR_EN(ON);
       sys_status.MSD_ENA = 1;
     }
 }
 
 /**
-  * @brief  ²½½øµç»úÉ²³µ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  æ­¥è¿›ç”µæœºåˆ¹è½¦
+  * @param  æ— 
+  * @retval æ— 
   */
 void Set_Stepper_Stop(void)
 {
-  /*Ê§ÄÜ±È½ÏÍ¨µÀ*/
+  /*å¤±èƒ½æ¯”è¾ƒé€šé“*/
 	TIM_CCxChannelCmd(MOTOR_PUL_TIM,MOTOR_PUL_CHANNEL_x,TIM_CCx_DISABLE);
   sys_status.stepper_running = 0;
 }
 
 /**
-  * @brief  Æô¶¯²½½øµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  å¯åŠ¨æ­¥è¿›ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void Set_Stepper_Start(void)
 {
-  /*Ê¹ÄÜÇı¶¯Æ÷*/
+  /*ä½¿èƒ½é©±åŠ¨å™¨*/
   MSD_ENA(ON);
-  /*Ê¹ÄÜ±È½ÏÍ¨µÀÊä³ö*/
+  /*ä½¿èƒ½æ¯”è¾ƒé€šé“è¾“å‡º*/
 	TIM_CCxChannelCmd(MOTOR_PUL_TIM,MOTOR_PUL_CHANNEL_x,TIM_CCx_ENABLE);
   sys_status.MSD_ENA = 1;
   sys_status.stepper_running = 1;
 }
 
 /**
-  * @brief  ²½½øµç»úÎ»ÖÃÊ½PID¿ØÖÆ
-  * @retval ÎŞ
-  * @note   »ù±¾¶¨Ê±Æ÷ÖĞ¶ÏÄÚµ÷ÓÃ
+  * @brief  æ­¥è¿›ç”µæœºä½ç½®å¼PIDæ§åˆ¶
+  * @retval æ— 
+  * @note   åŸºæœ¬å®šæ—¶å™¨ä¸­æ–­å†…è°ƒç”¨
   */
 void Stepper_Speed_Ctrl(void)
 {
-  /* ±àÂëÆ÷Ïà¹Ø±äÁ¿ */
+  /* ç¼–ç å™¨ç›¸å…³å˜é‡ */
   __IO int32_t capture_per_unit = 0;
   __IO int32_t capture_count = 0;
   static __IO int32_t last_count = 0;
-  /* ¾­¹ıpid¼ÆËãºóµÄÆÚÍûÖµ */
+  /* ç»è¿‡pidè®¡ç®—åçš„æœŸæœ›å€¼ */
   __IO int32_t cont_val = 0;
   
-  /* µ±µç»úÔË¶¯Ê±²ÅÆô¶¯pid¼ÆËã */
+  /* å½“ç”µæœºè¿åŠ¨æ—¶æ‰å¯åŠ¨pidè®¡ç®— */
   if((sys_status.MSD_ENA == 1) && (sys_status.stepper_running == 1))
   {
-    /* µÚÒ»²½ --> ¼ÆËãµ±Ç°±àÂëÆ÷Âö³å×ÜÊı */
-		// µ±Ç°Âö³å×Ü¼ÆÊıÖµ = µ±Ç°¶¨Ê±Æ÷µÄ¼ÆÊıÖµ + £¨¶¨Ê±Æ÷µÄÒç³ö´ÎÊı * ¶¨Ê±Æ÷µÄÖØ×°ÔØÖµ£©
+    /* ç¬¬ä¸€æ­¥ --> è®¡ç®—å½“å‰ç¼–ç å™¨è„‰å†²æ€»æ•° */
+		// å½“å‰è„‰å†²æ€»è®¡æ•°å€¼ = å½“å‰å®šæ—¶å™¨çš„è®¡æ•°å€¼ + ï¼ˆå®šæ—¶å™¨çš„æº¢å‡ºæ¬¡æ•° * å®šæ—¶å™¨çš„é‡è£…è½½å€¼ï¼‰
     capture_count =__HAL_TIM_GET_COUNTER(&TIM_EncoderHandle) + (encoder_overflow_count * ENCODER_TIM_PERIOD);
     
-    /* µÚ¶ş²½ --> ½«µ±Ç°±àÂëÆ÷Âö³å×ÜÊı×÷ÎªÊµ¼ÊÖµ´«Èëpid¿ØÖÆÆ÷ */		
+    /* ç¬¬äºŒæ­¥ --> å°†å½“å‰ç¼–ç å™¨è„‰å†²æ€»æ•°ä½œä¸ºå®é™…å€¼ä¼ å…¥pidæ§åˆ¶å™¨ */		
 		cont_val = PID_realize((float)capture_count);
 
-    /* µÚÈı²½ --> ÓÃPID¿ØÖÆÆ÷µÄÊä³öÖµ(ÆÚÍûÖµ)À´µ÷½Ú²½½øµç»ú */
-		// ÅĞ¶ÏPID¿ØÖÆÆ÷Êä³öÖµµÄ·½Ïò
+    /* ç¬¬ä¸‰æ­¥ --> ç”¨PIDæ§åˆ¶å™¨çš„è¾“å‡ºå€¼(æœŸæœ›å€¼)æ¥è°ƒèŠ‚æ­¥è¿›ç”µæœº */
+		// åˆ¤æ–­PIDæ§åˆ¶å™¨è¾“å‡ºå€¼çš„æ–¹å‘
     cont_val > 0 ? (MOTOR_DIR(CW)) : (MOTOR_DIR(CCW));
-    // ÓÉÓÚ±È½Ï¼ÆÊıÆ÷µÄÔöÁ¿²»ÄÜÎª¸ºÖµ£¬¶Ô¼ÆËãµÃ³öµÄÆÚÍûÖµÈ¡¾ø¶ÔÖµ */
+    // ç”±äºæ¯”è¾ƒè®¡æ•°å™¨çš„å¢é‡ä¸èƒ½ä¸ºè´Ÿå€¼ï¼Œå¯¹è®¡ç®—å¾—å‡ºçš„æœŸæœ›å€¼å–ç»å¯¹å€¼ */
     cont_val = abs(cont_val);
-    /* ÏŞÖÆ×î´óÆô¶¯ËÙ¶È £¬·ÀÖ¹¶Â×ª*/
+    /* é™åˆ¶æœ€å¤§å¯åŠ¨é€Ÿåº¦ ï¼Œé˜²æ­¢å µè½¬*/
     cont_val >= SPEED_LIMIT ? (cont_val = SPEED_LIMIT) : cont_val;
-    // ±È½Ï¼ÆÊıÆ÷µÄÔöÁ¿ =  (±È½Ï¼ÆÊ±Æ÷µÄÆµÂÊ/(ÆÚÍûÖµµÄ¾ø¶ÔÖµ * ²½½øµç»úÓë±àÂëÆ÷µÄÂö³å±È )) / 2
+    // æ¯”è¾ƒè®¡æ•°å™¨çš„å¢é‡ =  (æ¯”è¾ƒè®¡æ—¶å™¨çš„é¢‘ç‡/(æœŸæœ›å€¼çš„ç»å¯¹å€¼ * æ­¥è¿›ç”µæœºä¸ç¼–ç å™¨çš„è„‰å†²æ¯” )) / 2
     OC_Pulse_num = ((uint16_t)(T1_FREQ / ((float)cont_val * PULSE_RATIO))) >> 1;
         
    #if PID_ASSISTANT_EN
-    int Temp = capture_count;    // ÉÏÎ»»úĞèÒªÕûÊı²ÎÊı£¬×ª»»Ò»ÏÂ
-    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &Temp, 1);  // ¸øÍ¨µÀ 1 ·¢ËÍÊµ¼ÊÖµ
+    int Temp = capture_count;    // ä¸Šä½æœºéœ€è¦æ•´æ•°å‚æ•°ï¼Œè½¬æ¢ä¸€ä¸‹
+    set_computer_value(SEND_FACT_CMD, CURVES_CH1, &Temp, 1);  // ç»™é€šé“ 1 å‘é€å®é™…å€¼
    #else
-    printf("Êµ¼ÊÖµ£º%d£¬Ä¿±êÖµ£º%.0f\r\n", capture_count, pid.target_val);// ´òÓ¡Êµ¼ÊÖµºÍÄ¿±êÖµ
+    printf("å®é™…å€¼ï¼š%dï¼Œç›®æ ‡å€¼ï¼š%.0f\r\n", capture_count, pid.target_val);// æ‰“å°å®é™…å€¼å’Œç›®æ ‡å€¼
    #endif
   }
   else

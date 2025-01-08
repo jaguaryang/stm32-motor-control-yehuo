@@ -4,13 +4,13 @@
   * @author  STMicroelectronics
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   Í¨ÓÃ¶¨Ê±Æ÷¶¨Ê±·¶Àý
+  * @brief   é€šç”¨å®šæ—¶å™¨å®šæ—¶èŒƒä¾‹
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ð  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®žéªŒå¹³å°:é‡Žç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,43 +24,43 @@ void TIM_SetTIMxCompare(TIM_TypeDef *TIMx,uint32_t channel,uint32_t compare);
 void TIM_SetPWM_period(TIM_TypeDef* TIMx,uint32_t TIM_period);
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_GPIO_Config(void) 
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒý½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	
 	__HAL_RCC_GPIOD_CLK_ENABLE();
   
-  /* ¶¨Ê±Æ÷Í¨µÀ1¹¦ÄÜÒý½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàÐÍ*/
+  /* å®šæ—¶å™¨é€šé“1åŠŸèƒ½å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»åž‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-	/*ÉèÖÃÒý½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€ŸçŽ‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*ÉèÖÃ¸´ÓÃ*/
+	/*è®¾ç½®å¤ç”¨*/
   GPIO_InitStruct.Alternate = GENERAL_TIM_GPIO_AF;
 	
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒý½Å*/	
+	/*é€‰æ‹©è¦æŽ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = GENERAL_TIM_CH1_PIN;
-	/*µ÷ÓÃ¿âº¯Êý£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(GENERAL_TIM_CH1_GPIO_PORT, &GPIO_InitStruct);
 }
 
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓÐ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓÐ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ðè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈý¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓÐ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æž„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓÐ
- * TIM_CounterMode			 TIMx,x[6,7]Ã»ÓÐ£¬ÆäËû¶¼ÓÐ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓÐ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓÐ£¬ÆäËû¶¼ÓÐ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓÐ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode			 TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 TIM_HandleTypeDef  TIM_TimeBaseStructure;
@@ -68,43 +68,43 @@ static void TIM_PWMOUTPUT_Config(void)
 {
   TIM_OC_InitTypeDef  TIM_OCInitStructure;  
 	
-  /*Ê¹ÄÜ¶¨Ê±Æ÷*/
+  /*ä½¿èƒ½å®šæ—¶å™¨*/
   GENERAL_TIM_CLK_ENABLE();
 	
   TIM_TimeBaseStructure.Instance = GENERAL_TIM;
-  /* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üÐÂ»òÕßÖÐ¶Ï*/		
-  //µ±¶¨Ê±Æ÷´Ó0¼ÆÊýµ½PWM_PERIOD_COUNT£¬¼´ÎªPWM_PERIOD_COUNT+1´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+  /* ç´¯è®¡ TIM_Periodä¸ªåŽäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/		
+  //å½“å®šæ—¶å™¨ä»Ž0è®¡æ•°åˆ°PWM_PERIOD_COUNTï¼Œå³ä¸ºPWM_PERIOD_COUNT+1æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
 	TIM_TimeBaseStructure.Init.Period = PWM_PERIOD_COUNT;
-	// Í¨ÓÃ¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK/2=84MHz 
-	// Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(PWM_PRESCALER_COUNT+1)
+	// é€šç”¨æŽ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK/2=84MHz 
+	// è®¾å®šå®šæ—¶å™¨é¢‘çŽ‡ä¸º=TIMxCLK/(PWM_PRESCALER_COUNT+1)
   TIM_TimeBaseStructure.Init.Prescaler = PWM_PRESCALER_COUNT;	
 	
-	/*¼ÆÊý·½Ê½*/
+	/*è®¡æ•°æ–¹å¼*/
   TIM_TimeBaseStructure.Init.CounterMode = TIM_COUNTERMODE_UP;
-	/*²ÉÑùÊ±ÖÓ·ÖÆµ*/
+	/*é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘*/
   TIM_TimeBaseStructure.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-	/*³õÊ¼»¯¶¨Ê±Æ÷*/
+	/*åˆå§‹åŒ–å®šæ—¶å™¨*/
   HAL_TIM_Base_Init(&TIM_TimeBaseStructure);
   
-	/*PWMÄ£Ê½ÅäÖÃ*/
-  TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM2;      // ÅäÖÃÎªPWMÄ£Ê½1
-  TIM_OCInitStructure.Pulse = 0.5/20.0*PWM_PERIOD_COUNT;    // Ä¬ÈÏÕ¼¿Õ±È
+	/*PWMæ¨¡å¼é…ç½®*/
+  TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM2;      // é…ç½®ä¸ºPWMæ¨¡å¼1
+  TIM_OCInitStructure.Pulse = 0.5/20.0*PWM_PERIOD_COUNT;    // é»˜è®¤å ç©ºæ¯”
   TIM_OCInitStructure.OCFastMode = TIM_OCFAST_DISABLE;
-	/*µ±¶¨Ê±Æ÷¼ÆÊýÖµÐ¡ÓÚCCR1_ValÊ±Îª¸ßµçÆ½*/
+	/*å½“å®šæ—¶å™¨è®¡æ•°å€¼å°äºŽCCR1_Valæ—¶ä¸ºé«˜ç”µå¹³*/
   TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH;	
 	
-	/*ÅäÖÃPWMÍ¨µÀ*/
+	/*é…ç½®PWMé€šé“*/
   HAL_TIM_PWM_ConfigChannel(&TIM_TimeBaseStructure, &TIM_OCInitStructure, PWM_CHANNEL_1);
-	/*¿ªÊ¼Êä³öPWM*/
+	/*å¼€å§‹è¾“å‡ºPWM*/
 	HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_1);
 }
 
 /**
-  * @brief  ÉèÖÃTIMÍ¨µÀµÄÕ¼¿Õ±È
-	* @param  channel		Í¨µÀ	£¨1,2,3,4£©
-	* @param  compare		Õ¼¿Õ±È
-	*	@note 	ÎÞ
-  * @retval ÎÞ
+  * @brief  è®¾ç½®TIMé€šé“çš„å ç©ºæ¯”
+	* @param  channel		é€šé“	ï¼ˆ1,2,3,4ï¼‰
+	* @param  compare		å ç©ºæ¯”
+	*	@note 	æ— 
+  * @retval æ— 
   */
 void TIM2_SetPWM_pulse(uint32_t channel,int compare)
 {
@@ -119,9 +119,9 @@ void TIM2_SetPWM_pulse(uint32_t channel,int compare)
 
 
 /**
-  * @brief  ³õÊ¼»¯¿ØÖÆÍ¨ÓÃ¶¨Ê±Æ÷
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  åˆå§‹åŒ–æŽ§åˆ¶é€šç”¨å®šæ—¶å™¨
+  * @param  æ— 
+  * @retval æ— 
   */
 void TIMx_Configuration(void)
 {
@@ -131,15 +131,15 @@ void TIMx_Configuration(void)
 }
 
 /**
-  * @brief  ÉèÖÃ¶æ»úÕ¼¿Õ±È
-  * @param  angle: Õ¼¿Õ±È£¬£¨0.5/20.0*PWM_PERIOD_COUNT µ½ 2.5/20.0*PWM_PERIOD_COUNT£©
-  * @retval ÎÞ
+  * @brief  è®¾ç½®èˆµæœºå ç©ºæ¯”
+  * @param  angle: å ç©ºæ¯”ï¼Œï¼ˆ0.5/20.0*PWM_PERIOD_COUNT åˆ° 2.5/20.0*PWM_PERIOD_COUNTï¼‰
+  * @retval æ— 
   */
 void set_steering_gear_dutyfactor(uint16_t dutyfactor)
 {
   #if 1
   {
-    /* ¶Ô³¬¹ý·¶Î§µÄÕ¼¿Õ±È½øÐÐ±ß½ç´¦Àí */
+    /* å¯¹è¶…è¿‡èŒƒå›´çš„å ç©ºæ¯”è¿›è¡Œè¾¹ç•Œå¤„ç† */
     dutyfactor = 0.5/20.0*PWM_PERIOD_COUNT > dutyfactor ? 0.5/20.0*PWM_PERIOD_COUNT : dutyfactor;
     dutyfactor = 2.5/20.0*PWM_PERIOD_COUNT < dutyfactor ? 2.5/20.0*PWM_PERIOD_COUNT : dutyfactor;
   }
@@ -149,77 +149,77 @@ void set_steering_gear_dutyfactor(uint16_t dutyfactor)
 }
 
 /**
-  * @brief  ÉèÖÃ¶æ»ú½Ç¶È
-  * @param  angle: ½Ç¶È£¬£¨0 µ½ 180£¨¶æ»úÎª0¡ã-180¡ã£©£©
-  * @retval ÎÞ
+  * @brief  è®¾ç½®èˆµæœºè§’åº¦
+  * @param  angle: è§’åº¦ï¼Œï¼ˆ0 åˆ° 180ï¼ˆèˆµæœºä¸º0Â°-180Â°ï¼‰ï¼‰
+  * @retval æ— 
   */
 void set_steering_gear_angle(uint16_t angle_temp)
 {
-  angle_temp = (0.5 + angle_temp / 180.0 * (2.5 - 0.5)) / 20.0 * PWM_PERIOD_COUNT;    // ¼ÆËã½Ç¶È¶ÔÓ¦µÄÕ¼¿Õ±È
+  angle_temp = (0.5 + angle_temp / 180.0 * (2.5 - 0.5)) / 20.0 * PWM_PERIOD_COUNT;    // è®¡ç®—è§’åº¦å¯¹åº”çš„å ç©ºæ¯”
   
-  set_steering_gear_dutyfactor(angle_temp);    // ÉèÖÃÕ¼¿Õ±È
+  set_steering_gear_dutyfactor(angle_temp);    // è®¾ç½®å ç©ºæ¯”
 }
 
 /**
-  * @brief  ´òÓ¡°ïÖúÃüÁî
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  æ‰“å°å¸®åŠ©å‘½ä»¤
+  * @param  æ— 
+  * @retval æ— 
   */
 void show_help(void)
 {
-    printf("¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ªÒ°»ð¶æ»úÇý¶¯ÑÝÊ¾³ÌÐò¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\n\r");
-    printf("ÊäÈëÃüÁî(ÒÔ»Ø³µ½áÊø)£º\n\r");
-    printf("< ? >     -°ïÖú²Ëµ¥\n\r");
-    printf("a[data]   -ÉèÖÃ¶æ»úµÄ½Ç¶È£¨·¶Î§£º%d¡ª%d£©\n\r", 0, 180);
+    printf("â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”é‡Žç«èˆµæœºé©±åŠ¨æ¼”ç¤ºç¨‹åºâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”\n\r");
+    printf("è¾“å…¥å‘½ä»¤(ä»¥å›žè½¦ç»“æŸ)ï¼š\n\r");
+    printf("< ? >     -å¸®åŠ©èœå•\n\r");
+    printf("a[data]   -è®¾ç½®èˆµæœºçš„è§’åº¦ï¼ˆèŒƒå›´ï¼š%dâ€”%dï¼‰\n\r", 0, 180);
 }
 
 extern uint16_t ChannelPulse;
 
 /**
-  * @brief  ´¦Àí´®¿Ú½ÓÊÕµ½µÄÊý¾Ý
-  * @param  ÎÞ
-  * @retval ÎÞ
+  * @brief  å¤„ç†ä¸²å£æŽ¥æ”¶åˆ°çš„æ•°æ®
+  * @param  æ— 
+  * @retval æ— 
   */
 void deal_serial_data(void)
 {
     int angle_temp=0;
     
-    //½ÓÊÕµ½ÕýÈ·µÄÖ¸Áî²ÅÎª1
+    //æŽ¥æ”¶åˆ°æ­£ç¡®çš„æŒ‡ä»¤æ‰ä¸º1
     char okCmd = 0;
 
-    //¼ì²éÊÇ·ñ½ÓÊÕµ½Ö¸Áî
+    //æ£€æŸ¥æ˜¯å¦æŽ¥æ”¶åˆ°æŒ‡ä»¤
     if(receive_cmd == 1)
     {
       if(UART_RxBuffer[0] == 'a' || UART_RxBuffer[0] == 'A')
       {
-        //ÉèÖÃËÙ¶È
+        //è®¾ç½®é€Ÿåº¦
         if(UART_RxBuffer[1] == ' ')
         {
           angle_temp = atoi((char const *)UART_RxBuffer+2);
           if(angle_temp>=0 && angle_temp <= 180)
           {
-            printf("\n\r½Ç¶È: %d\n\r", angle_temp);
-            ChannelPulse = (0.5 + angle_temp / 180.0 * (2.5 - 0.5)) / 20.0 * PWM_PERIOD_COUNT;    // ¸üÐÂ°´Å¥¿ØÖÆµÄÕ¼¿Õ±È
+            printf("\n\rè§’åº¦: %d\n\r", angle_temp);
+            ChannelPulse = (0.5 + angle_temp / 180.0 * (2.5 - 0.5)) / 20.0 * PWM_PERIOD_COUNT;    // æ›´æ–°æŒ‰é’®æŽ§åˆ¶çš„å ç©ºæ¯”
             set_steering_gear_angle(angle_temp);
-//            printf("\n\r½Ç¶È: %d\n\r", (uint16_t)(angle_temp/PWM_PERIOD_COUNT*20.0/(2.5-0.5)*180.0));
+//            printf("\n\rè§’åº¦: %d\n\r", (uint16_t)(angle_temp/PWM_PERIOD_COUNT*20.0/(2.5-0.5)*180.0));
             okCmd = 1;
           }
         }
       }
       else if(UART_RxBuffer[0] == '?')
       {
-        //´òÓ¡°ïÖúÃüÁî
+        //æ‰“å°å¸®åŠ©å‘½ä»¤
         show_help();
         okCmd = 1;
       }
-      //Èç¹ûÖ¸ÁîÓÐÎÞÔò´òÓ¡°ïÖúÃüÁî
+      //å¦‚æžœæŒ‡ä»¤æœ‰æ— åˆ™æ‰“å°å¸®åŠ©å‘½ä»¤
       if(okCmd != 1)
       {
-        printf("\n\r ÊäÈëÓÐÎó£¬ÇëÖØÐÂÊäÈë...\n\r");
+        printf("\n\r è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥...\n\r");
         show_help();
       }
 
-      //Çå¿Õ´®¿Ú½ÓÊÕ»º³åÊý×é
+      //æ¸…ç©ºä¸²å£æŽ¥æ”¶ç¼“å†²æ•°ç»„
       receive_cmd = 0;
       uart_FlushRxBuffer();
 

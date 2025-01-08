@@ -4,11 +4,11 @@
   * @author  LONGZR
   * @brief   This file contains all definitions and functions prototypes for the
   *          Resistor Divider Bus Voltage Sensor component of the Motor Control SDK.
-  *          ÔÚÕâÀïÊµÏÖÁËST MC SDK²»Ò»ÑùµÄ²¿·Ö£¬ÖØĞÂĞ´µçÑ¹¼ì²éº¯Êı.
+  *          åœ¨è¿™é‡Œå®ç°äº†ST MC SDKä¸ä¸€æ ·çš„éƒ¨åˆ†ï¼Œé‡æ–°å†™ç”µå‹æ£€æŸ¥å‡½æ•°.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 Ò°»ğµç×Ó.
+  * <h2><center>&copy; Copyright (c) 2020 é‡ç«ç”µå­.
   * All rights reserved.</center></h2>
   *
   ******************************************************************************
@@ -38,8 +38,8 @@ extern "C" {
   * @{
   */
 
-#define VBUS_MAGNIFICATION_TIMES     37.0    // µçÑ¹·Å´ó±¶Êı
-#define VBUS_VBIAS                   1.24    // Æ«ÖÃµçÑ¹
+#define VBUS_MAGNIFICATION_TIMES     37.0    // ç”µå‹æ”¾å¤§å€æ•°
+#define VBUS_VBIAS                   1.24    // åç½®ç”µå‹
 
 #define YH_OVERVOLTAGE_THRESHOLD_d   (uint16_t)((OV_VOLTAGE_THRESHOLD_V / VBUS_MAGNIFICATION_TIMES + VBUS_VBIAS)/\
                                                 ADC_REFERENCE_VOLTAGE * 65535)

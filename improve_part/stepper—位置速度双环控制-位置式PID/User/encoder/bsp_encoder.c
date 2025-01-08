@@ -4,34 +4,34 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ±àÂëÆ÷½Ó¿Ú
+  * @brief   ç¼–ç å™¨æ¥å£
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
 
 #include "./Encoder/bsp_encoder.h"
 
-/* ¶¨Ê±Æ÷Òç³ö´ÎÊı */
+/* å®šæ—¶å™¨æº¢å‡ºæ¬¡æ•° */
 __IO int16_t encoder_overflow_count = 0;
 
 TIM_HandleTypeDef TIM_EncoderHandle;
 
 /**
-  * @brief  ±àÂëÆ÷½Ó¿ÚÒı½Å³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¼–ç å™¨æ¥å£å¼•è„šåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Encoder_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   
-  /* ¶¨Ê±Æ÷Í¨µÀÒı½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
   ENCODER_TIM_CH1_GPIO_CLK_ENABLE();
   ENCODER_TIM_CH2_GPIO_CLK_ENABLE();
   
@@ -39,41 +39,41 @@ static void Encoder_GPIO_Init(void)
   PC6     ------> TIM3_CH1
   PC7     ------> TIM3_CH2 
   */
-  /* ÉèÖÃÊäÈëÀàĞÍ */
+  /* è®¾ç½®è¾“å…¥ç±»å‹ */
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-  /* ÉèÖÃÉÏÀ­ */
+  /* è®¾ç½®ä¸Šæ‹‰ */
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  /* ÉèÖÃÒı½ÅËÙÂÊ */
+  /* è®¾ç½®å¼•è„šé€Ÿç‡ */
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   
-  /* Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å */	
+  /* é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š */	
   GPIO_InitStruct.Pin = ENCODER_TIM_CH1_PIN;
-  /* ÉèÖÃ¸´ÓÃ */
+  /* è®¾ç½®å¤ç”¨ */
   GPIO_InitStruct.Alternate = ENCODER_TIM_CH1_GPIO_AF;
-  /* µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO */
+  /* è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO */
   HAL_GPIO_Init(ENCODER_TIM_CH1_GPIO_PORT, &GPIO_InitStruct);
   
-  /* Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å */	
+  /* é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š */	
   GPIO_InitStruct.Pin = ENCODER_TIM_CH2_PIN;
-  /* ÉèÖÃ¸´ÓÃ */
+  /* è®¾ç½®å¤ç”¨ */
   GPIO_InitStruct.Alternate = ENCODER_TIM_CH2_GPIO_AF;
-  /* µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO */
+  /* è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO */
   HAL_GPIO_Init(ENCODER_TIM_CH2_GPIO_PORT, &GPIO_InitStruct);
 }
 
 /**
-  * @brief  ÅäÖÃTIMx±àÂëÆ÷Ä£Ê½
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMxç¼–ç å™¨æ¨¡å¼
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIM_Encoder_Init(void)
 { 
   TIM_Encoder_InitTypeDef Encoder_ConfigStructure;
   
-  /* Ê¹ÄÜ±àÂëÆ÷½Ó¿ÚÊ±ÖÓ */
+  /* ä½¿èƒ½ç¼–ç å™¨æ¥å£æ—¶é’Ÿ */
   ENCODER_TIM_CLK_ENABLE();
   
-  /* ¶¨Ê±Æ÷³õÊ¼»¯ÉèÖÃ */
+  /* å®šæ—¶å™¨åˆå§‹åŒ–è®¾ç½® */
   TIM_EncoderHandle.Instance = ENCODER_TIM;
   TIM_EncoderHandle.Init.Prescaler = ENCODER_TIM_PRESCALER;
   TIM_EncoderHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -81,49 +81,49 @@ static void TIM_Encoder_Init(void)
   TIM_EncoderHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   TIM_EncoderHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   
-  /* ÉèÖÃ±àÂëÆ÷±¶ÆµÊı */
+  /* è®¾ç½®ç¼–ç å™¨å€é¢‘æ•° */
   Encoder_ConfigStructure.EncoderMode = ENCODER_MODE;
-  /* ±àÂëÆ÷½Ó¿ÚÍ¨µÀ1ÉèÖÃ */
+  /* ç¼–ç å™¨æ¥å£é€šé“1è®¾ç½® */
   Encoder_ConfigStructure.IC1Polarity = ENCODER_IC1_POLARITY;
   Encoder_ConfigStructure.IC1Selection = TIM_ICSELECTION_DIRECTTI;
   Encoder_ConfigStructure.IC1Prescaler = TIM_ICPSC_DIV1;
   Encoder_ConfigStructure.IC1Filter = 0;
-  /* ±àÂëÆ÷½Ó¿ÚÍ¨µÀ2ÉèÖÃ */
+  /* ç¼–ç å™¨æ¥å£é€šé“2è®¾ç½® */
   Encoder_ConfigStructure.IC2Polarity = ENCODER_IC2_POLARITY;
   Encoder_ConfigStructure.IC2Selection = TIM_ICSELECTION_DIRECTTI;
   Encoder_ConfigStructure.IC2Prescaler = TIM_ICPSC_DIV1;
   Encoder_ConfigStructure.IC2Filter = 0;
-  /* ³õÊ¼»¯±àÂëÆ÷½Ó¿Ú */
+  /* åˆå§‹åŒ–ç¼–ç å™¨æ¥å£ */
   HAL_TIM_Encoder_Init(&TIM_EncoderHandle, &Encoder_ConfigStructure);
   
-  /* ÇåÁã¼ÆÊıÆ÷ */
+  /* æ¸…é›¶è®¡æ•°å™¨ */
   __HAL_TIM_SET_COUNTER(&TIM_EncoderHandle, 0);
   
-  /* ÇåÁãÖĞ¶Ï±êÖ¾Î» */
+  /* æ¸…é›¶ä¸­æ–­æ ‡å¿—ä½ */
   __HAL_TIM_CLEAR_IT(&TIM_EncoderHandle,TIM_IT_UPDATE);
-  /* Ê¹ÄÜ¶¨Ê±Æ÷µÄ¸üĞÂÊÂ¼şÖĞ¶Ï */
+  /* ä½¿èƒ½å®šæ—¶å™¨çš„æ›´æ–°äº‹ä»¶ä¸­æ–­ */
   __HAL_TIM_ENABLE_IT(&TIM_EncoderHandle,TIM_IT_UPDATE);
-  /* ÉèÖÃ¸üĞÂÊÂ¼şÇëÇóÔ´Îª£º¼ÆÊıÆ÷Òç³ö */
+  /* è®¾ç½®æ›´æ–°äº‹ä»¶è¯·æ±‚æºä¸ºï¼šè®¡æ•°å™¨æº¢å‡º */
   __HAL_TIM_URS_ENABLE(&TIM_EncoderHandle);
   
-  /* ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶ */
+  /* è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§ */
   HAL_NVIC_SetPriority(ENCODER_TIM_IRQn, 5, 1);
-  /* Ê¹ÄÜ¶¨Ê±Æ÷ÖĞ¶Ï */
+  /* ä½¿èƒ½å®šæ—¶å™¨ä¸­æ–­ */
   HAL_NVIC_EnableIRQ(ENCODER_TIM_IRQn);
   
-  /* Ê¹ÄÜ±àÂëÆ÷½Ó¿Ú */
+  /* ä½¿èƒ½ç¼–ç å™¨æ¥å£ */
   HAL_TIM_Encoder_Start(&TIM_EncoderHandle, TIM_CHANNEL_ALL);
 }
 
 /**
-  * @brief  ±àÂëÆ÷½Ó¿Ú³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¼–ç å™¨æ¥å£åˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 void Encoder_Init(void)
 {
-  Encoder_GPIO_Init();    /* Òı½Å³õÊ¼»¯ */
-  TIM_Encoder_Init();     /* ÅäÖÃ±àÂëÆ÷½Ó¿Ú */
+  Encoder_GPIO_Init();    /* å¼•è„šåˆå§‹åŒ– */
+  TIM_Encoder_Init();     /* é…ç½®ç¼–ç å™¨æ¥å£ */
 }
 
 /*********************************************END OF FILE**********************/

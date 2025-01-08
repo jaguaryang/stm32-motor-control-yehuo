@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   ����Ӧ��bsp��ɨ��ģʽ��
+  * @brief   按键应用bsp（扫描模式）
   ******************************************************************************
   * @attention
   *
-  * ʵ��ƽ̨:Ұ��  STM32 F407 ������ 
-  * ��̳    :http://www.firebbs.cn
-  * �Ա�    :http://firestm32.taobao.com
+  * 实验平台:野火  STM32 F407 开发板 
+  * 论坛    :http://www.firebbs.cn
+  * 淘宝    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -20,69 +20,69 @@
 #include ".\key\bsp_key.h" 
 
 /**
-  * @brief  ���ð����õ���I/O��
-  * @param  ��
-  * @retval ��
+  * @brief  配置按键用到的I/O口
+  * @param  无
+  * @retval 无
   */
 
 void Key_GPIO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
-  /*��������GPIO�ڵ�ʱ��*/
+  /*开启按键GPIO口的时钟*/
   KEY1_GPIO_CLK_ENABLE();
   KEY2_GPIO_CLK_ENABLE();
   KEY3_GPIO_CLK_ENABLE();
   KEY4_GPIO_CLK_ENABLE();
   KEY5_GPIO_CLK_ENABLE();
 
-  /*ѡ�񰴼�������*/	
+  /*选择按键的引脚*/	
   GPIO_InitStructure.Pin = KEY1_PIN; 
-  /*��������Ϊ����ģʽ*/
+  /*设置引脚为输入模式*/
   GPIO_InitStructure.Mode = GPIO_MODE_INPUT; 
-  /*�������Ų�����Ҳ������*/
+  /*设置引脚不上拉也不下拉*/
   GPIO_InitStructure.Pull = GPIO_PULLDOWN;
-  /*ʹ������Ľṹ���ʼ������*/
+  /*使用上面的结构体初始化按键*/
   HAL_GPIO_Init(KEY1_GPIO_PORT, &GPIO_InitStructure);
 
-  /*ѡ�񰴼�������*/
+  /*选择按键的引脚*/
   GPIO_InitStructure.Pin = KEY2_PIN; 
-  /*ʹ������Ľṹ���ʼ������*/
+  /*使用上面的结构体初始化按键*/
   HAL_GPIO_Init(KEY2_GPIO_PORT, &GPIO_InitStructure);
   
-  /*ѡ�񰴼�������*/
+  /*选择按键的引脚*/
   GPIO_InitStructure.Pin = KEY3_PIN; 
-  /*ʹ������Ľṹ���ʼ������*/
+  /*使用上面的结构体初始化按键*/
   HAL_GPIO_Init(KEY3_GPIO_PORT, &GPIO_InitStructure);
   
-  /*ѡ�񰴼�������*/
+  /*选择按键的引脚*/
   GPIO_InitStructure.Pin = KEY4_PIN; 
-  /*ʹ������Ľṹ���ʼ������*/
+  /*使用上面的结构体初始化按键*/
   HAL_GPIO_Init(KEY4_GPIO_PORT, &GPIO_InitStructure);
   
-  /*ѡ�񰴼�������*/
+  /*选择按键的引脚*/
   GPIO_InitStructure.Pin = KEY5_PIN; 
-  /*ʹ������Ľṹ���ʼ������*/
+  /*使用上面的结构体初始化按键*/
   HAL_GPIO_Init(KEY5_GPIO_PORT, &GPIO_InitStructure);
 }
 
 
 
 /**
-  * @brief   ����Ƿ��а�������
-  * @param   ����Ķ˿ںͶ˿�λ
-  *		@arg GPIOx: x�����ǣ�A...G�� 
-  *		@arg GPIO_PIN ������GPIO_PIN_x��x������1...16��
-  * @retval  ������״̬
-  *		@arg KEY_ON:��������
-  *		@arg KEY_OFF:����û����
+  * @brief   检测是否有按键按下
+  * @param   具体的端口和端口位
+  *		@arg GPIOx: x可以是（A...G） 
+  *		@arg GPIO_PIN 可以是GPIO_PIN_x（x可以是1...16）
+  * @retval  按键的状态
+  *		@arg KEY_ON:按键按下
+  *		@arg KEY_OFF:按键没按下
   */
 
 uint8_t Key_Scan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
 {			
-  /*����Ƿ��а������� */
+  /*检测是否有按键按下 */
   if(HAL_GPIO_ReadPin(GPIOx,GPIO_Pin) == KEY_ON )  
   {	 
-    /*�ȴ������ͷ� */
+    /*等待按键释放 */
     while(HAL_GPIO_ReadPin(GPIOx,GPIO_Pin) == KEY_ON);   
     return 	KEY_ON;	 
   }

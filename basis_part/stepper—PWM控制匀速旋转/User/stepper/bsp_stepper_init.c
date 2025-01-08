@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ²½½øµç»ú³õÊ¼»¯
+  * @brief   æ­¥è¿›ç”µæœºåˆå§‹åŒ–
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -22,58 +22,58 @@ void TIM_SetTIMxCompare(TIM_TypeDef *TIMx,uint32_t channel,uint32_t compare);
 void TIM_SetPWM_period(TIM_TypeDef* TIMx,uint32_t TIM_period);
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Stepper_GPIO_Config(void) 
 {
   GPIO_InitTypeDef GPIO_InitStruct;
-  /*¿ªÆôMotorÏà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+  /*å¼€å¯Motorç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
   MOTOR_DIR_GPIO_CLK_ENABLE();
   MOTOR_PUL_GPIO_CLK_ENABLE();
   MOTOR_EN_GPIO_CLK_ENABLE();
   
-  /*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/                                 
+  /*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/                                 
   GPIO_InitStruct.Pin = MOTOR_DIR_PIN;  
-  /*ÉèÖÃÒı½ÅµÄÊä³öÀàĞÍÎªÍÆÍìÊä³ö*/
+  /*è®¾ç½®å¼•è„šçš„è¾“å‡ºç±»å‹ä¸ºæ¨æŒ½è¾“å‡º*/
   GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP; 
   GPIO_InitStruct.Pull =GPIO_PULLUP;
-  /*ÉèÖÃÒı½ÅËÙÂÊÎª¸ßËÙ */   
+  /*è®¾ç½®å¼•è„šé€Ÿç‡ä¸ºé«˜é€Ÿ */   
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  /*Motor ·½ÏòÒı½Å ³õÊ¼»¯*/
+  /*Motor æ–¹å‘å¼•è„š åˆå§‹åŒ–*/
   HAL_GPIO_Init(MOTOR_DIR_GPIO_PORT, &GPIO_InitStruct); 
   
-  /*Motor Ê¹ÄÜÒı½Å ³õÊ¼»¯*/
+  /*Motor ä½¿èƒ½å¼•è„š åˆå§‹åŒ–*/
   GPIO_InitStruct.Pin = MOTOR_EN_PIN; 
   HAL_GPIO_Init(MOTOR_EN_GPIO_PORT, &GPIO_InitStruct);  
   
-  /* ¶¨Ê±Æ÷Í¨µÀ1¹¦ÄÜÒı½ÅIO³õÊ¼»¯ */
-  /*ÉèÖÃÊä³öÀàĞÍ*/
+  /* å®šæ—¶å™¨é€šé“1åŠŸèƒ½å¼•è„šIOåˆå§‹åŒ– */
+  /*è®¾ç½®è¾“å‡ºç±»å‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  /*ÉèÖÃÒı½ÅËÙÂÊ */ 
+  /*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  /*ÉèÖÃ¸´ÓÃ*/
+  /*è®¾ç½®å¤ç”¨*/
   GPIO_InitStruct.Alternate = MOTOR_PUL_GPIO_AF;
-  /*ÉèÖÃ¸´ÓÃ*/
+  /*è®¾ç½®å¤ç”¨*/
   GPIO_InitStruct.Pull =GPIO_PULLUP;
-  /*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/  
+  /*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/  
   GPIO_InitStruct.Pin = GENERAL_TIM_CH1_PIN;
-  /*Motor Âö³åÒı½Å ³õÊ¼»¯*/
+  /*Motor è„‰å†²å¼•è„š åˆå§‹åŒ–*/
   HAL_GPIO_Init(GENERAL_TIM_CH1_GPIO_PORT, &GPIO_InitStruct);     
 }
 
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓĞ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓĞ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ğè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈı¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓĞ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æ„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓĞ
- * TIM_CounterMode       TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓĞ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓĞ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode       TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 
@@ -82,46 +82,46 @@ TIM_HandleTypeDef  TIM_TimeBaseStructure;
 static void TIM_PWMOUTPUT_Config(void)
 {
   
-  int tim_per=1000;//¶¨Ê±Æ÷ÖÜÆÚ
+  int tim_per=1000;//å®šæ—¶å™¨å‘¨æœŸ
 
-  /*Ê¹ÄÜ¶¨Ê±Æ÷*/
+  /*ä½¿èƒ½å®šæ—¶å™¨*/
   MOTOR_PUL_CLK_ENABLE();
 
   TIM_TimeBaseStructure.Instance = MOTOR_PUL_TIM;
-  /* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üĞÂ»òÕßÖĞ¶Ï*/    
-  //µ±¶¨Ê±Æ÷´Ó0¼ÆÊıµ½10000£¬¼´Îª10000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+  /* ç´¯è®¡ TIM_Periodä¸ªåäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/    
+  //å½“å®šæ—¶å™¨ä»0è®¡æ•°åˆ°10000ï¼Œå³ä¸º10000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
   TIM_TimeBaseStructure.Init.Period = tim_per;
-  // ¸ß¼¶¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=168MHz 
-  // Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=1MHz
+  // é«˜çº§å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=168MHz 
+  // è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=1MHz
   TIM_TimeBaseStructure.Init.Prescaler = 168-1; 
 
-  /*¼ÆÊı·½Ê½*/
+  /*è®¡æ•°æ–¹å¼*/
   TIM_TimeBaseStructure.Init.CounterMode = TIM_COUNTERMODE_UP;
-  /*²ÉÑùÊ±ÖÓ·ÖÆµ*/
+  /*é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘*/
   TIM_TimeBaseStructure.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-  /*³õÊ¼»¯¶¨Ê±Æ÷*/
+  /*åˆå§‹åŒ–å®šæ—¶å™¨*/
   HAL_TIM_Base_Init(&TIM_TimeBaseStructure);
 
-  /*PWMÄ£Ê½ÅäÖÃ*/
-  TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM1;//ÅäÖÃÎªPWMÄ£Ê½1 
-  TIM_OCInitStructure.Pulse = tim_per/2;//Ä¬ÈÏÕ¼¿Õ±ÈÎª50%
+  /*PWMæ¨¡å¼é…ç½®*/
+  TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM1;//é…ç½®ä¸ºPWMæ¨¡å¼1 
+  TIM_OCInitStructure.Pulse = tim_per/2;//é»˜è®¤å ç©ºæ¯”ä¸º50%
   TIM_OCInitStructure.OCFastMode = TIM_OCFAST_DISABLE;
-  /*µ±¶¨Ê±Æ÷¼ÆÊıÖµĞ¡ÓÚCCR1_ValÊ±Îª¸ßµçÆ½*/
+  /*å½“å®šæ—¶å™¨è®¡æ•°å€¼å°äºCCR1_Valæ—¶ä¸ºé«˜ç”µå¹³*/
   TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH; 
 
-  /*ÅäÖÃPWMÍ¨µÀ*/
+  /*é…ç½®PWMé€šé“*/
   HAL_TIM_PWM_ConfigChannel(&TIM_TimeBaseStructure, &TIM_OCInitStructure, MOTOR_PUL_CHANNEL_x);
-  /*¿ªÊ¼Êä³öPWM*/
+  /*å¼€å§‹è¾“å‡ºPWM*/
   HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,MOTOR_PUL_CHANNEL_x);
       
 }
 
 /**
-  * @brief  ÉèÖÃTIMÍ¨µÀµÄÕ¼¿Õ±È
-  * @param  channel   Í¨µÀ  £¨1,2,3,4£©
-  * @param  compare   Õ¼¿Õ±È
-  * @note   ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®TIMé€šé“çš„å ç©ºæ¯”
+  * @param  channel   é€šé“  ï¼ˆ1,2,3,4ï¼‰
+  * @param  compare   å ç©ºæ¯”
+  * @note   æ— 
+  * @retval æ— 
   */
 void TIM2_SetPWM_pulse(int channel,int compare)
 {
@@ -137,8 +137,8 @@ void TIM2_SetPWM_pulse(int channel,int compare)
 
 
 /**
-  * @brief  Òı½Å³õÊ¼»¯
-  * @retval ÎŞ
+  * @brief  å¼•è„šåˆå§‹åŒ–
+  * @retval æ— 
   */
 void stepper_Init()
 {

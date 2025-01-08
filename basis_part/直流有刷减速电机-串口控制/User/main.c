@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÓĞË¢¼õËÙµç»ú-´®¿Ú¿ØÖÆ
+  * @brief   ç›´æµæœ‰åˆ·å‡é€Ÿç”µæœº-ä¸²å£æ§åˆ¶
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -26,40 +26,40 @@
 
 int pulse_num=0;
 	
-void Delay(__IO uint32_t nCount)	 //¼òµ¥µÄÑÓÊ±º¯Êı
+void Delay(__IO uint32_t nCount)	 //ç®€å•çš„å»¶æ—¶å‡½æ•°
 {
 	for(; nCount != 0; nCount--);
 }	
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   __IO uint16_t ChannelPulse = 0;
   
-  /* HAL ¿â³õÊ¼»¯ */
+  /* HAL åº“åˆå§‹åŒ– */
   HAL_Init();
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
   
-  /* ³õÊ¼»¯´®¿Ú */
+  /* åˆå§‹åŒ–ä¸²å£ */
   DEBUG_USART_Config();
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   motor_init();
   
 	set_motor_enable();
 	
 	while(1)
 	{
-    /* ´¦ÀíÊı¾İ */
+    /* å¤„ç†æ•°æ® */
     deal_serial_data();
 	}
 }

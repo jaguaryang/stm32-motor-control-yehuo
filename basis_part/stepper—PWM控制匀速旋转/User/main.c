@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   PWM¿ØÖÆ½Ç¶È
+  * @brief   PWMæ§åˆ¶è§’åº¦
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,45 +24,45 @@
 #include "./key/bsp_key.h"
 #include "./led/bsp_led.h"
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   int i=0,j=0;
   int dir_val=0;
   int en_val=0;
-  /* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+  /* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
   SystemClock_Config();
-  /*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+  /*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
   DEBUG_USART_Config();
-  printf("»¶Ó­Ê¹ÓÃÒ°»ğ µç»ú¿ª·¢°å ²½½øµç»ú PWM¿ØÖÆĞı×ª Àı³Ì\r\n");
-  printf("°´ÏÂ°´¼ü1¡¢2¿ÉĞŞ¸ÄĞı×ª·½ÏòºÍÊ¹ÄÜ\r\n");  
-  /*°´¼üÖĞ¶Ï³õÊ¼»¯*/
+  printf("æ¬¢è¿ä½¿ç”¨é‡ç« ç”µæœºå¼€å‘æ¿ æ­¥è¿›ç”µæœº PWMæ§åˆ¶æ—‹è½¬ ä¾‹ç¨‹\r\n");
+  printf("æŒ‰ä¸‹æŒ‰é”®1ã€2å¯ä¿®æ”¹æ—‹è½¬æ–¹å‘å’Œä½¿èƒ½\r\n");  
+  /*æŒ‰é”®ä¸­æ–­åˆå§‹åŒ–*/
   Key_GPIO_Config();  
-  /*led³õÊ¼»¯*/
+  /*ledåˆå§‹åŒ–*/
   LED_GPIO_Config();
-  /*²½½øµç»ú³õÊ¼»¯*/
+  /*æ­¥è¿›ç”µæœºåˆå§‹åŒ–*/
   stepper_Init();
   
   while(1)
   {     
     if( Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON  )
     {
-      // LED2 È¡·´    
+      // LED2 å–å    
       LED2_TOGGLE;
       
-      /*¸Ä±ä·½Ïò*/
+      /*æ”¹å˜æ–¹å‘*/
       dir_val=(++i % 2) ? CW : CCW;
       MOTOR_DIR(dir_val);
     }
     if( Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON  )
     {
-      // LED1 È¡·´    
+      // LED1 å–å    
       LED1_TOGGLE;
 
-      /*¸Ä±äÊ¹ÄÜ*/
+      /*æ”¹å˜ä½¿èƒ½*/
       en_val=(++j % 2) ? CW : CCW;
       MOTOR_EN(en_val);
     }

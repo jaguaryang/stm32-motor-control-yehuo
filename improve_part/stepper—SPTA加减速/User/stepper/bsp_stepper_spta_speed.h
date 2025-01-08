@@ -4,42 +4,42 @@
 #include "stm32f4xx.h"
 #include "./stepper/bsp_stepper_init.h"
 
-/* SPTAÔËĞĞ×´Ì¬ */
+/* SPTAè¿è¡ŒçŠ¶æ€ */
 typedef enum
 {
-  IDLE = 0U,         /* Í£Ö¹ */
-  ACCELERATING,      /* ¼ÓËÙ */
-  UNIFORM,           /* ÔÈËÙ */
-  DECELERATING,      /* ¼õËÙ */
+  IDLE = 0U,         /* åœæ­¢ */
+  ACCELERATING,      /* åŠ é€Ÿ */
+  UNIFORM,           /* åŒ€é€Ÿ */
+  DECELERATING,      /* å‡é€Ÿ */
 }STEP_STATE_TypeDef;
 
-/* SPTAÏà¹Ø²ÎÊı½á¹¹Ìå */
+/* SPTAç›¸å…³å‚æ•°ç»“æ„ä½“ */
 typedef struct 
 {
-  __IO int32_t steps_required;       //×ÜÔËĞĞ²½Êı
-  __IO uint32_t steps_taken;         //ÒÑ¾­ÔËĞĞµÄ²½Êı
+  __IO int32_t steps_required;       //æ€»è¿è¡Œæ­¥æ•°
+  __IO uint32_t steps_taken;         //å·²ç»è¿è¡Œçš„æ­¥æ•°
   
-  __IO uint32_t steps_acced;         //¼ÓËÙ½×¶ÎµÄ²½Êı
-  __IO uint32_t steps_middle;        //×Ü²½ÊıµÄÖĞµã£¬Èı½ÇÂÖÀªÊ±³¬¹ı¸Ã²½Êı¾ÍÒª¼õËÙ
+  __IO uint32_t steps_acced;         //åŠ é€Ÿé˜¶æ®µçš„æ­¥æ•°
+  __IO uint32_t steps_middle;        //æ€»æ­¥æ•°çš„ä¸­ç‚¹ï¼Œä¸‰è§’è½®å»“æ—¶è¶…è¿‡è¯¥æ­¥æ•°å°±è¦å‡é€Ÿ
   
-  __IO uint32_t acceleration;        //¼ÓËÙ¶ÈµÄÊıÖµ£¬²»°üÀ¨·½Ïò
-  __IO uint32_t speed_accumulator;   //ËÙ¶ÈÀÛ¼ÓÆ÷£¬Ã¿´ÎÀÛ¼Óstep_accel£¬µ±ÀÛ¼ÓÆ÷µÚ17Î»ÖÃÎ»ºóstep_speedÔö¼Ó
+  __IO uint32_t acceleration;        //åŠ é€Ÿåº¦çš„æ•°å€¼ï¼Œä¸åŒ…æ‹¬æ–¹å‘
+  __IO uint32_t speed_accumulator;   //é€Ÿåº¦ç´¯åŠ å™¨ï¼Œæ¯æ¬¡ç´¯åŠ step_accelï¼Œå½“ç´¯åŠ å™¨ç¬¬17ä½ç½®ä½åstep_speedå¢åŠ 
   
-  __IO uint32_t step_speed;          //SPTAËÙ¶ÈÖµ£¬speed_accumulatorµÄÒç³öÖµ¼Óµ½ÕâÀï
-  __IO uint32_t step_accumulator;    //²½ÊıÀÛ¼ÓÆ÷£¬Ã¿´ÎÀÛ¼Óstep_speed£¬µ±ÀÛ¼ÓÆ÷µÚ17Î»ÖÃÎ»ºó²úÉúÒ»¸ö²½½øÂö³å
+  __IO uint32_t step_speed;          //SPTAé€Ÿåº¦å€¼ï¼Œspeed_accumulatorçš„æº¢å‡ºå€¼åŠ åˆ°è¿™é‡Œ
+  __IO uint32_t step_accumulator;    //æ­¥æ•°ç´¯åŠ å™¨ï¼Œæ¯æ¬¡ç´¯åŠ step_speedï¼Œå½“ç´¯åŠ å™¨ç¬¬17ä½ç½®ä½åäº§ç”Ÿä¸€ä¸ªæ­¥è¿›è„‰å†²
 
-  __IO uint32_t speed_lim;           //µç»úµÄ×î´óËÙ¶ÈÏŞÖÆ£¬ÔËĞĞËÙ¶ÈĞ¡ÓÚËÙ¶ÈÏŞÖÆÊ±ÎªÈı½ÇÂÖÀª£¬´óÓÚµÈÓÚËÙ¶ÈÏŞÖÆÊ±ÎªÌİĞÎÂÖÀª
+  __IO uint32_t speed_lim;           //ç”µæœºçš„æœ€å¤§é€Ÿåº¦é™åˆ¶ï¼Œè¿è¡Œé€Ÿåº¦å°äºé€Ÿåº¦é™åˆ¶æ—¶ä¸ºä¸‰è§’è½®å»“ï¼Œå¤§äºç­‰äºé€Ÿåº¦é™åˆ¶æ—¶ä¸ºæ¢¯å½¢è½®å»“
   
-  STEP_STATE_TypeDef step_state;     //µç»úÔËĞĞ×´Ì¬Ã¶¾Ù
+  STEP_STATE_TypeDef step_state;     //ç”µæœºè¿è¡ŒçŠ¶æ€æšä¸¾
 }SPTAData_Typedef;
 
 
-/*µç»úµ¥È¦²ÎÊı*/
-#define STEP_ANGLE        1.8f                 //²½½øµç»úµÄ²½¾à½Ç µ¥Î»£º¶È
-#define FSPR              (360.0f/STEP_ANGLE)  //²½½øµç»úµÄÒ»È¦ËùĞèÂö³åÊı
+/*ç”µæœºå•åœˆå‚æ•°*/
+#define STEP_ANGLE        1.8f                 //æ­¥è¿›ç”µæœºçš„æ­¥è·è§’ å•ä½ï¼šåº¦
+#define FSPR              (360.0f/STEP_ANGLE)  //æ­¥è¿›ç”µæœºçš„ä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-#define MICRO_STEP        32                   //Ï¸·ÖÆ÷Ï¸·ÖÊı 
-#define SPR               (FSPR*MICRO_STEP)    //Ï¸·ÖºóÒ»È¦ËùĞèÂö³åÊı
+#define MICRO_STEP        32                   //ç»†åˆ†å™¨ç»†åˆ†æ•° 
+#define SPR               (FSPR*MICRO_STEP)    //ç»†åˆ†åä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
 
 extern SPTAData_Typedef spta_data;

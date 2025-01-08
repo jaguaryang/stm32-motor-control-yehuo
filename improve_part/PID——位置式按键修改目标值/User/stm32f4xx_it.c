@@ -183,14 +183,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if(htim==(&TIM_TimeBaseStructure))
     {
-        LED1_TOGGLE;  //红灯周期闪烁
+        LED1_TOGGLE;  //绾㈢伅鍛ㄦ湡闂儊
 				time_period_fun();
     }
 }
 /**
   * @}
   */ 
-// 串口中断服务函数
+// 涓插彛涓柇鏈嶅姟鍑芥暟
 
 void DEBUG_USART_IRQHandler(void)
 {

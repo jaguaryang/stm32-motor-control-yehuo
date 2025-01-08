@@ -4,26 +4,26 @@
 #include "./stepper/bsp_stepper_init.h"
 #include "./Encoder/bsp_encoder.h"
 
-/*ºê¶¨Òå*/
+/*å®å®šä¹‰*/
 /*******************************************************/
-#define T1_FREQ           (SystemCoreClock/TIM_PRESCALER) // ÆµÂÊftÖµ
+#define T1_FREQ           (SystemCoreClock/TIM_PRESCALER) // é¢‘ç‡ftå€¼
 
-/*µç»úµ¥È¦²ÎÊı*/
-#define STEP_ANGLE				1.8f                        //²½½øµç»úµÄ²½¾à½Ç µ¥Î»£º¶È
-#define FSPR              ((float)(360.0f/STEP_ANGLE))//²½½øµç»úµÄÒ»È¦ËùĞèÂö³åÊı
+/*ç”µæœºå•åœˆå‚æ•°*/
+#define STEP_ANGLE				1.8f                        //æ­¥è¿›ç”µæœºçš„æ­¥è·è§’ å•ä½ï¼šåº¦
+#define FSPR              ((float)(360.0f/STEP_ANGLE))//æ­¥è¿›ç”µæœºçš„ä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-#define MICRO_STEP        32          				        //Ï¸·ÖÆ÷Ï¸·ÖÊı 
-#define SPR               (FSPR*MICRO_STEP)           //Ï¸·ÖºóÒ»È¦ËùĞèÂö³åÊı
+#define MICRO_STEP        32          				        //ç»†åˆ†å™¨ç»†åˆ†æ•° 
+#define SPR               (FSPR*MICRO_STEP)           //ç»†åˆ†åä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-#define PULSE_RATIO       ((float)(SPR/ENCODER_TOTAL_RESOLUTION))//²½½øµç»úµ¥È¦Âö³åÊıÓë±àÂëÆ÷µ¥È¦Âö³åµÄ±ÈÖµ
-#define TARGET_DISP       2                    //²½½øµç»úÔË¶¯Ê±µÄÄ¿±êÈ¦Êı£¬µ¥Î»£º×ª
-#define SPEED_LIMIT       12000                //×î´óÆô¶¯ËÙ¶ÈÏŞÖÆ
-#define SAMPLING_PERIOD   50                   //PID²ÉÑùÆµÂÊ£¬µ¥Î»Hz
+#define PULSE_RATIO       ((float)(SPR/ENCODER_TOTAL_RESOLUTION))//æ­¥è¿›ç”µæœºå•åœˆè„‰å†²æ•°ä¸ç¼–ç å™¨å•åœˆè„‰å†²çš„æ¯”å€¼
+#define TARGET_DISP       2                    //æ­¥è¿›ç”µæœºè¿åŠ¨æ—¶çš„ç›®æ ‡åœˆæ•°ï¼Œå•ä½ï¼šè½¬
+#define SPEED_LIMIT       12000                //æœ€å¤§å¯åŠ¨é€Ÿåº¦é™åˆ¶
+#define SAMPLING_PERIOD   50                   //PIDé‡‡æ ·é¢‘ç‡ï¼Œå•ä½Hz
 
 typedef struct {
-  unsigned char stepper_dir : 1;               //²½½øµç»ú·½Ïò
-  unsigned char stepper_running : 1;           //²½½øµç»úÔËĞĞ×´Ì¬
-  unsigned char MSD_ENA : 1;                   //Çı¶¯Æ÷Ê¹ÄÜ×´Ì¬
+  unsigned char stepper_dir : 1;               //æ­¥è¿›ç”µæœºæ–¹å‘
+  unsigned char stepper_running : 1;           //æ­¥è¿›ç”µæœºè¿è¡ŒçŠ¶æ€
+  unsigned char MSD_ENA : 1;                   //é©±åŠ¨å™¨ä½¿èƒ½çŠ¶æ€
 }__SYS_STATUS;
 
 

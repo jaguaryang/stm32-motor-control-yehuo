@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ¼õËÙµç»ú±àÂëÆ÷²âËÙ
+  * @brief   å‡é€Ÿç”µæœºç¼–ç å™¨æµ‹é€Ÿ
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,66 +25,66 @@
 #include "./usart/bsp_debug_usart.h"
 #include "./Encoder/bsp_encoder.h"
 
-/* µç»úĞı×ª·½Ïò */
+/* ç”µæœºæ—‹è½¬æ–¹å‘ */
 __IO int8_t Motor_Direction = 0;
-/* µ±Ç°Ê±¿Ì×Ü¼ÆÊıÖµ */
+/* å½“å‰æ—¶åˆ»æ€»è®¡æ•°å€¼ */
 __IO int32_t Capture_Count = 0;
-/* ÉÏÒ»Ê±¿Ì×Ü¼ÆÊıÖµ */
+/* ä¸Šä¸€æ—¶åˆ»æ€»è®¡æ•°å€¼ */
 __IO int32_t Last_Count = 0;
-/* µç»ú×ªÖá×ªËÙ */
+/* ç”µæœºè½¬è½´è½¬é€Ÿ */
 __IO float Shaft_Speed = 0.0f;
   
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   __IO uint16_t ChannelPulse = PWM_MAX_PERIOD_COUNT/2;
   uint8_t i = 0;
   
-  /* HAL¿â³õÊ¼»¯*/
+  /* HALåº“åˆå§‹åŒ–*/
   HAL_Init();
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-  /* ÅäÖÃ1msÊ±»ùÎªSysTick */
+  /* é…ç½®1msæ—¶åŸºä¸ºSysTick */
   HAL_InitTick(5);
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
-  /* ³õÊ¼»¯USART */
+  /* åˆå§‹åŒ–USART */
   DEBUG_USART_Config();
   
-  printf("\r\n¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ªÒ°»ğ¼õËÙµç»ú±àÂëÆ÷²âËÙÑİÊ¾³ÌĞò¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª\r\n");
+  printf("\r\nâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”é‡ç«å‡é€Ÿç”µæœºç¼–ç å™¨æµ‹é€Ÿæ¼”ç¤ºç¨‹åºâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”\r\n");
   
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   motor_init();
   
-  /* ÉèÖÃËÙ¶È */
+  /* è®¾ç½®é€Ÿåº¦ */
 	set_motor_speed(ChannelPulse);
   
-  /* ±àÂëÆ÷½Ó¿Ú³õÊ¼»¯ */
+  /* ç¼–ç å™¨æ¥å£åˆå§‹åŒ– */
 	Encoder_Init();
   
 	while(1)
 	{ 
-    /* É¨ÃèKEY1 */
+    /* æ‰«æKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      /* Ôö´óÕ¼¿Õ±È */
+      /* å¢å¤§å ç©ºæ¯” */
       set_motor_enable();
     }
     
-    /* É¨ÃèKEY2 */
+    /* æ‰«æKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
       set_motor_disable();
     }
     
-    /* É¨ÃèKEY3 */
+    /* æ‰«æKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* Ôö´óÕ¼¿Õ±È */
+      /* å¢å¤§å ç©ºæ¯” */
       ChannelPulse += PWM_MAX_PERIOD_COUNT/10;
       
       if(ChannelPulse > PWM_MAX_PERIOD_COUNT)
@@ -93,7 +93,7 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY4 */
+    /* æ‰«æKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
       if(ChannelPulse < PWM_MAX_PERIOD_COUNT/10)
@@ -104,42 +104,42 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY5 */
+    /* æ‰«æKEY5 */
     if( Key_Scan(KEY5_GPIO_PORT, KEY5_PIN) == KEY_ON)
     {
-      /* ×ª»»·½Ïò */
+      /* è½¬æ¢æ–¹å‘ */
       set_motor_direction( (++i % 2) ? MOTOR_FWD : MOTOR_REV);
     }
 	}
 }
 
 /**
-  * @brief  SysTickÖĞ¶Ï»Øµ÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  SysTickä¸­æ–­å›è°ƒå‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 void HAL_SYSTICK_Callback(void)
 {
   static uint16_t i = 0;
 
   i++;
-  if(i == 100)/* 100ms¼ÆËãÒ»´Î */
+  if(i == 100)/* 100msè®¡ç®—ä¸€æ¬¡ */
   {
-    /* µç»úĞı×ª·½Ïò = ¼ÆÊıÆ÷¼ÆÊı·½Ïò */
+    /* ç”µæœºæ—‹è½¬æ–¹å‘ = è®¡æ•°å™¨è®¡æ•°æ–¹å‘ */
     Motor_Direction = __HAL_TIM_IS_TIM_COUNTING_DOWN(&TIM_EncoderHandle);
     
-    /* µ±Ç°Ê±¿Ì×Ü¼ÆÊıÖµ = ¼ÆÊıÆ÷Öµ + ¼ÆÊıÒç³ö´ÎÊı * ENCODER_TIM_PERIOD  */
+    /* å½“å‰æ—¶åˆ»æ€»è®¡æ•°å€¼ = è®¡æ•°å™¨å€¼ + è®¡æ•°æº¢å‡ºæ¬¡æ•° * ENCODER_TIM_PERIOD  */
     Capture_Count =__HAL_TIM_GET_COUNTER(&TIM_EncoderHandle) + (Encoder_Overflow_Count * ENCODER_TIM_PERIOD);
     
-    /* ×ªÖá×ªËÙ = µ¥Î»Ê±¼äÄÚµÄ¼ÆÊıÖµ / ±àÂëÆ÷×Ü·Ö±æÂÊ * Ê±¼äÏµÊı  */
+    /* è½¬è½´è½¬é€Ÿ = å•ä½æ—¶é—´å†…çš„è®¡æ•°å€¼ / ç¼–ç å™¨æ€»åˆ†è¾¨ç‡ * æ—¶é—´ç³»æ•°  */
     Shaft_Speed = (float)(Capture_Count - Last_Count) / ENCODER_TOTAL_RESOLUTION * 10 ;
 
-    printf("µç»ú·½Ïò£º%d\r\n", Motor_Direction);
-    printf("µ¥Î»Ê±¼äÄÚÓĞĞ§¼ÆÊıÖµ£º%d\r\n", Capture_Count - Last_Count);/* µ¥Î»Ê±¼ä¼ÆÊıÖµ = µ±Ç°Ê±¿Ì×Ü¼ÆÊıÖµ - ÉÏÒ»Ê±¿Ì×Ü¼ÆÊıÖµ */
-    printf("µç»ú×ªÖá´¦×ªËÙ£º%.2f ×ª/Ãë \r\n", Shaft_Speed);
-    printf("µç»úÊä³öÖá×ªËÙ£º%.2f ×ª/Ãë \r\n", Shaft_Speed/REDUCTION_RATIO);/* Êä³öÖá×ªËÙ = ×ªÖá×ªËÙ / ¼õËÙ±È */
+    printf("ç”µæœºæ–¹å‘ï¼š%d\r\n", Motor_Direction);
+    printf("å•ä½æ—¶é—´å†…æœ‰æ•ˆè®¡æ•°å€¼ï¼š%d\r\n", Capture_Count - Last_Count);/* å•ä½æ—¶é—´è®¡æ•°å€¼ = å½“å‰æ—¶åˆ»æ€»è®¡æ•°å€¼ - ä¸Šä¸€æ—¶åˆ»æ€»è®¡æ•°å€¼ */
+    printf("ç”µæœºè½¬è½´å¤„è½¬é€Ÿï¼š%.2f è½¬/ç§’ \r\n", Shaft_Speed);
+    printf("ç”µæœºè¾“å‡ºè½´è½¬é€Ÿï¼š%.2f è½¬/ç§’ \r\n", Shaft_Speed/REDUCTION_RATIO);/* è¾“å‡ºè½´è½¬é€Ÿ = è½¬è½´è½¬é€Ÿ / å‡é€Ÿæ¯” */
     
-    /* ¼ÇÂ¼µ±Ç°×Ü¼ÆÊıÖµ£¬¹©ÏÂÒ»Ê±¿Ì¼ÆËãÊ¹ÓÃ */
+    /* è®°å½•å½“å‰æ€»è®¡æ•°å€¼ï¼Œä¾›ä¸‹ä¸€æ—¶åˆ»è®¡ç®—ä½¿ç”¨ */
     Last_Count = Capture_Count;
     i = 0;
   }

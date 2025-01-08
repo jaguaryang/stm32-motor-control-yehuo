@@ -5,71 +5,71 @@
 #include "./stepper/bsp_stepper_init.h"
 #include "math.h"
 
-/*ÌİĞÎ¼Ó¼õËÙÏà¹Ø±äÁ¿*/
+/*æ¢¯å½¢åŠ å‡é€Ÿç›¸å…³å˜é‡*/
 typedef struct 
 {
-	/*µ±Ç°µç»ú×´Ì¬*/
+	/*å½“å‰ç”µæœºçŠ¶æ€*/
 	uint8_t  run_state ; 
-	/*Ğı×ª·½Ïò*/
+	/*æ—‹è½¬æ–¹å‘*/
 	uint8_t  dir ;    
-	/*Âö³å¼ä¸ô*/
+	/*è„‰å†²é—´éš”*/
 	int  step_delay;  
-	/*¼õËÙÎ»ÖÃ*/
+	/*å‡é€Ÿä½ç½®*/
 	int  decel_start; 
-	/*¼õËÙ²½Êı*/
+	/*å‡é€Ÿæ­¥æ•°*/
 	int  decel_val;   
-	/*×îĞ¡¼ä¸ô*/
+	/*æœ€å°é—´éš”*/
 	int  min_delay;   
-	/*¼ÓËÙ²½Êı*/
+	/*åŠ é€Ÿæ­¥æ•°*/
 	int  accel_count; 
 }speedRampData;
 
-/*/ÏµÍ³×´Ì¬*/
+/*/ç³»ç»ŸçŠ¶æ€*/
 struct GLOBAL_FLAGS 
 {
-	//µ±²½½øµç»úÕıÔÚÔËĞĞÊ±£¬ÖµÎª1
+	//å½“æ­¥è¿›ç”µæœºæ­£åœ¨è¿è¡Œæ—¶ï¼Œå€¼ä¸º1
 	unsigned char running:1;
-	//µ±´®¿Ú½ÓÊÕµ½Êı¾İÊ±£¬ÖµÎª1
+	//å½“ä¸²å£æ¥æ”¶åˆ°æ•°æ®æ—¶ï¼Œå€¼ä¸º1
 	unsigned char cmd:1;
-	//µ±Çı¶¯Æ÷Õı³£Êä³öÊ±,ÖµÎª1
+	//å½“é©±åŠ¨å™¨æ­£å¸¸è¾“å‡ºæ—¶,å€¼ä¸º1
 	unsigned char out_ena:1;
 };
 
-#define ACCEL_R(x)	ceil(x)//ÏòÉÏÈ¡Õû
-#define DECEL_R(x)	floor(x)//ÏòÏÂÈ¡Õû
+#define ACCEL_R(x)	ceil(x)//å‘ä¸Šå–æ•´
+#define DECEL_R(x)	floor(x)//å‘ä¸‹å–æ•´
 
 #define FALSE             0
 #define TRUE              1
-#define CW                0 // Ë³Ê±Õë
-#define CCW               1 // ÄæÊ±Õë
+#define CW                0 // é¡ºæ—¶é’ˆ
+#define CCW               1 // é€†æ—¶é’ˆ
 
-/*µç»úËÙ¶È¾ö²ßÖĞµÄËÄ¸ö×´Ì¬*/
-#define STOP              0 // Í£Ö¹×´Ì¬
-#define ACCEL             1 // ¼ÓËÙ×´Ì¬
-#define DECEL             2 // ¼õËÙ×´Ì¬
-#define RUN               3 // ÔÈËÙ×´Ì¬
+/*ç”µæœºé€Ÿåº¦å†³ç­–ä¸­çš„å››ä¸ªçŠ¶æ€*/
+#define STOP              0 // åœæ­¢çŠ¶æ€
+#define ACCEL             1 // åŠ é€ŸçŠ¶æ€
+#define DECEL             2 // å‡é€ŸçŠ¶æ€
+#define RUN               3 // åŒ€é€ŸçŠ¶æ€
 
-/*ÆµÂÊÏà¹Ø²ÎÊı*/
-//¶¨Ê±Æ÷Êµ¼ÊÊ±ÖÓÆµÂÊÎª£º168MHz/(TIM_PRESCALER+1)
-//ÆäÖĞ ¸ß¼¶¶¨Ê±Æ÷µÄ ÆµÂÊÎª168MHz,ÆäËû¶¨Ê±Æ÷Îª84MHz
+/*é¢‘ç‡ç›¸å…³å‚æ•°*/
+//å®šæ—¶å™¨å®é™…æ—¶é’Ÿé¢‘ç‡ä¸ºï¼š168MHz/(TIM_PRESCALER+1)
+//å…¶ä¸­ é«˜çº§å®šæ—¶å™¨çš„ é¢‘ç‡ä¸º168MHz,å…¶ä»–å®šæ—¶å™¨ä¸º84MHz
 //168/(5+1)=28Mhz
-//¾ßÌåĞèÒªµÄÆµÂÊ¿ÉÒÔ×Ô¼º¼ÆËã
+//å…·ä½“éœ€è¦çš„é¢‘ç‡å¯ä»¥è‡ªå·±è®¡ç®—
 #define TIM_PRESCALER      5 
-#define T1_FREQ           (SystemCoreClock/(TIM_PRESCALER+1)) // ÆµÂÊftÖµ
+#define T1_FREQ           (SystemCoreClock/(TIM_PRESCALER+1)) // é¢‘ç‡ftå€¼
 
 
-/*µç»úµ¥È¦²ÎÊı*/
-#define STEP_ANGLE				1.8									//²½½øµç»úµÄ²½¾à½Ç µ¥Î»£º¶È
-#define FSPR              (360.0/1.8)         //²½½øµç»úµÄÒ»È¦ËùĞèÂö³åÊı
+/*ç”µæœºå•åœˆå‚æ•°*/
+#define STEP_ANGLE				1.8									//æ­¥è¿›ç”µæœºçš„æ­¥è·è§’ å•ä½ï¼šåº¦
+#define FSPR              (360.0/1.8)         //æ­¥è¿›ç”µæœºçš„ä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-#define MICRO_STEP        32          				//Ï¸·ÖÆ÷Ï¸·ÖÊı 
-#define SPR               (FSPR*MICRO_STEP)   //Ï¸·ÖºóÒ»È¦ËùĞèÂö³åÊı
+#define MICRO_STEP        32          				//ç»†åˆ†å™¨ç»†åˆ†æ•° 
+#define SPR               (FSPR*MICRO_STEP)   //ç»†åˆ†åä¸€åœˆæ‰€éœ€è„‰å†²æ•°
 
-/*ÊıÑ§³£Êı,ÓÃÓÚ¼ò»¯¼ÆËã*/
+/*æ•°å­¦å¸¸æ•°,ç”¨äºç®€åŒ–è®¡ç®—*/
 
-#define ALPHA             ((float)(2*3.14159/SPR))       // ¦Á= 2*pi/spr
+#define ALPHA             ((float)(2*3.14159/SPR))       // Î±= 2*pi/spr
 #define A_T_x10           ((float)(10*ALPHA*T1_FREQ))
-#define T1_FREQ_148       ((float)((T1_FREQ*0.676)/10)) // 0.69ÎªÎó²îĞŞÕıÖµ(¼ÆËã¹ı³Ì£¬ÎÄµµÖĞÓĞĞ´)
+#define T1_FREQ_148       ((float)((T1_FREQ*0.676)/10)) // 0.69ä¸ºè¯¯å·®ä¿®æ­£å€¼(è®¡ç®—è¿‡ç¨‹ï¼Œæ–‡æ¡£ä¸­æœ‰å†™)
 #define A_SQ              ((float)(2*100000*ALPHA)) 
 #define A_x200            ((float)(200*ALPHA))
 

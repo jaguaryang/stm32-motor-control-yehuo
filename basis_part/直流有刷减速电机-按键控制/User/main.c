@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÓĞË¢¼õËÙµç»ú-°´¼ü¿ØÖÆ
+  * @brief   ç›´æµæœ‰åˆ·å‡é€Ÿç”µæœº-æŒ‰é”®æ§åˆ¶
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,28 +25,28 @@
 
 int pulse_num=0;
 	
-void Delay(__IO uint32_t nCount)	 //¼òµ¥µÄÑÓÊ±º¯Êı
+void Delay(__IO uint32_t nCount)	 //ç®€å•çš„å»¶æ—¶å‡½æ•°
 {
 	for(; nCount != 0; nCount--);
 }	
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   __IO uint16_t ChannelPulse = PWM_MAX_PERIOD_COUNT/2;
   uint8_t i = 0;
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   motor_init();
   
   set_motor_disable();
@@ -54,23 +54,23 @@ int main(void)
 	
 	while(1)
 	{
-    /* É¨ÃèKEY1 */
+    /* æ‰«æKEY1 */
     if( Key_Scan(KEY1_GPIO_PORT, KEY1_PIN) == KEY_ON)
     {
-      /* Ê¹ÄÜµç»ú */
+      /* ä½¿èƒ½ç”µæœº */
       set_motor_enable();
     }
     
-    /* É¨ÃèKEY2 */
+    /* æ‰«æKEY2 */
     if( Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
       set_motor_disable();
     }
     
-    /* É¨ÃèKEY3 */
+    /* æ‰«æKEY3 */
     if( Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
-      /* Ôö´óÕ¼¿Õ±È */
+      /* å¢å¤§å ç©ºæ¯” */
       ChannelPulse += PWM_MAX_PERIOD_COUNT/10;
       
       if(ChannelPulse > PWM_MAX_PERIOD_COUNT)
@@ -79,7 +79,7 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY4 */
+    /* æ‰«æKEY4 */
     if( Key_Scan(KEY4_GPIO_PORT, KEY4_PIN) == KEY_ON)
     {
       if(ChannelPulse < PWM_MAX_PERIOD_COUNT/10)
@@ -90,10 +90,10 @@ int main(void)
       set_motor_speed(ChannelPulse);
     }
     
-    /* É¨ÃèKEY5 */
+    /* æ‰«æKEY5 */
     if( Key_Scan(KEY5_GPIO_PORT, KEY5_PIN) == KEY_ON)
     {
-      /* ×ª»»·½Ïò */
+      /* è½¬æ¢æ–¹å‘ */
       set_motor_direction( (++i % 2) ? MOTOR_FWD : MOTOR_REV);
     }
 	}

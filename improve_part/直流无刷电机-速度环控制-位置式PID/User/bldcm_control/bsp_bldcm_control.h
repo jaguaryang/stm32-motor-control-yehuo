@@ -5,19 +5,19 @@
 #include "./tim/bsp_motor_tim.h"
 #include "main.h"
 
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
 /*******************************************************/
-// Á¬½ÓÇı¶¯°åµÄ SD ½Å
+// è¿æ¥é©±åŠ¨æ¿çš„ SD è„š
 #define SHUTDOWN_PIN                  GPIO_PIN_6
 #define SHUTDOWN_GPIO_PORT            GPIOE
 #define SHUTDOWN_GPIO_CLK_ENABLE()    __GPIOE_CLK_ENABLE()
 /*******************************************************/
 
-/* µç»ú SD or EN Ê¹ÄÜ½Å */
-#define BLDCM_ENABLE_SD()                     HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_SET)      // ¸ßµçÆ½´ò¿ª-¸ßµçÆ½Ê¹ÄÜ 
-#define BLDCM_DISABLE_SD()                    HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_RESET)    // µÍµçÆ½¹Ø¶Ï-µÍµçÆ½½ûÓÃ
+/* ç”µæœº SD or EN ä½¿èƒ½è„š */
+#define BLDCM_ENABLE_SD()                     HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_SET)      // é«˜ç”µå¹³æ‰“å¼€-é«˜ç”µå¹³ä½¿èƒ½ 
+#define BLDCM_DISABLE_SD()                    HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_RESET)    // ä½ç”µå¹³å…³æ–­-ä½ç”µå¹³ç¦ç”¨
 
-/* µç»ú·½Ïò¿ØÖÆÃ¶¾Ù */
+/* ç”µæœºæ–¹å‘æ§åˆ¶æšä¸¾ */
 typedef enum
 {
   MOTOR_FWD = 0,
@@ -26,9 +26,9 @@ typedef enum
 
 typedef struct
 {
-  motor_dir_t direction;    // µç»ú·½Ïò
-  uint16_t dutyfactor;      // PWM Êä³öÕ¼¿Õ±È
-  uint8_t is_enable;        // Ê¹ÄÜµç»ú
+  motor_dir_t direction;    // ç”µæœºæ–¹å‘
+  uint16_t dutyfactor;      // PWM è¾“å‡ºå ç©ºæ¯”
+  uint8_t is_enable;        // ä½¿èƒ½ç”µæœº
 }bldcm_data_t;
 
 void bldcm_init(void);

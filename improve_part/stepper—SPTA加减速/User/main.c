@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ÌİĞÎ¼Ó¼õËÙ
+  * @brief   æ¢¯å½¢åŠ å‡é€Ÿ
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -23,30 +23,30 @@
 #include "./stepper/bsp_stepper_spta_speed.h"
 #include "./key/bsp_key.h"
 
-#define SPTA_SPEED 48000 //SPTA×î´óËÙ¶ÈÏŞÖÆ
-#define SPTA_ACCEL 30000 //SPTA¼ÓËÙ¶È
+#define SPTA_SPEED 48000 //SPTAæœ€å¤§é€Ÿåº¦é™åˆ¶
+#define SPTA_ACCEL 30000 //SPTAåŠ é€Ÿåº¦
 
 void SPTA_demo_run(void);
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   uint32_t j = 0;
   
   HAL_InitTick(0);
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+	/*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
 	DEBUG_USART_Config();
-	printf("\r\n»¶Ó­Ê¹ÓÃÒ°»ğ µç»ú¿ª·¢°å ²½½øµç»ú SPTA¼Ó¼õËÙÕı·´Ğı×ª Àı³Ì\r\n");
-  printf("°´ÏÂKEY2¡¢KEY3¿ÉÒÔÆô¶¯²½½øµç»ú½øĞĞSPTA¼Ó¼õËÙÔË¶¯\r\n");
-  /* °´¼ü³õÊ¼»¯ */
+	printf("\r\næ¬¢è¿ä½¿ç”¨é‡ç« ç”µæœºå¼€å‘æ¿ æ­¥è¿›ç”µæœº SPTAåŠ å‡é€Ÿæ­£åæ—‹è½¬ ä¾‹ç¨‹\r\n");
+  printf("æŒ‰ä¸‹KEY2ã€KEY3å¯ä»¥å¯åŠ¨æ­¥è¿›ç”µæœºè¿›è¡ŒSPTAåŠ å‡é€Ÿè¿åŠ¨\r\n");
+  /* æŒ‰é”®åˆå§‹åŒ– */
   Key_GPIO_Config();
-	/*²½½øµç»ú³õÊ¼»¯*/
+	/*æ­¥è¿›ç”µæœºåˆå§‹åŒ–*/
 	stepper_Init();
 
 	while(1)
@@ -69,9 +69,9 @@ int main(void)
 } 	
 
 /**
-  * @brief  SPTAÔËĞĞÑİÊ¾
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  SPTAè¿è¡Œæ¼”ç¤º
+  * @param  æ— 
+  * @retval æ— 
   */
 void SPTA_demo_run(void)
 {

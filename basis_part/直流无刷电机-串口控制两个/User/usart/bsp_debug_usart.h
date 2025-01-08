@@ -4,16 +4,16 @@
 #include "stm32f4xx.h"
 #include <stdio.h>
 
-//´®¿Ú½ÓÊÕ»º³åÊı×é´óĞ¡
+//ä¸²å£æ¥æ”¶ç¼“å†²æ•°ç»„å¤§å°
 #define UART_RX_BUFFER_SIZE 512
 
 extern unsigned char UART_RxBuffer[UART_RX_BUFFER_SIZE];
 extern uint8_t receive_cmd;
 
-//´®¿Ú²¨ÌØÂÊ
+//ä¸²å£æ³¢ç‰¹ç‡
 #define DEBUG_USART_BAUDRATE                    115200
 
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
 /*******************************************************/
 #define DEBUG_USART                             USART1
 #define DEBUG_USART_CLK_ENABLE()                __USART1_CLK_ENABLE();

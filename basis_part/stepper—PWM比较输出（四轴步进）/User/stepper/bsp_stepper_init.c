@@ -4,22 +4,22 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ²½½øµç»ú³õÊ¼»¯
+  * @brief   æ­¥è¿›ç”µæœºåˆå§‹åŒ–
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
 #include "./stepper/bsp_stepper_init.h"
 
-/* ¶¨Ê±Æ÷¾ä±ú */
+/* å®šæ—¶å™¨å¥æŸ„ */
 TIM_HandleTypeDef TIM_StepperHandle;
 
-/* ²½½øµç»úÊı×é */
+/* æ­¥è¿›ç”µæœºæ•°ç»„ */
 Stepper_TypeDef step_motor[4] = 
 {
   {MOTOR_PUL1_PIN, MOTOR_DIR1_PIN, MOTOR_EN1_PIN, MOTOR_PUL1_CHANNEL, MOTOR_PUL1_PORT, MOTOR_DIR1_GPIO_PORT, MOTOR_EN1_GPIO_PORT, 100},
@@ -29,21 +29,21 @@ Stepper_TypeDef step_motor[4] =
 };
 
 /**
-  * @brief  ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_NVIC_Configuration(void)
 {
-  /* ÍâÉèÖĞ¶ÏÅäÖÃ */
+  /* å¤–è®¾ä¸­æ–­é…ç½® */
   HAL_NVIC_SetPriority(MOTOR_PUL_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(MOTOR_PUL_IRQn);
 }
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void Stepper_GPIO_Config(void)
 {
@@ -65,111 +65,111 @@ static void Stepper_GPIO_Config(void)
   MOTOR_EN4_GPIO_CLK_ENABLE();
   MOTOR_PUL4_GPIO_CLK_ENABLE();
 
-  /* »ñÈ¡Êı×éÔªËØ¸öÊı */
+  /* è·å–æ•°ç»„å…ƒç´ ä¸ªæ•° */
   uint8_t member_count = sizeof(step_motor)/sizeof(Stepper_TypeDef);
   
   for(uint8_t i = 0; i < member_count; i++)
   {
-    /*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/															   
+    /*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/															   
     GPIO_InitStruct.Pin = step_motor[i].dir_pin;	
-    /*ÉèÖÃÒı½ÅµÄÊä³öÀàĞÍÎªÍÆÍìÊä³ö*/
+    /*è®¾ç½®å¼•è„šçš„è¾“å‡ºç±»å‹ä¸ºæ¨æŒ½è¾“å‡º*/
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;  
     GPIO_InitStruct.Pull =GPIO_PULLUP;
-    /*ÉèÖÃÒı½ÅËÙÂÊÎª¸ßËÙ */   
+    /*è®¾ç½®å¼•è„šé€Ÿç‡ä¸ºé«˜é€Ÿ */   
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    /*Motor ·½ÏòÒı½Å ³õÊ¼»¯*/
+    /*Motor æ–¹å‘å¼•è„š åˆå§‹åŒ–*/
     HAL_GPIO_Init(step_motor[i].dir_port, &GPIO_InitStruct);
     MOTOR_DIR(step_motor[i].dir_port, step_motor[i].dir_pin, CW);
     
-    /*Motor Ê¹ÄÜÒı½Å ³õÊ¼»¯*/
+    /*Motor ä½¿èƒ½å¼•è„š åˆå§‹åŒ–*/
     GPIO_InitStruct.Pin = step_motor[i].en_pin;
     HAL_GPIO_Init(step_motor[i].en_port, &GPIO_InitStruct);
     MOTOR_OFFLINE(step_motor[i].en_port, step_motor[i].en_pin, ON);
     
-    /* ¶¨Ê±Æ÷Êä³öÍ¨µÀ¹¦ÄÜÒı½ÅIO³õÊ¼»¯ */
-    /*ÉèÖÃÊä³öÀàĞÍ*/
+    /* å®šæ—¶å™¨è¾“å‡ºé€šé“åŠŸèƒ½å¼•è„šIOåˆå§‹åŒ– */
+    /*è®¾ç½®è¾“å‡ºç±»å‹*/
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    /*ÉèÖÃÒı½ÅËÙÂÊ */ 
+    /*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    /*ÉèÖÃ¸´ÓÃ*/
+    /*è®¾ç½®å¤ç”¨*/
     GPIO_InitStruct.Alternate = MOTOR_PUL_GPIO_AF;
-    /*ÉèÖÃ¸´ÓÃ*/
+    /*è®¾ç½®å¤ç”¨*/
     GPIO_InitStruct.Pull = GPIO_PULLUP;
-    /*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+    /*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
     GPIO_InitStruct.Pin = step_motor[i].pul_pin;
-    /*Motor Âö³åÒı½Å ³õÊ¼»¯*/
+    /*Motor è„‰å†²å¼•è„š åˆå§‹åŒ–*/
     HAL_GPIO_Init(step_motor[i].pul_port, &GPIO_InitStruct);
   }
 }
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓĞ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓĞ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ğè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈı¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓĞ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æ„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓĞ
- * TIM_CounterMode			 TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓĞ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓĞ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode			 TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 static void TIM_PWMOUTPUT_Config(void)
 {
 	TIM_OC_InitTypeDef  TIM_OCInitStructure;
 
-  /* »ñÈ¡Êı×éÔªËØ¸öÊı */
+  /* è·å–æ•°ç»„å…ƒç´ ä¸ªæ•° */
   uint8_t member_count = sizeof(step_motor)/sizeof(Stepper_TypeDef);
   
-	/*Ê¹ÄÜ¶¨Ê±Æ÷*/
+	/*ä½¿èƒ½å®šæ—¶å™¨*/
 	MOTOR_PUL_CLK_ENABLE();
 
 	TIM_StepperHandle.Instance = MOTOR_PUL_TIM;    
-	/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üĞÂ»òÕßÖĞ¶Ï*/		
-	//µ±¶¨Ê±Æ÷´Ó0¼ÆÊıµ½TIM_PERIOD£¬¼´ÎªTIM_PERIOD´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+	/* ç´¯è®¡ TIM_Periodä¸ªåäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/		
+	//å½“å®šæ—¶å™¨ä»0è®¡æ•°åˆ°TIM_PERIODï¼Œå³ä¸ºTIM_PERIODæ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
 	TIM_StepperHandle.Init.Period = TIM_PERIOD;
-	// Í¨ÓÃ¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=168MHz 
-	// Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=2MHz
+	// é€šç”¨æ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=168MHz 
+	// è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=2MHz
 	TIM_StepperHandle.Init.Prescaler = TIM_PRESCALER-1;                
 
-	/*¼ÆÊı·½Ê½*/
+	/*è®¡æ•°æ–¹å¼*/
 	TIM_StepperHandle.Init.CounterMode = TIM_COUNTERMODE_UP;            
-	/*²ÉÑùÊ±ÖÓ·ÖÆµ*/	
+	/*é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘*/	
 	TIM_StepperHandle.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;   
 	TIM_StepperHandle.Init.RepetitionCounter = 0 ;  		
-	/*³õÊ¼»¯¶¨Ê±Æ÷*/
+	/*åˆå§‹åŒ–å®šæ—¶å™¨*/
 	HAL_TIM_OC_Init(&TIM_StepperHandle);
 
-	/*PWMÄ£Ê½ÅäÖÃ--ÕâÀïÅäÖÃÎªÊä³ö±È½ÏÄ£Ê½*/
+	/*PWMæ¨¡å¼é…ç½®--è¿™é‡Œé…ç½®ä¸ºè¾“å‡ºæ¯”è¾ƒæ¨¡å¼*/
 	TIM_OCInitStructure.OCMode = TIM_OCMODE_TOGGLE; 
-	/*±È½ÏÊä³öµÄ¼ÆÊıÖµ*/
+	/*æ¯”è¾ƒè¾“å‡ºçš„è®¡æ•°å€¼*/
 	TIM_OCInitStructure.Pulse = TIM_PERIOD;                    
-	/*µ±¶¨Ê±Æ÷¼ÆÊıÖµĞ¡ÓÚCCR1_ValÊ±Îª¸ßµçÆ½*/
+	/*å½“å®šæ—¶å™¨è®¡æ•°å€¼å°äºCCR1_Valæ—¶ä¸ºé«˜ç”µå¹³*/
 	TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH;          
-	/*ÉèÖÃ»¥²¹Í¨µÀÊä³öµÄ¼«ĞÔ*/
+	/*è®¾ç½®äº’è¡¥é€šé“è¾“å‡ºçš„ææ€§*/
 	TIM_OCInitStructure.OCNPolarity = TIM_OCNPOLARITY_LOW; 
-	/*¿ìËÙÄ£Ê½ÉèÖÃ*/
+	/*å¿«é€Ÿæ¨¡å¼è®¾ç½®*/
 	TIM_OCInitStructure.OCFastMode = TIM_OCFAST_DISABLE;   
-	/*¿ÕÏĞµçÆ½*/
+	/*ç©ºé—²ç”µå¹³*/
 	TIM_OCInitStructure.OCIdleState = TIM_OCIDLESTATE_RESET;  
-	/*»¥²¹Í¨µÀÉèÖÃ*/
+	/*äº’è¡¥é€šé“è®¾ç½®*/
 	TIM_OCInitStructure.OCNIdleState = TIM_OCNIDLESTATE_RESET;
   
   for(uint8_t i = 0; i < member_count; i++)
   {
-    /* Æô¶¯±È½ÏÊä³ö²¢Ê¹ÄÜÖĞ¶Ï */
+    /* å¯åŠ¨æ¯”è¾ƒè¾“å‡ºå¹¶ä½¿èƒ½ä¸­æ–­ */
     HAL_TIM_OC_ConfigChannel(&TIM_StepperHandle, &TIM_OCInitStructure, step_motor[i].pul_channel);
     HAL_TIM_OC_Start_IT(&TIM_StepperHandle, step_motor[i].pul_channel);
   }
 
-  /* Æô¶¯¶¨Ê±Æ÷ */
+  /* å¯åŠ¨å®šæ—¶å™¨ */
 	HAL_TIM_Base_Start(&TIM_StepperHandle);
 }
 
 /**
-  * @brief  ¶¨Ê±Æ÷ÖĞ¶Ï·şÎñº¯Êı
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨ä¸­æ–­æœåŠ¡å‡½æ•°
+	*	@note   æ— 
+  * @retval æ— 
   */
 void MOTOR_PUL_IRQHandler(void)
 {
@@ -177,34 +177,34 @@ void MOTOR_PUL_IRQHandler(void)
 }
 
 /**
-  * @brief  ¶¨Ê±Æ÷±È½ÏÖĞ¶Ï»Øµ÷º¯Êı
-  * @param  htim£º¶¨Ê±Æ÷¾ä±úÖ¸Õë
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨æ¯”è¾ƒä¸­æ–­å›è°ƒå‡½æ•°
+  * @param  htimï¼šå®šæ—¶å™¨å¥æŸ„æŒ‡é’ˆ
+	*	@note   æ— 
+  * @retval æ— 
   */
 void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 {
   uint32_t channel = htim->Channel;
   
-  /* »ñÈ¡µ±Ç°¼ÆÊı */
+  /* è·å–å½“å‰è®¡æ•° */
   uint32_t count = __HAL_TIM_GET_COUNTER(htim);
   
   switch(channel)
   {
     case HAL_TIM_ACTIVE_CHANNEL_1:
-      /* ÉèÖÃ±È½ÏÊıÖµ */
+      /* è®¾ç½®æ¯”è¾ƒæ•°å€¼ */
       __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, MOTOR_PUL1_CHANNEL, count + step_motor[0].oc_pulse_num);
       break;
     case HAL_TIM_ACTIVE_CHANNEL_2:
-      /* ÉèÖÃ±È½ÏÊıÖµ */
+      /* è®¾ç½®æ¯”è¾ƒæ•°å€¼ */
       __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, MOTOR_PUL2_CHANNEL, count + step_motor[1].oc_pulse_num);
       break;
     case HAL_TIM_ACTIVE_CHANNEL_3:
-      /* ÉèÖÃ±È½ÏÊıÖµ */
+      /* è®¾ç½®æ¯”è¾ƒæ•°å€¼ */
       __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, MOTOR_PUL3_CHANNEL, count + step_motor[2].oc_pulse_num);
       break;
     case HAL_TIM_ACTIVE_CHANNEL_4:
-      /* ÉèÖÃ±È½ÏÊıÖµ */
+      /* è®¾ç½®æ¯”è¾ƒæ•°å€¼ */
       __HAL_TIM_SET_COMPARE(&TIM_StepperHandle, MOTOR_PUL4_CHANNEL, count + step_motor[3].oc_pulse_num);
       break;
   }
@@ -212,27 +212,27 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 
 
 /**
-  * @brief  ²½½øµç»ú³õÊ¼»¯
-  * @param  *step_motor£º²½½øµç»ú½á¹¹ÌåÖ¸Õë
-  * @param  member_count£ºÏëÒª³õÊ¼»¯µÄ²½½øµç»ú¸öÊı
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  æ­¥è¿›ç”µæœºåˆå§‹åŒ–
+  * @param  *step_motorï¼šæ­¥è¿›ç”µæœºç»“æ„ä½“æŒ‡é’ˆ
+  * @param  member_countï¼šæƒ³è¦åˆå§‹åŒ–çš„æ­¥è¿›ç”µæœºä¸ªæ•°
+	*	@note   æ— 
+  * @retval æ— 
   */
 void stepper_Init(void)
 {
-	/*µç»úIOÅäÖÃ*/
+	/*ç”µæœºIOé…ç½®*/
 	Stepper_GPIO_Config();
-	/*¶¨Ê±Æ÷PWMÊä³öÅäÖÃ*/
+	/*å®šæ—¶å™¨PWMè¾“å‡ºé…ç½®*/
 	TIM_PWMOUTPUT_Config();
-	/*ÖĞ¶ÏÅäÖÃ*/
+	/*ä¸­æ–­é…ç½®*/
 	TIMx_NVIC_Configuration();
 }
 
 /**
-  * @brief  Æô¶¯µç»ú
-  * @param  channel£ºµç»úÍ¨µÀ
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  å¯åŠ¨ç”µæœº
+  * @param  channelï¼šç”µæœºé€šé“
+	*	@note   æ— 
+  * @retval æ— 
   */
 void stepper_Start(uint32_t channel)
 {
@@ -240,10 +240,10 @@ void stepper_Start(uint32_t channel)
 }
 
 /**
-  * @brief  Í£Ö¹µç»ú
-  * @param  channel£ºµç»úÍ¨µÀ
-	*	@note   ÎŞ
-  * @retval ÎŞ
+  * @brief  åœæ­¢ç”µæœº
+  * @param  channelï¼šç”µæœºé€šé“
+	*	@note   æ— 
+  * @retval æ— 
   */
 void stepper_Stop(uint32_t channel)
 {

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   Ö±Á÷ÎŞË¢µç»ú-´®¿Ú¿ØÖÆ
+  * @brief   ç›´æµæ— åˆ·ç”µæœº-ä¸²å£æ§åˆ¶
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,40 +25,40 @@
 
 int pulse_num=0;
 	
-void Delay(__IO uint32_t nCount)	 //¼òµ¥µÄÑÓÊ±º¯Êı
+void Delay(__IO uint32_t nCount)	 //ç®€å•çš„å»¶æ—¶å‡½æ•°
 {
 	for(; nCount != 0; nCount--);
 }	
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
   __IO uint16_t ChannelPulse = PWM_PERIOD_COUNT/10;
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
   
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
   
-  /* LED µÆ³õÊ¼»¯ */
+  /* LED ç¯åˆå§‹åŒ– */
   LED_GPIO_Config();
   
-  /* µ÷ÊÔ´®¿Ú³õÊ¼»¯ */
+  /* è°ƒè¯•ä¸²å£åˆå§‹åŒ– */
   DEBUG_USART_Config();
   
-  printf("Ò°»ğÖ±Á÷ÎŞË¢µç»ú°´¼ü¿ØÖÆÀı³Ì\r\n");
+  printf("é‡ç«ç›´æµæ— åˆ·ç”µæœºæŒ‰é”®æ§åˆ¶ä¾‹ç¨‹\r\n");
 
-  /* µç»ú³õÊ¼»¯ */
+  /* ç”µæœºåˆå§‹åŒ– */
   bldcm_init();
 	
 	while(1)
 	{
-    /* ´¦ÀíÊı¾İ */
+    /* å¤„ç†æ•°æ® */
     deal_serial_data();
 	}
 }

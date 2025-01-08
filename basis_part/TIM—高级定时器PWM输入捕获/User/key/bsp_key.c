@@ -10,7 +10,7 @@
 
   * @date    2015-xx-xx
 
-  * @brief   °´¼üÓ¦ÓÃbsp£¨É¨ÃèÄ£Ê½£©
+  * @brief   æŒ‰é”®åº”ç”¨bspï¼ˆæ‰«ææ¨¡å¼ï¼‰
 
   ******************************************************************************
 
@@ -18,11 +18,11 @@
 
   *
 
-  * ÊµÑéÆ½Ì¨:Ò°»ð  STM32 F407 ¿ª·¢°å 
+  * å®žéªŒå¹³å°:é‡Žç«  STM32 F407 å¼€å‘æ¿ 
 
-  * ÂÛÌ³    :http://www.firebbs.cn
+  * è®ºå›    :http://www.firebbs.cn
 
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * æ·˜å®    :http://firestm32.taobao.com
 
   *
 
@@ -36,11 +36,11 @@
 
 /**
 
-  * @brief  ÅäÖÃ°´¼üÓÃµ½µÄI/O¿Ú
+  * @brief  é…ç½®æŒ‰é”®ç”¨åˆ°çš„I/Oå£
 
-  * @param  ÎÞ
+  * @param  æ— 
 
-  * @retval ÎÞ
+  * @retval æ— 
 
   */
 
@@ -52,37 +52,37 @@ void Key_GPIO_Config(void)
 
 
 
-    /*¿ªÆô°´¼üGPIO¿ÚµÄÊ±ÖÓ*/
+    /*å¼€å¯æŒ‰é”®GPIOå£çš„æ—¶é’Ÿ*/
 
     KEY1_GPIO_CLK_ENABLE();
 
     KEY2_GPIO_CLK_ENABLE();
 
-    /*Ñ¡Ôñ°´¼üµÄÒý½Å*/	
+    /*é€‰æ‹©æŒ‰é”®çš„å¼•è„š*/	
 
     GPIO_InitStructure.Pin = KEY1_PIN; 
 
 
 
-    /*ÉèÖÃÒý½ÅÎªÊäÈëÄ£Ê½*/
+    /*è®¾ç½®å¼•è„šä¸ºè¾“å…¥æ¨¡å¼*/
 
     GPIO_InitStructure.Mode = GPIO_MODE_INPUT; 
 
 
-    /*ÉèÖÃÒý½Å²»ÉÏÀ­Ò²²»ÏÂÀ­*/
+    /*è®¾ç½®å¼•è„šä¸ä¸Šæ‹‰ä¹Ÿä¸ä¸‹æ‹‰*/
 
     GPIO_InitStructure.Pull = GPIO_NOPULL;
 
-    /*Ê¹ÓÃÉÏÃæµÄ½á¹¹Ìå³õÊ¼»¯°´¼ü*/
+    /*ä½¿ç”¨ä¸Šé¢çš„ç»“æž„ä½“åˆå§‹åŒ–æŒ‰é”®*/
 
     HAL_GPIO_Init(KEY1_GPIO_PORT, &GPIO_InitStructure);
 
-    /*Ñ¡Ôñ°´¼üµÄÒý½Å*/
+    /*é€‰æ‹©æŒ‰é”®çš„å¼•è„š*/
 
     GPIO_InitStructure.Pin = KEY2_PIN; 
 
 
-    /*Ê¹ÓÃÉÏÃæµÄ½á¹¹Ìå³õÊ¼»¯°´¼ü*/
+    /*ä½¿ç”¨ä¸Šé¢çš„ç»“æž„ä½“åˆå§‹åŒ–æŒ‰é”®*/
 
     HAL_GPIO_Init(KEY2_GPIO_PORT, &GPIO_InitStructure);
 
@@ -93,19 +93,19 @@ void Key_GPIO_Config(void)
 
 /**
 
-  * @brief   ¼ì²âÊÇ·ñÓÐ°´¼ü°´ÏÂ
+  * @brief   æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®æŒ‰ä¸‹
 
-  * @param   ¾ßÌåµÄ¶Ë¿ÚºÍ¶Ë¿ÚÎ»
+  * @param   å…·ä½“çš„ç«¯å£å’Œç«¯å£ä½
 
-  *		@arg GPIOx: x¿ÉÒÔÊÇ£¨A...G£© 
+  *		@arg GPIOx: xå¯ä»¥æ˜¯ï¼ˆA...Gï¼‰ 
 
-  *		@arg GPIO_PIN ¿ÉÒÔÊÇGPIO_PIN_x£¨x¿ÉÒÔÊÇ1...16£©
+  *		@arg GPIO_PIN å¯ä»¥æ˜¯GPIO_PIN_xï¼ˆxå¯ä»¥æ˜¯1...16ï¼‰
 
-  * @retval  °´¼üµÄ×´Ì¬
+  * @retval  æŒ‰é”®çš„çŠ¶æ€
 
-  *		@arg KEY_ON:°´¼ü°´ÏÂ
+  *		@arg KEY_ON:æŒ‰é”®æŒ‰ä¸‹
 
-  *		@arg KEY_OFF:°´¼üÃ»°´ÏÂ
+  *		@arg KEY_OFF:æŒ‰é”®æ²¡æŒ‰ä¸‹
 
   */
 
@@ -113,13 +113,13 @@ uint8_t Key_Scan(GPIO_TypeDef* GPIOx,uint16_t GPIO_Pin)
 
 {			
 
-	/*¼ì²âÊÇ·ñÓÐ°´¼ü°´ÏÂ */
+	/*æ£€æµ‹æ˜¯å¦æœ‰æŒ‰é”®æŒ‰ä¸‹ */
 
 	if(HAL_GPIO_ReadPin(GPIOx,GPIO_Pin) == KEY_ON )  
 
 	{	 
 
-		/*µÈ´ý°´¼üÊÍ·Å */
+		/*ç­‰å¾…æŒ‰é”®é‡Šæ”¾ */
 
 		while(HAL_GPIO_ReadPin(GPIOx,GPIO_Pin) == KEY_ON);   
 

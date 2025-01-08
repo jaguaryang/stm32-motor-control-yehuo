@@ -4,36 +4,36 @@
 #include "stm32f4xx.h"
 #include "./tim/bsp_motor_tim.h"
 
-//Òı½Å¶¨Òå
+//å¼•è„šå®šä¹‰
 /*******************************************************/
-// Á¬½ÓMOS¹Ü´î½¨°åµÄ SD ½Å£¬»òÕßÁ¬½ÓL298N°åµÄ EN ½Å
+// è¿æ¥MOSç®¡æ­å»ºæ¿çš„ SD è„šï¼Œæˆ–è€…è¿æ¥L298Næ¿çš„ EN è„š
 #define SHUTDOWN_PIN                  GPIO_PIN_12
 #define SHUTDOWN_GPIO_PORT            GPIOG
 #define SHUTDOWN_GPIO_CLK_ENABLE()    __GPIOG_CLK_ENABLE()
 /*******************************************************/
 
-/* µç»ú SD or EN Ê¹ÄÜ½Å */
-#define MOTOR_ENABLE_SD()                     HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_SET)      // ¸ßµçÆ½´ò¿ª-¸ßµçÆ½Ê¹ÄÜ 
-#define MOTOR_DISABLE_SD()                    HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_RESET)    // µÍµçÆ½¹Ø¶Ï-µÍµçÆ½½ûÓÃ
+/* ç”µæœº SD or EN ä½¿èƒ½è„š */
+#define MOTOR_ENABLE_SD()                     HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_SET)      // é«˜ç”µå¹³æ‰“å¼€-é«˜ç”µå¹³ä½¿èƒ½ 
+#define MOTOR_DISABLE_SD()                    HAL_GPIO_WritePin(SHUTDOWN_GPIO_PORT, SHUTDOWN_PIN, GPIO_PIN_RESET)    // ä½ç”µå¹³å…³æ–­-ä½ç”µå¹³ç¦ç”¨
 
-/* µç»ú·½Ïò¿ØÖÆÃ¶¾Ù */
+/* ç”µæœºæ–¹å‘æ§åˆ¶æšä¸¾ */
 typedef enum
 {
   MOTOR_FWD = 0,
   MOTOR_REV,
 }motor_dir_t;
 
-/* ÉèÖÃËÙ¶È£¨Õ¼¿Õ±È£© */
-#define SET_FWD_COMPAER(ChannelPulse)     TIM1_SetPWM_pulse(PWM_CHANNEL_1,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
-#define SET_REV_COMPAER(ChannelPulse)     TIM1_SetPWM_pulse(PWM_CHANNEL_2,ChannelPulse)    // ÉèÖÃ±È½Ï¼Ä´æÆ÷µÄÖµ
+/* è®¾ç½®é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰ */
+#define SET_FWD_COMPAER(ChannelPulse)     TIM1_SetPWM_pulse(PWM_CHANNEL_1,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
+#define SET_REV_COMPAER(ChannelPulse)     TIM1_SetPWM_pulse(PWM_CHANNEL_2,ChannelPulse)    // è®¾ç½®æ¯”è¾ƒå¯„å­˜å™¨çš„å€¼
 
-/* Ê¹ÄÜÊä³ö */
-#define MOTOR_FWD_ENABLE()      HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_1);    // Ê¹ÄÜ PWM Í¨µÀ 1
-#define MOTOR_REV_ENABLE()      HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_2);    // Ê¹ÄÜ PWM Í¨µÀ 2
+/* ä½¿èƒ½è¾“å‡º */
+#define MOTOR_FWD_ENABLE()      HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_1);    // ä½¿èƒ½ PWM é€šé“ 1
+#define MOTOR_REV_ENABLE()      HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,PWM_CHANNEL_2);    // ä½¿èƒ½ PWM é€šé“ 2
 
-/* ½ûÓÃÊä³ö */
-#define MOTOR_FWD_DISABLE()     HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_1);     // ½ûÓÃ PWM Í¨µÀ 1
-#define MOTOR_REV_DISABLE()     HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_2);     // ½ûÓÃ PWM Í¨µÀ 2
+/* ç¦ç”¨è¾“å‡º */
+#define MOTOR_FWD_DISABLE()     HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_1);     // ç¦ç”¨ PWM é€šé“ 1
+#define MOTOR_REV_DISABLE()     HAL_TIM_PWM_Stop(&TIM_TimeBaseStructure,PWM_CHANNEL_2);     // ç¦ç”¨ PWM é€šé“ 2
 
 void motor_init(void);
 void set_motor_speed(uint16_t v);

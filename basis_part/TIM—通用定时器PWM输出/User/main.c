@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2017-xx-xx
-  * @brief   GPIOÊä³ö--Ê¹ÓÃ¹Ì¼ş¿âµãÁÁLEDµÆ
+  * @brief   GPIOè¾“å‡º--ä½¿ç”¨å›ºä»¶åº“ç‚¹äº®LEDç¯
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -23,24 +23,24 @@
 
 int pulse_num=0;
 	
-void Delay(__IO uint32_t nCount)	 //¼òµ¥µÄÑÓÊ±º¯Êı
+void Delay(__IO uint32_t nCount)	 //ç®€å•çš„å»¶æ—¶å‡½æ•°
 {
 	for(; nCount != 0; nCount--);
 }	
 	
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/* ³õÊ¼»¯LED */
+	/* åˆå§‹åŒ–LED */
 	LED_GPIO_Config();
 
-  /* Í¨ÓÃ¶¨Ê±Æ÷³õÊ¼»¯²¢ÅäÖÃPWMÊä³ö¹¦ÄÜ */
+  /* é€šç”¨å®šæ—¶å™¨åˆå§‹åŒ–å¹¶é…ç½®PWMè¾“å‡ºåŠŸèƒ½ */
   TIMx_Configuration();
   
 	TIM2_SetPWM_pulse(1,1000);

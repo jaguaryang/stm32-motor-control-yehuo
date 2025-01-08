@@ -3,7 +3,7 @@
 
 #include "stm32f4xx.h"
 
-/*�궨��*/
+/*宏定义*/
 #define GENERAL_TIM                        	TIM4
 #define GENERAL_TIM_GPIO_AF                 GPIO_AF2_TIM4
 #define GENERAL_TIM_CLK_ENABLE()  					__TIM4_CLK_ENABLE()
@@ -13,15 +13,15 @@
 //#define PWM_CHANNEL_3                       TIM_CHANNEL_3
 //#define PWM_CHANNEL_4                       TIM_CHANNEL_4
 
-/* �ۼ� TIM_Period�������һ�����»����ж�*/		
-/* ����ʱ����0������PWM_PERIOD_COUNT����ΪPWM_PERIOD_COUNT+1�Σ�Ϊһ����ʱ���� */
+/* 累计 TIM_Period个后产生一个更新或者中断*/		
+/* 当定时器从0计数到PWM_PERIOD_COUNT，即为PWM_PERIOD_COUNT+1次，为一个定时周期 */
 #define PWM_PERIOD_COUNT     999
 
-/* ͨ�ÿ��ƶ�ʱ��ʱ��ԴTIMxCLK = HCLK/2=84MHz */
-/* �趨��ʱ��Ƶ��Ϊ=TIMxCLK/(PWM_PRESCALER_COUNT+1) */
+/* 通用控制定时器时钟源TIMxCLK = HCLK/2=84MHz */
+/* 设定定时器频率为=TIMxCLK/(PWM_PRESCALER_COUNT+1) */
 #define PWM_PRESCALER_COUNT     1679
 
-/*PWM����*/
+/*PWM引脚*/
 #define GENERAL_TIM_CH1_GPIO_PORT           GPIOD
 #define GENERAL_TIM_CH1_PIN                 GPIO_PIN_12
 

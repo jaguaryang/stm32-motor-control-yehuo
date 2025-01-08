@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   µç»ú¿ØÖÆ½Ó¿Ú
+  * @brief   ç”µæœºæ§åˆ¶æ¥å£
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -18,44 +18,44 @@
 #include ".\motor_control\bsp_motor_control.h"
 #include "./led/bsp_led.h"   
 
-/* Ë½ÓĞ±äÁ¿ */
-static motor_dir_t direction  = MOTOR_FWD;     // ¼ÇÂ¼·½Ïò
-static uint16_t    dutyfactor = 0;             // ¼ÇÂ¼Õ¼¿Õ±È
+/* ç§æœ‰å˜é‡ */
+static motor_dir_t direction  = MOTOR_FWD;     // è®°å½•æ–¹å‘
+static uint16_t    dutyfactor = 0;             // è®°å½•å ç©ºæ¯”
 
 static void sd_gpio_config(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒı½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	SHUTDOWN_GPIO_CLK_ENABLE();
   
-  /* Òı½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàĞÍ*/
+  /* å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»å‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	/*ÉèÖÃÒı½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€Ÿç‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/	
+	/*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = SHUTDOWN_PIN;
   
-	/*µ÷ÓÃ¿âº¯Êı£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(SHUTDOWN_GPIO_PORT, &GPIO_InitStruct);
 }
 
 /**
-  * @brief  µç»ú³õÊ¼»¯
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç”µæœºåˆå§‹åŒ–
+  * @param  æ— 
+  * @retval æ— 
   */
 void motor_init(void)
 {
-  Motor_TIMx_Configuration();     // ³õÊ¼»¯µç»ú 1
+  Motor_TIMx_Configuration();     // åˆå§‹åŒ–ç”µæœº 1
   sd_gpio_config();
 }
 
 /**
-  * @brief  ÉèÖÃµç»úËÙ¶È
-  * @param  v: ËÙ¶È£¨Õ¼¿Õ±È£©
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºé€Ÿåº¦
+  * @param  v: é€Ÿåº¦ï¼ˆå ç©ºæ¯”ï¼‰
+  * @retval æ— 
   */
 void set_motor_speed(uint16_t v)
 {
@@ -63,18 +63,18 @@ void set_motor_speed(uint16_t v)
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  ÉèÖÃµç»ú·½Ïò
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  è®¾ç½®ç”µæœºæ–¹å‘
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_direction(motor_dir_t dir)
 {
@@ -82,36 +82,36 @@ void set_motor_direction(motor_dir_t dir)
   
   if (direction == MOTOR_FWD)
   {
-    SET_FWD_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(0);              // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
   }
   else
   {
-    SET_FWD_COMPAER(0);              // ÉèÖÃËÙ¶È
-    SET_REV_COMPAER(dutyfactor);     // ÉèÖÃËÙ¶È
+    SET_FWD_COMPAER(0);              // è®¾ç½®é€Ÿåº¦
+    SET_REV_COMPAER(dutyfactor);     // è®¾ç½®é€Ÿåº¦
   }
 }
 
 /**
-  * @brief  Ê¹ÄÜµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä½¿èƒ½ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_enable(void)
 {
-  MOTOR_ENABLE_SD();    // SD ½ÅÊä³ö¸ßµçÆ½Ê¹ÄÜ
+  MOTOR_ENABLE_SD();    // SD è„šè¾“å‡ºé«˜ç”µå¹³ä½¿èƒ½
   MOTOR_FWD_ENABLE();
   MOTOR_REV_ENABLE();
 }
 
 /**
-  * @brief  ½ûÓÃµç»ú
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ç¦ç”¨ç”µæœº
+  * @param  æ— 
+  * @retval æ— 
   */
 void set_motor_disable(void)
 {
-  MOTOR_DISABLE_SD();    // SD ½ÅÊä³ö¸ßµçÆ½½ûÓÃ
+  MOTOR_DISABLE_SD();    // SD è„šè¾“å‡ºé«˜ç”µå¹³ç¦ç”¨
   MOTOR_FWD_DISABLE();
   MOTOR_REV_DISABLE();
 }

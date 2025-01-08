@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   PIDËã·¨ÊµÏÖ
+  * @brief   PIDç®—æ³•å®ç°
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -30,37 +30,37 @@ extern float set_point;
 extern int pid_status;
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/* Ğ­Òé³õÊ¼»¯ */
+	/* åè®®åˆå§‹åŒ– */
 	protocol_init();
-	/*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+	/*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
 	DEBUG_USART_Config();
-	/* ³õÊ¼»¯»ù±¾¶¨Ê±Æ÷¶¨Ê±£¬20ms²úÉúÒ»´ÎÖĞ¶Ï */
+	/* åˆå§‹åŒ–åŸºæœ¬å®šæ—¶å™¨å®šæ—¶ï¼Œ20msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­ */
 	TIMx_Configuration();
-	/* PIDËã·¨²ÎÊı³õÊ¼»¯ */
+	/* PIDç®—æ³•å‚æ•°åˆå§‹åŒ– */
 	PID_param_init();	
-	/*led³õÊ¼»¯*/
+	/*ledåˆå§‹åŒ–*/
 	LED_GPIO_Config();
-	/*°´¼ü³õÊ¼»¯*/
+	/*æŒ‰é”®åˆå§‹åŒ–*/
 	Key_GPIO_Config();
 	int run_i=0;
 #if defined(PID_ASSISTANT_EN) 
-    int temp = set_point;    // ÉÏÎ»»úĞèÒªÕûÊı²ÎÊı£¬×ª»»Ò»ÏÂ
-    set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+    int temp = set_point;    // ä¸Šä½æœºéœ€è¦æ•´æ•°å‚æ•°ï¼Œè½¬æ¢ä¸€ä¸‹
+    set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);     // ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
 #endif
   
 	while(1)
 	{      
-		/* ½ÓÊÕÊı¾İ´¦Àí */
+		/* æ¥æ”¶æ•°æ®å¤„ç† */
 		receiving_process();		
-		/*Ä£ÄâĞŞ¸ÄPIDÄ¿±êÖµ*/
+		/*æ¨¡æ‹Ÿä¿®æ”¹PIDç›®æ ‡å€¼*/
 		if( Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON  )
 		{
 			if(run_i%2==0)
@@ -76,23 +76,23 @@ int main(void)
 			run_i++;
         
 #if defined(PID_ASSISTANT_EN) 
-        temp = set_point;    // ÉÏÎ»»úĞèÒªÕûÊı²ÎÊı£¬×ª»»Ò»ÏÂ
-        set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);     // ¸øÍ¨µÀ 1 ·¢ËÍÄ¿±êÖµ
+        temp = set_point;    // ä¸Šä½æœºéœ€è¦æ•´æ•°å‚æ•°ï¼Œè½¬æ¢ä¸€ä¸‹
+        set_computer_value(SEND_TARGET_CMD, CURVES_CH1, &temp, 1);     // ç»™é€šé“ 1 å‘é€ç›®æ ‡å€¼
 #endif
 		}   
 
 		if( Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON  )
 		{
-			pid_status=!pid_status;//È¡·´×´Ì¬
+			pid_status=!pid_status;//å–åçŠ¶æ€
 		  
 #if defined(PID_ASSISTANT_EN) 
 		  if (!pid_status)
 		  {
-			set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);     // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+			set_computer_value(SEND_START_CMD, CURVES_CH1, NULL, 0);     // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
 		  }
 		  else
 		  {
-			set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);     // Í¬²½ÉÏÎ»»úµÄÆô¶¯°´Å¥×´Ì¬
+			set_computer_value(SEND_STOP_CMD, CURVES_CH1, NULL, 0);     // åŒæ­¥ä¸Šä½æœºçš„å¯åŠ¨æŒ‰é’®çŠ¶æ€
 		  }      
 #endif
 		} 

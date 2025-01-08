@@ -2,14 +2,14 @@
 #define	__BSP_GENERAL_TIM_H
 
 #include "stm32f4xx.h"
-/*∫Í∂®“Â*/
+/*ÂÆèÂÆö‰πâ*/
 
 #define GENERAL_TIM                        	TIM2
 #define GENERAL_TIM_GPIO_AF                 GPIO_AF1_TIM2
 #define GENERAL_TIM_CLK_ENABLE()  					__TIM2_CLK_ENABLE()
 
 
-/*PWM“˝Ω≈*/
+/*PWMÂºïËÑö*/
 #define GENERAL_TIM_CH1_GPIO_PORT           GPIOA
 #define GENERAL_TIM_CH1_PIN                 GPIO_PIN_15
 

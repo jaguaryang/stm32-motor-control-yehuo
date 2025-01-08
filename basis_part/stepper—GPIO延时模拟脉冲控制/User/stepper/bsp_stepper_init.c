@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   ³õÊ¼»¯
+  * @brief   åˆå§‹åŒ–
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -18,30 +18,30 @@
 #include "./delay/core_delay.h"   
 #include "stm32f4xx.h"
 /**
-  * @brief  ²½½øµç»úĞı×ª
-  * @param  tim         ·½²¨ÖÜÆÚ µ¥Î»MS ÖÜÆÚÔ½¶ÌÆµÂÊÔ½¸ß£¬×ªËÙÔ½¿ì Ï¸·ÖÎª1Ê±×îÉÙ10ms
-  * @param  angle       ĞèÒª×ª¶¯µÄ½Ç¶ÈÖµ
-  * @param  subdivide   Ï¸·ÖÖµ
-  * @param  dir         Ñ¡ÔñÕı·´×ª(È¡Öµ·¶Î§£º0,1) 
-  * @note   ÎŞ
-  * @retval ÎŞ
+  * @brief  æ­¥è¿›ç”µæœºæ—‹è½¬
+  * @param  tim         æ–¹æ³¢å‘¨æœŸ å•ä½MS å‘¨æœŸè¶ŠçŸ­é¢‘ç‡è¶Šé«˜ï¼Œè½¬é€Ÿè¶Šå¿« ç»†åˆ†ä¸º1æ—¶æœ€å°‘10ms
+  * @param  angle       éœ€è¦è½¬åŠ¨çš„è§’åº¦å€¼
+  * @param  subdivide   ç»†åˆ†å€¼
+  * @param  dir         é€‰æ‹©æ­£åè½¬(å–å€¼èŒƒå›´ï¼š0,1) 
+  * @note   æ— 
+  * @retval æ— 
   */
 void stepper_turn(int tim,float angle,float subdivide,uint8_t dir)  
 {
   int n,i;
-  /*¸ù¾İÏ¸·ÖÊıÇóµÃ²½¾à½Ç±»·Ö³É¶àÉÙ¸ö·½²¨*/
+  /*æ ¹æ®ç»†åˆ†æ•°æ±‚å¾—æ­¥è·è§’è¢«åˆ†æˆå¤šå°‘ä¸ªæ–¹æ³¢*/
   n=(int)(angle/(1.8/subdivide));
-  if(dir==CW) //Ë³Ê±Õë
+  if(dir==CW) //é¡ºæ—¶é’ˆ
   {
     MOTOR_DIR(CW);
   }
-  else if(dir==CCW)//ÄæÊ±Õë
+  else if(dir==CCW)//é€†æ—¶é’ˆ
   {
     MOTOR_DIR(CCW);
   }
-  /*¿ªÊ¹ÄÜ*/
+  /*å¼€ä½¿èƒ½*/
   MOTOR_EN(ON);
-  /*Ä£Äâ·½²¨*/
+  /*æ¨¡æ‹Ÿæ–¹æ³¢*/
   for(i=0;i<n;i++)
   {   
     MOTOR_PLU(HIGH);
@@ -49,48 +49,48 @@ void stepper_turn(int tim,float angle,float subdivide,uint8_t dir)
     MOTOR_PLU(LOW);
     delay_us(tim/2);
   }
-  /*¹ØÊ¹ÄÜ*/
+  /*å…³ä½¿èƒ½*/
   MOTOR_EN(OFF);
 }
 
 
 /**
-  * @brief  Òı½Å³õÊ¼»¯
-  * @retval ÎŞ
+  * @brief  å¼•è„šåˆå§‹åŒ–
+  * @retval æ— 
   */
 void stepper_Init()
 {
-  /*¶¨ÒåÒ»¸öGPIO_InitTypeDefÀàĞÍµÄ½á¹¹Ìå*/
+  /*å®šä¹‰ä¸€ä¸ªGPIO_InitTypeDefç±»å‹çš„ç»“æ„ä½“*/
   GPIO_InitTypeDef  GPIO_InitStruct;
 
-  /*¿ªÆôMotorÏà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+  /*å¼€å¯Motorç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
   MOTOR_DIR_GPIO_CLK_ENABLE();
   MOTOR_PUL_GPIO_CLK_ENABLE();
   MOTOR_EN_GPIO_CLK_ENABLE();
 
-  /*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒı½Å*/                                 
+  /*é€‰æ‹©è¦æ§åˆ¶çš„GPIOå¼•è„š*/                                 
   GPIO_InitStruct.Pin = MOTOR_DIR_PIN;  
 
-  /*ÉèÖÃÒı½ÅµÄÊä³öÀàĞÍÎªÍÆÍìÊä³ö*/
+  /*è®¾ç½®å¼•è„šçš„è¾“å‡ºç±»å‹ä¸ºæ¨æŒ½è¾“å‡º*/
   GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;  
 
   GPIO_InitStruct.Pull =GPIO_PULLUP;
 
-  /*ÉèÖÃÒı½ÅËÙÂÊÎª¸ßËÙ */   
+  /*è®¾ç½®å¼•è„šé€Ÿç‡ä¸ºé«˜é€Ÿ */   
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 
-  /*Motor ·½ÏòÒı½Å ³õÊ¼»¯*/
+  /*Motor æ–¹å‘å¼•è„š åˆå§‹åŒ–*/
   HAL_GPIO_Init(MOTOR_DIR_GPIO_PORT, &GPIO_InitStruct); 
 
-  /*Motor Âö³åÒı½Å ³õÊ¼»¯*/
+  /*Motor è„‰å†²å¼•è„š åˆå§‹åŒ–*/
   GPIO_InitStruct.Pin = MOTOR_PUL_PIN;  
   HAL_GPIO_Init(MOTOR_PUL_GPIO_PORT, &GPIO_InitStruct); 
 
-  /*Motor Ê¹ÄÜÒı½Å ³õÊ¼»¯*/
+  /*Motor ä½¿èƒ½å¼•è„š åˆå§‹åŒ–*/
   GPIO_InitStruct.Pin = MOTOR_EN_PIN; 
   HAL_GPIO_Init(MOTOR_EN_GPIO_PORT, &GPIO_InitStruct);  
 
-  /*¹ØµôÊ¹ÄÜ*/
+  /*å…³æ‰ä½¿èƒ½*/
   MOTOR_EN(OFF);
 
 }

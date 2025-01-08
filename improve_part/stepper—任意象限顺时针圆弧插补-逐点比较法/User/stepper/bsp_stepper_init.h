@@ -3,7 +3,7 @@
 
 #include "stm32f4xx_hal.h"
 
-/* ²½½øµç»ú½á¹¹Ìå */
+/* æ­¥è¿›ç”µæœºç»“æ„ä½“ */
 typedef struct{
   uint16_t pul_pin;
   uint16_t dir_pin;
@@ -16,7 +16,7 @@ typedef struct{
 }Stepper_TypeDef;
 
 
-/*ºê¶¨Òå*/
+/*å®å®šä¹‰*/
 /*******************************************************/
 #define MOTOR_PUL_TIM                        TIM8
 #define MOTOR_PUL_IRQn                       TIM8_UP_TIM13_IRQn
@@ -24,71 +24,71 @@ typedef struct{
 #define MOTOR_PUL_CLK_ENABLE()               __TIM8_CLK_ENABLE()
 #define MOTOR_PUL_GPIO_AF                    GPIO_AF3_TIM8
 
-/*********************XÖáµç»úÒı½Å¶¨Òå*******************/
-//Motor ·½Ïò
+/*********************Xè½´ç”µæœºå¼•è„šå®šä¹‰*******************/
+//Motor æ–¹å‘
 #define X_MOTOR_DIR_PIN                      GPIO_PIN_1
 #define X_MOTOR_DIR_GPIO_PORT                GPIOE
 #define X_MOTOR_DIR_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ
+//Motor ä½¿èƒ½
 #define X_MOTOR_EN_PIN                       GPIO_PIN_0
 #define X_MOTOR_EN_GPIO_PORT                 GPIOE
 #define X_MOTOR_EN_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Âö³å
+//Motor è„‰å†²
 #define X_MOTOR_PUL_PORT                     GPIOI
 #define X_MOTOR_PUL_PIN                      GPIO_PIN_5
 #define X_MOTOR_PUL_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOI_CLK_ENABLE()
 
-//¶¨Ê±Æ÷Í¨µÀ
+//å®šæ—¶å™¨é€šé“
 #define X_MOTOR_PUL_CHANNEL                  TIM_CHANNEL_1
 
-/*********************YÖáµç»úÒı½Å¶¨Òå*******************/
-//Motor ·½Ïò
+/*********************Yè½´ç”µæœºå¼•è„šå®šä¹‰*******************/
+//Motor æ–¹å‘
 #define Y_MOTOR_DIR_PIN                      GPIO_PIN_8
 #define Y_MOTOR_DIR_GPIO_PORT                GPIOI          
 #define Y_MOTOR_DIR_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOI_CLK_ENABLE()
 
-//Motor Ê¹ÄÜ
+//Motor ä½¿èƒ½
 #define Y_MOTOR_EN_PIN                       GPIO_PIN_4
 #define Y_MOTOR_EN_GPIO_PORT                 GPIOE                       
 #define Y_MOTOR_EN_GPIO_CLK_ENABLE()      	 __HAL_RCC_GPIOE_CLK_ENABLE()
 
-//Motor Âö³å
+//Motor è„‰å†²
 #define Y_MOTOR_PUL_PORT       			         GPIOI
 #define Y_MOTOR_PUL_PIN             		     GPIO_PIN_6
 #define Y_MOTOR_PUL_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOI_CLK_ENABLE()
 
-//¶¨Ê±Æ÷Í¨µÀ
+//å®šæ—¶å™¨é€šé“
 #define Y_MOTOR_PUL_CHANNEL                  TIM_CHANNEL_2
 
 
-//¿ØÖÆÊ¹ÄÜÒı½Å
-/* ´ø²Îºê£¬¿ÉÒÔÏñÄÚÁªº¯ÊıÒ»ÑùÊ¹ÓÃ */
+//æ§åˆ¶ä½¿èƒ½å¼•è„š
+/* å¸¦å‚å®ï¼Œå¯ä»¥åƒå†…è”å‡½æ•°ä¸€æ ·ä½¿ç”¨ */
 #define MOTOR_PUL(port, pin, x)              HAL_GPIO_WritePin(port, pin, x)
 #define MOTOR_DIR(port, pin, x)              HAL_GPIO_WritePin(port, pin, x)
 #define MOTOR_OFFLINE(port, pin, x)          HAL_GPIO_WritePin(port, pin, x)
 #define MOTOR_START(tim, channel, status)    TIM_CCxChannelCmd(tim, channel, status)
 #define MOTOR_STOP(tim, channel, status)     TIM_CCxChannelCmd(tim, channel, status)
 
-/*ÆµÂÊÏà¹Ø²ÎÊı*/
-//¶¨Ê±Æ÷Êµ¼ÊÊ±ÖÓÆµÂÊÎª£º168MHz/TIM_PRESCALER
-//ÆäÖĞ ¸ß¼¶¶¨Ê±Æ÷µÄ ÆµÂÊÎª168MHz,ÆäËû¶¨Ê±Æ÷Îª84MHz
+/*é¢‘ç‡ç›¸å…³å‚æ•°*/
+//å®šæ—¶å™¨å®é™…æ—¶é’Ÿé¢‘ç‡ä¸ºï¼š168MHz/TIM_PRESCALER
+//å…¶ä¸­ é«˜çº§å®šæ—¶å™¨çš„ é¢‘ç‡ä¸º168MHz,å…¶ä»–å®šæ—¶å™¨ä¸º84MHz
 //168/TIM_PRESCALER=28MHz
-//¾ßÌåĞèÒªµÄÆµÂÊ¿ÉÒÔ×Ô¼º¼ÆËã
+//å…·ä½“éœ€è¦çš„é¢‘ç‡å¯ä»¥è‡ªå·±è®¡ç®—
 #define TIM_PRESCALER                6
-// ¶¨Òå¶¨Ê±Æ÷ÖÜÆÚ£¬Êä³ö±È½ÏÄ£Ê½ÖÜÆÚÉèÖÃÎª0xFFFF
+// å®šä¹‰å®šæ—¶å™¨å‘¨æœŸï¼Œè¾“å‡ºæ¯”è¾ƒæ¨¡å¼å‘¨æœŸè®¾ç½®ä¸º0xFFFF
 #define TIM_PERIOD                   0xFFFF
 
 /************************************************************/
-#define HIGH GPIO_PIN_SET	  //¸ßµçÆ½
-#define LOW  GPIO_PIN_RESET	//µÍµçÆ½
+#define HIGH GPIO_PIN_SET	  //é«˜ç”µå¹³
+#define LOW  GPIO_PIN_RESET	//ä½ç”µå¹³
 
-#define ON   LOW	          //¿ª
-#define OFF  HIGH	          //¹Ø
+#define ON   LOW	          //å¼€
+#define OFF  HIGH	          //å…³
 
-#define CW   HIGH		        //Ë³Ê±Õë
-#define CCW  LOW      	    //ÄæÊ±Õë
+#define CW   HIGH		        //é¡ºæ—¶é’ˆ
+#define CCW  LOW      	    //é€†æ—¶é’ˆ
 
 
 extern TIM_HandleTypeDef TIM_StepperHandle;

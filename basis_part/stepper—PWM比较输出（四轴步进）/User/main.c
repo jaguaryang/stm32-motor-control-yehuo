@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2019-xx-xx
-  * @brief   PWM¿ØÖÆ½Ç¶È
+  * @brief   PWMæ§åˆ¶è§’åº¦
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,9 +25,9 @@
 #include "./led/bsp_led.h"
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
@@ -35,46 +35,46 @@ int main(void)
   uint8_t size = sizeof(step_motor)/sizeof(Stepper_TypeDef);
   uint8_t motor0 = 0, motor1 = 0, motor2 = 0, motor3 = 0, dir_all = 0;
   
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/*³õÊ¼»¯USART ÅäÖÃÄ£Ê½Îª 115200 8-N-1£¬ÖĞ¶Ï½ÓÊÕ*/
+	/*åˆå§‹åŒ–USART é…ç½®æ¨¡å¼ä¸º 115200 8-N-1ï¼Œä¸­æ–­æ¥æ”¶*/
 	DEBUG_USART_Config();
-	printf("»¶Ó­Ê¹ÓÃÒ°»ğ µç»ú¿ª·¢°å 4Öá²½½øµç»úĞı×ª Àı³Ì\r\n");
-	printf("°´ÏÂ°´¼ü1¡¢2¡¢3¡¢4¿É·Ö±ğÆô¶¯ºÍÍ£Ö¹µç»ú£¬°´¼ü5¿É¿ØÖÆËùÓĞµç»úµÄ·½Ïò\r\n");	
-	/*°´¼ü³õÊ¼»¯*/
+	printf("æ¬¢è¿ä½¿ç”¨é‡ç« ç”µæœºå¼€å‘æ¿ 4è½´æ­¥è¿›ç”µæœºæ—‹è½¬ ä¾‹ç¨‹\r\n");
+	printf("æŒ‰ä¸‹æŒ‰é”®1ã€2ã€3ã€4å¯åˆ†åˆ«å¯åŠ¨å’Œåœæ­¢ç”µæœºï¼ŒæŒ‰é”®5å¯æ§åˆ¶æ‰€æœ‰ç”µæœºçš„æ–¹å‘\r\n");	
+	/*æŒ‰é”®åˆå§‹åŒ–*/
 	Key_GPIO_Config();	
-	/*led³õÊ¼»¯*/
+	/*ledåˆå§‹åŒ–*/
 	LED_GPIO_Config();
-	/*²½½øµç»ú³õÊ¼»¯*/
+	/*æ­¥è¿›ç”µæœºåˆå§‹åŒ–*/
 	stepper_Init();
   
 	while(1)
 	{
-    /* ²½½øµç»ú1 */
+    /* æ­¥è¿›ç”µæœº1 */
     if(Key_Scan(KEY1_GPIO_PORT,KEY1_PIN) == KEY_ON)
     {
       (motor0 > 0) ? stepper_Start(step_motor[0].pul_channel) : stepper_Stop(step_motor[0].pul_channel);
       motor0 = !motor0;
     }
-    /* ²½½øµç»ú2 */
+    /* æ­¥è¿›ç”µæœº2 */
     if(Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON)
     {
       (motor1 > 0) ? stepper_Start(step_motor[1].pul_channel) : stepper_Stop(step_motor[1].pul_channel);
       motor1 = !motor1;
     }
-    /* ²½½øµç»ú3 */
+    /* æ­¥è¿›ç”µæœº3 */
     if(Key_Scan(KEY3_GPIO_PORT,KEY3_PIN) == KEY_ON)
     {
       (motor2 > 0) ? stepper_Start(step_motor[2].pul_channel) : stepper_Stop(step_motor[2].pul_channel);
       motor2 = !motor2;
     }
-    /* ²½½øµç»ú4 */
+    /* æ­¥è¿›ç”µæœº4 */
     if(Key_Scan(KEY4_GPIO_PORT,KEY4_PIN) == KEY_ON)
     {
       (motor3 > 0) ? stepper_Start(step_motor[3].pul_channel) : stepper_Stop(step_motor[3].pul_channel);
       motor3 = !motor3;
     }
-    /* ·½Ïò×Ü¿Ø */
+    /* æ–¹å‘æ€»æ§ */
     if(Key_Scan(KEY5_GPIO_PORT,KEY5_PIN) == KEY_ON)
     {
       if(dir_all != 0)

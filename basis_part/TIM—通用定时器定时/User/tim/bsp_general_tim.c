@@ -4,13 +4,13 @@
   * @author  STMicroelectronics
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   ͨ�ö�ʱ����ʱ����
+  * @brief   通用定时器定时范例
   ******************************************************************************
   * @attention
   *
-  * ʵ��ƽ̨:Ұ��  STM32 F407 ������  
-  * ��̳    :http://www.firebbs.cn
-  * �Ա�    :http://firestm32.taobao.com
+  * 实验平台:野火  STM32 F407 开发板  
+  * 论坛    :http://www.firebbs.cn
+  * 淘宝    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -19,27 +19,27 @@
 
 TIM_HandleTypeDef TIM_TimeBaseStructure;
  /**
-  * @brief  ͨ�ö�ʱ�� TIMx,x[6,7]�ж����ȼ�����
-  * @param  ��
-  * @retval ��
+  * @brief  通用定时器 TIMx,x[6,7]中断优先级配置
+  * @param  无
+  * @retval 无
   */
 static void TIMx_NVIC_Configuration(void)
 {
-    /* �����ж����� */
+    /* 外设中断配置 */
     HAL_NVIC_SetPriority(GENERAL_TIM_IRQ, 0, 0);
     HAL_NVIC_EnableIRQ(GENERAL_TIM_IRQ);
 }
 
 /*
- * ע�⣺TIM_TimeBaseInitTypeDef�ṹ��������5����Ա��TIM6��TIM7�ļĴ�������ֻ��
- * TIM_Prescaler��TIM_Period������ʹ��TIM6��TIM7��ʱ��ֻ���ʼ����������Ա���ɣ�
- * ����������Ա��ͨ�ö�ʱ���͸߼���ʱ������.
+ * 注意：TIM_TimeBaseInitTypeDef结构体里面有5个成员，TIM6和TIM7的寄存器里面只有
+ * TIM_Prescaler和TIM_Period，所以使用TIM6和TIM7的时候只需初始化这两个成员即可，
+ * 另外三个成员是通用定时器和高级定时器才有.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ����
- * TIM_CounterMode			 TIMx,x[6,7]û�У��������У�ͨ�ö�ʱ����
- * TIM_Period            ����
- * TIM_ClockDivision     TIMx,x[6,7]û�У���������(ͨ�ö�ʱ��)
- * TIM_RepetitionCounter TIMx,x[1,8]����(�߼���ʱ��)
+ * TIM_Prescaler         都有
+ * TIM_CounterMode			 TIMx,x[6,7]没有，其他都有（通用定时器）
+ * TIM_Period            都有
+ * TIM_ClockDivision     TIMx,x[6,7]没有，其他都有(通用定时器)
+ * TIM_RepetitionCounter TIMx,x[1,8]才有(高级定时器)
  *-----------------------------------------------------------------------------
  */
 static void TIM_Mode_Config(void)
@@ -48,28 +48,28 @@ static void TIM_Mode_Config(void)
 	GENERAL_TIM_CLK_ENABLE();
 
   TIM_TimeBaseStructure.Instance = GENERAL_TIM;
-	/* �ۼ� TIM_Period�������һ�����»����ж�*/		
-  //����ʱ����0������4999����Ϊ5000�Σ�Ϊһ����ʱ����
+	/* 累计 TIM_Period个后产生一个更新或者中断*/		
+  //当定时器从0计数到4999，即为5000次，为一个定时周期
   TIM_TimeBaseStructure.Init.Period = 1000000-1;	
-	// ͨ�ÿ��ƶ�ʱ��ʱ��ԴTIMxCLK = HCLK/2=84MHz 
-	// �趨��ʱ��Ƶ��Ϊ=TIMxCLK/(TIM_Prescaler+1)=1MHz
+	// 通用控制定时器时钟源TIMxCLK = HCLK/2=84MHz 
+	// 设定定时器频率为=TIMxCLK/(TIM_Prescaler+1)=1MHz
   TIM_TimeBaseStructure.Init.Prescaler = 84-1;
 	
-	// ������ʽ
+	// 计数方式
 	TIM_TimeBaseStructure.Init.CounterMode=TIM_COUNTERMODE_UP;
-	// ����ʱ�ӷ�Ƶ
+	// 采样时钟分频
 	TIM_TimeBaseStructure.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-	// ��ʼ����ʱ��TIMx, x[2,5] [9,14]
+	// 初始化定时器TIMx, x[2,5] [9,14]
 	HAL_TIM_Base_Init(&TIM_TimeBaseStructure);
 
-	// ������ʱ�������ж�
+	// 开启定时器更新中断
 	HAL_TIM_Base_Start_IT(&TIM_TimeBaseStructure);	
 }
 
 /**
-  * @brief  ��ʼ��ͨ�ö�ʱ����ʱ
-  * @param  ��
-  * @retval ��
+  * @brief  初始化通用定时器定时
+  * @param  无
+  * @retval 无
   */
 void TIMx_Configuration(void)
 {

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2016-xx-xx
-  * @brief   Ê¹ÓÃ´®¿Ú1£¬ÖØ¶¨Ïòc¿âprintfº¯Êıµ½usart¶Ë¿Ú£¬ÖĞ¶Ï½ÓÊÕÄ£Ê½
+  * @brief   ä½¿ç”¨ä¸²å£1ï¼Œé‡å®šå‘cåº“printfå‡½æ•°åˆ°usartç«¯å£ï¼Œä¸­æ–­æ¥æ”¶æ¨¡å¼
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç« STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */ 
@@ -24,17 +24,17 @@
 extern _pid pid;
 UART_HandleTypeDef UartHandle;
 
-//´®¿Ú½ÓÊÕÊı×é
+//ä¸²å£æ¥æ”¶æ•°ç»„
 unsigned char UART_RxBuffer[UART_RX_BUFFER_SIZE];
-//´®¿Ú½ÓÊÕÊı×éÖ¸Õë
+//ä¸²å£æ¥æ”¶æ•°ç»„æŒ‡é’ˆ
 unsigned char UART_RxPtr;
-/* ÃüÁî½ÓÊÕÍê³É */
+/* å‘½ä»¤æ¥æ”¶å®Œæˆ */
 uint8_t receive_cmd = 0;
 
  /**
-  * @brief  DEBUG_USART GPIO ÅäÖÃ,¹¤×÷Ä£Ê½ÅäÖÃ¡£115200 8-N-1
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  DEBUG_USART GPIO é…ç½®,å·¥ä½œæ¨¡å¼é…ç½®ã€‚115200 8-N-1
+  * @param  æ— 
+  * @retval æ— 
   */  
 void DEBUG_USART_Config(void)
 { 
@@ -50,20 +50,20 @@ void DEBUG_USART_Config(void)
   
   HAL_UART_Init(&UartHandle);
     
-  /* Ê¹ÄÜ´®¿Ú¿ÕÏĞ¶Ï */
+  /* ä½¿èƒ½ä¸²å£ç©ºé—²æ–­ */
   __HAL_UART_ENABLE_IT(&UartHandle, USART_IT_IDLE);
   
   HAL_UART_Receive_IT(&UartHandle, UART_RxBuffer, sizeof(UART_RxBuffer));
   
-  HAL_NVIC_SetPriority(DEBUG_USART_IRQ, 2, 0);	// ÇÀÕ¼ÓÅÏÈ¼¶0£¬×ÓÓÅÏÈ¼¶1
-  HAL_NVIC_EnableIRQ(DEBUG_USART_IRQ );		      // Ê¹ÄÜUSART1ÖĞ¶ÏÍ¨µÀ 
+  HAL_NVIC_SetPriority(DEBUG_USART_IRQ, 2, 0);	// æŠ¢å ä¼˜å…ˆçº§0ï¼Œå­ä¼˜å…ˆçº§1
+  HAL_NVIC_EnableIRQ(DEBUG_USART_IRQ );		      // ä½¿èƒ½USART1ä¸­æ–­é€šé“ 
 }
 
 
 /**
-  * @brief UART MSP ³õÊ¼»¯ 
+  * @brief UART MSP åˆå§‹åŒ– 
   * @param huart: UART handle
-  * @retval ÎŞ
+  * @retval æ— 
   */
 void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 {  
@@ -78,7 +78,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   PA9     ------> USART1_TX
   PA10    ------> USART1_RX 
   */
-  /* ÅäÖÃTxÒı½ÅÎª¸´ÓÃ¹¦ÄÜ  */
+  /* é…ç½®Txå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½  */
   GPIO_InitStruct.Pin = DEBUG_USART_TX_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -86,26 +86,26 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
   GPIO_InitStruct.Alternate = DEBUG_USART_TX_AF;
   HAL_GPIO_Init(DEBUG_USART_TX_GPIO_PORT, &GPIO_InitStruct);
   
-  /* ÅäÖÃRxÒı½ÅÎª¸´ÓÃ¹¦ÄÜ */
+  /* é…ç½®Rxå¼•è„šä¸ºå¤ç”¨åŠŸèƒ½ */
   GPIO_InitStruct.Pin = DEBUG_USART_RX_PIN;
   GPIO_InitStruct.Alternate = DEBUG_USART_RX_AF;
   HAL_GPIO_Init(DEBUG_USART_RX_GPIO_PORT, &GPIO_InitStruct); 
 }
 
-//Çå¿Õ½ÓÊÕ»º³å
+//æ¸…ç©ºæ¥æ”¶ç¼“å†²
 void uart_FlushRxBuffer(void)
 {
   UART_RxPtr = 0;
   UART_RxBuffer[UART_RxPtr] = 0;
 }
 
-/*****************  ·¢ËÍ×Ö·û **********************/
+/*****************  å‘é€å­—ç¬¦ **********************/
 void Usart_SendByte(uint8_t str)
 {
   HAL_UART_Transmit(&UartHandle, &str, 1, 1000);
 }
 
-/*****************  ·¢ËÍ×Ö·û´® **********************/
+/*****************  å‘é€å­—ç¬¦ä¸² **********************/
 void Usart_SendString(uint8_t *str)
 {
 	unsigned int k=0;
@@ -116,16 +116,16 @@ void Usart_SendString(uint8_t *str)
   } while(*(str + k)!='\0');
 }
 
-///ÖØ¶¨Ïòc¿âº¯Êıprintfµ½´®¿ÚDEBUG_USART£¬ÖØ¶¨Ïòºó¿ÉÊ¹ÓÃprintfº¯Êı
+///é‡å®šå‘cåº“å‡½æ•°printfåˆ°ä¸²å£DEBUG_USARTï¼Œé‡å®šå‘åå¯ä½¿ç”¨printfå‡½æ•°
 int fputc(int ch, FILE *f)
 {
-	/* ·¢ËÍÒ»¸ö×Ö½ÚÊı¾İµ½´®¿ÚDEBUG_USART */
+	/* å‘é€ä¸€ä¸ªå­—èŠ‚æ•°æ®åˆ°ä¸²å£DEBUG_USART */
 	HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 1000);	
 	
 	return (ch);
 }
 
-///ÖØ¶¨Ïòc¿âº¯Êıscanfµ½´®¿ÚDEBUG_USART£¬ÖØĞ´Ïòºó¿ÉÊ¹ÓÃscanf¡¢getcharµÈº¯Êı
+///é‡å®šå‘cåº“å‡½æ•°scanfåˆ°ä¸²å£DEBUG_USARTï¼Œé‡å†™å‘åå¯ä½¿ç”¨scanfã€getcharç­‰å‡½æ•°
 int fgetc(FILE *f)
 {
 		
@@ -135,10 +135,10 @@ int fgetc(FILE *f)
 }
 
 /**
-  * @brief ¼ÆËãĞ£ÑéºÍ
-  * @param ptr£ºĞèÒª¼ÆËãµÄÊı¾İ
-  * @param len£ºĞèÒª¼ÆËãµÄ³¤¶È
-  * @retval Ğ£ÑéºÍ
+  * @brief è®¡ç®—æ ¡éªŒå’Œ
+  * @param ptrï¼šéœ€è¦è®¡ç®—çš„æ•°æ®
+  * @param lenï¼šéœ€è¦è®¡ç®—çš„é•¿åº¦
+  * @retval æ ¡éªŒå’Œ
   */
 uint8_t check_sum(uint8_t init, uint8_t *ptr, uint8_t len )
 {
@@ -154,37 +154,37 @@ uint8_t check_sum(uint8_t init, uint8_t *ptr, uint8_t len )
 }
 
 /**
-  * @brief ÉèÖÃÉÏÎ»»úµÄÖµ
-  * @param cmd£ºÃüÁî
-  * @param ch: ÇúÏßÍ¨µÀ
-  * @param data£º²ÎÊıÖ¸Õë
-  * @param num£º²ÎÊı¸öÊı
-  * @retval ÎŞ
+  * @brief è®¾ç½®ä¸Šä½æœºçš„å€¼
+  * @param cmdï¼šå‘½ä»¤
+  * @param ch: æ›²çº¿é€šé“
+  * @param dataï¼šå‚æ•°æŒ‡é’ˆ
+  * @param numï¼šå‚æ•°ä¸ªæ•°
+  * @retval æ— 
   */
 void set_computer_value(uint8_t cmd, uint8_t ch, void *data, uint8_t num)
 {
-  uint8_t sum = 0;    // Ğ£ÑéºÍ
-  num *= 4;           // Ò»¸ö²ÎÊı 4 ¸ö×Ö½Ú
+  uint8_t sum = 0;    // æ ¡éªŒå’Œ
+  num *= 4;           // ä¸€ä¸ªå‚æ•° 4 ä¸ªå­—èŠ‚
   
   static packet_head_t set_packet;
   
-  set_packet.head = PACKET_HEAD;     // °üÍ· 0x59485A53
-  set_packet.len  = 0x0B + num;      // °ü³¤
-  set_packet.ch   = ch;              // ÉèÖÃÍ¨µÀ
-  set_packet.cmd  = cmd;             // ÉèÖÃÃüÁî
+  set_packet.head = PACKET_HEAD;     // åŒ…å¤´ 0x59485A53
+  set_packet.len  = 0x0B + num;      // åŒ…é•¿
+  set_packet.ch   = ch;              // è®¾ç½®é€šé“
+  set_packet.cmd  = cmd;             // è®¾ç½®å‘½ä»¤
   
-  sum = check_sum(0, (uint8_t *)&set_packet, sizeof(set_packet));       // ¼ÆËã°üÍ·Ğ£ÑéºÍ
-  sum = check_sum(sum, (uint8_t *)data, num);                           // ¼ÆËã²ÎÊıĞ£ÑéºÍ
+  sum = check_sum(0, (uint8_t *)&set_packet, sizeof(set_packet));       // è®¡ç®—åŒ…å¤´æ ¡éªŒå’Œ
+  sum = check_sum(sum, (uint8_t *)data, num);                           // è®¡ç®—å‚æ•°æ ¡éªŒå’Œ
   
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)&set_packet, sizeof(set_packet), 0xFFFFF);    // ·¢ËÍÊı¾İÍ·
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)data, num, 0xFFFFF);                          // ·¢ËÍ²ÎÊı
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)&sum, sizeof(sum), 0xFFFFF);                  // ·¢ËÍĞ£ÑéºÍ
+  HAL_UART_Transmit(&UartHandle, (uint8_t *)&set_packet, sizeof(set_packet), 0xFFFFF);    // å‘é€æ•°æ®å¤´
+  HAL_UART_Transmit(&UartHandle, (uint8_t *)data, num, 0xFFFFF);                          // å‘é€å‚æ•°
+  HAL_UART_Transmit(&UartHandle, (uint8_t *)&sum, sizeof(sum), 0xFFFFF);                  // å‘é€æ ¡éªŒå’Œ
 }
 
 /**
-  * @brief Í¬²½ÉÏÎ»»úµÄÖµ
-  * @param ÎŞ
-  * @retval ÎŞ
+  * @brief åŒæ­¥ä¸Šä½æœºçš„å€¼
+  * @param æ— 
+  * @retval æ— 
   */
 void sync_computer_value(void)
 {
@@ -195,24 +195,24 @@ extern int pid_status;
 extern float set_point;
 
 /**
-  * @brief ½âÎö´®¿Ú½ÓÊÕµ½µÄÊı¾İ
-  * @param cmd£ºÃüÁî
-  * @param ch: ÇúÏßÍ¨µÀ
-  * @param data£ºÊı¾İ
-  * @retval ÎŞ
+  * @brief è§£æä¸²å£æ¥æ”¶åˆ°çš„æ•°æ®
+  * @param cmdï¼šå‘½ä»¤
+  * @param ch: æ›²çº¿é€šé“
+  * @param dataï¼šæ•°æ®
+  * @retval æ— 
   */
 void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *husart)
 {
   packet_head_t packet;
     
   packet.cmd = UART_RxBuffer[CMD_INDEX_VAL];
-  packet.len  = COMPOUND_32BIT(&UART_RxBuffer[LEN_INDEX_VAL]);     // ºÏ³É³¤¶È
-  packet.head = COMPOUND_32BIT(&UART_RxBuffer[HEAD_INDEX_VAL]);    // ºÏ³É°üÍ·
+  packet.len  = COMPOUND_32BIT(&UART_RxBuffer[LEN_INDEX_VAL]);     // åˆæˆé•¿åº¦
+  packet.head = COMPOUND_32BIT(&UART_RxBuffer[HEAD_INDEX_VAL]);    // åˆæˆåŒ…å¤´
   
-  if (packet.head == PACKET_HEAD)    // ¼ì²é°üÍ·
+  if (packet.head == PACKET_HEAD)    // æ£€æŸ¥åŒ…å¤´
   {
-    /* °üÍ·ÕıÈ· */
-    if (check_sum(0, UART_RxBuffer, packet.len - 1) == UART_RxBuffer[packet.len - 1])    // ¼ì²éĞ£ÑéºÍÊÇ·ñÕıÈ·
+    /* åŒ…å¤´æ­£ç¡® */
+    if (check_sum(0, UART_RxBuffer, packet.len - 1) == UART_RxBuffer[packet.len - 1])    // æ£€æŸ¥æ ¡éªŒå’Œæ˜¯å¦æ­£ç¡®
     {
       switch(packet.cmd)
       {
@@ -228,40 +228,40 @@ void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *husart)
           i_temp = *(float *)&temp1;
           d_temp = *(float *)&temp2;
           
-          set_p_i_d(p_temp, i_temp, d_temp);    // ÉèÖÃ P I D
+          set_p_i_d(p_temp, i_temp, d_temp);    // è®¾ç½® P I D
         }
         break;
 
         case SET_TARGET_CMD:
         {
-          int actual_temp = COMPOUND_32BIT(&UART_RxBuffer[13]);    // µÃµ½Êı¾İ
+          int actual_temp = COMPOUND_32BIT(&UART_RxBuffer[13]);    // å¾—åˆ°æ•°æ®
 
-          pid.target_val = actual_temp;    // ÉèÖÃÄ¿±êÖµ
+          pid.target_val = actual_temp;    // è®¾ç½®ç›®æ ‡å€¼
         }
         break;
         
         case START_CMD:
         {
-          Set_Stepper_Start();             // Æô¶¯
+          Set_Stepper_Start();             // å¯åŠ¨
         }
         break;
         
         case STOP_CMD:
         {
-          Set_Stepper_Stop();              // Í£Ö¹
+          Set_Stepper_Stop();              // åœæ­¢
         }
         break;
         
         case RESET_CMD:
         {
-          HAL_NVIC_SystemReset();          // ¸´Î»ÏµÍ³
+          HAL_NVIC_SystemReset();          // å¤ä½ç³»ç»Ÿ
         }
         break;
         
         case SET_PERIOD_CMD:
         {
-          uint32_t temp = COMPOUND_32BIT(&UART_RxBuffer[13]);     // ÖÜÆÚÊı
-          SET_BASIC_TIM_PERIOD(temp);                             // ÉèÖÃ¶¨Ê±Æ÷ÖÜÆÚ1~1000ms
+          uint32_t temp = COMPOUND_32BIT(&UART_RxBuffer[13]);     // å‘¨æœŸæ•°
+          SET_BASIC_TIM_PERIOD(temp);                             // è®¾ç½®å®šæ—¶å™¨å‘¨æœŸ1~1000ms
         }
         break;
       }

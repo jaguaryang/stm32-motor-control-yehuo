@@ -181,7 +181,7 @@ void SysTick_Handler(void)
 {
 }*/
 
-// ´®¿ÚÖĞ¶Ï·şÎñº¯Êı
+// ä¸²å£ä¸­æ–­æœåŠ¡å‡½æ•°
 
 void DEBUG_USART_IRQHandler(void)
 {
@@ -192,7 +192,7 @@ void DEBUG_USART_IRQHandler(void)
 }
 
 /**
-  * @brief ±àÂëÆ÷½Ó¿ÚÖĞ¶Ï·şÎñº¯Êı
+  * @brief ç¼–ç å™¨æ¥å£ä¸­æ–­æœåŠ¡å‡½æ•°
   */
 void ENCODER_TIM_IRQHandler(void)
 {
@@ -210,20 +210,20 @@ void BASIC_TIM_IRQHandler (void)
 }
 
 /**
-  * @brief  ¶¨Ê±Æ÷¸üĞÂÊÂ¼ş»Øµ÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  å®šæ—¶å™¨æ›´æ–°äº‹ä»¶å›è°ƒå‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if(htim==(&TIM_EncoderHandle))
   {
-    /* ÅĞ¶Ïµ±Ç°¼ÆÊıÆ÷¼ÆÊı·½Ïò */
+    /* åˆ¤æ–­å½“å‰è®¡æ•°å™¨è®¡æ•°æ–¹å‘ */
     if(__HAL_TIM_IS_TIM_COUNTING_DOWN(&TIM_EncoderHandle))
-      /* ÏÂÒç */
+      /* ä¸‹æº¢ */
       Encoder_Overflow_Count--;
     else
-      /* ÉÏÒç */
+      /* ä¸Šæº¢ */
       Encoder_Overflow_Count++;
   }
   else if(htim==(&TIM_TimeBaseStructure))

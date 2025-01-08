@@ -5,14 +5,14 @@
 #include "./protocol/protocol.h"
 #include <stdio.h>
 
-//¥Æø⁄≤®Ãÿ¬ 
+//‰∏≤Âè£Ê≥¢ÁâπÁéá
 #define DEBUG_USART_BAUDRATE                    115200
 
 //#define RS232
 #define USB_TO_UART
 
 #ifdef RS232
-  //“˝Ω≈∂®“Â
+  //ÂºïËÑöÂÆö‰πâ
   /*******************************************************/
   #define DEBUG_USART                             USART3
   #define DEBUG_USART_CLK_ENABLE()                __USART3_CLK_ENABLE();
@@ -34,7 +34,7 @@
   #define DEBUG_USART_IRQ                 		    USART3_IRQn
   /************************************************************/
 #else
-  //“˝Ω≈∂®“Â
+  //ÂºïËÑöÂÆö‰πâ
   /*******************************************************/
   #define DEBUG_USART                             USART1
   #define DEBUG_USART_CLK_ENABLE()                __USART1_CLK_ENABLE();

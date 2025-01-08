@@ -584,7 +584,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 /**
-  * @brief SD ¿ØÖÆÒý½Å³õÊ¼»¯£¬²¢Ä¬ÈÏÊ¹ÄÜ
+  * @brief SD æŽ§åˆ¶å¼•è„šåˆå§‹åŒ–ï¼Œå¹¶é»˜è®¤ä½¿èƒ½
   * @param None
   * @retval None
   */
@@ -592,21 +592,21 @@ static void sd_gpio_config(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   
-  /* ¶¨Ê±Æ÷Í¨µÀ¹¦ÄÜÒý½Å¶Ë¿ÚÊ±ÖÓÊ¹ÄÜ */
+  /* å®šæ—¶å™¨é€šé“åŠŸèƒ½å¼•è„šç«¯å£æ—¶é’Ÿä½¿èƒ½ */
 	__HAL_RCC_GPIOG_CLK_ENABLE();
   
-  /* Òý½ÅIO³õÊ¼»¯ */
-	/*ÉèÖÃÊä³öÀàÐÍ*/
+  /* å¼•è„šIOåˆå§‹åŒ– */
+	/*è®¾ç½®è¾“å‡ºç±»åž‹*/
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	/*ÉèÖÃÒý½ÅËÙÂÊ */ 
+	/*è®¾ç½®å¼•è„šé€ŸçŽ‡ */ 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-	/*Ñ¡ÔñÒª¿ØÖÆµÄGPIOÒý½Å*/	
+	/*é€‰æ‹©è¦æŽ§åˆ¶çš„GPIOå¼•è„š*/	
 	GPIO_InitStruct.Pin = M1_SD_Pin;
   
-	/*µ÷ÓÃ¿âº¯Êý£¬Ê¹ÓÃÉÏÃæÅäÖÃµÄGPIO_InitStructure³õÊ¼»¯GPIO*/
+	/*è°ƒç”¨åº“å‡½æ•°ï¼Œä½¿ç”¨ä¸Šé¢é…ç½®çš„GPIO_InitStructureåˆå§‹åŒ–GPIO*/
   HAL_GPIO_Init(M1_SD_GPIO_Port, &GPIO_InitStruct);
   
-  HAL_GPIO_WritePin(M1_SD_GPIO_Port, M1_SD_Pin, GPIO_PIN_SET);      // ¸ßµçÆ½´ò¿ª-¸ßµçÆ½Ê¹ÄÜ 
+  HAL_GPIO_WritePin(M1_SD_GPIO_Port, M1_SD_Pin, GPIO_PIN_SET);      // é«˜ç”µå¹³æ‰“å¼€-é«˜ç”µå¹³ä½¿èƒ½ 
 }
 /* USER CODE END 4 */
 

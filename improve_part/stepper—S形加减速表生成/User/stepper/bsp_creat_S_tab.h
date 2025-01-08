@@ -9,18 +9,18 @@
 #include "string.h"
 
 #define FORM_LEN 	   1000
-#define MICRO_STEP     32    // Çı¶¯Æ÷Ï¸·ÖÊı
-#define FSPR           200   // ²½½øµç»úµ¥È¦²½Êı
-#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // ¸ù¾İµç»ú×ªËÙ£¨r/min£©£¬¼ÆËãµç»ú²½ËÙ£¨step/s£©
+#define MICRO_STEP     32    // é©±åŠ¨å™¨ç»†åˆ†æ•°
+#define FSPR           200   // æ­¥è¿›ç”µæœºå•åœˆæ­¥æ•°
+#define CONVER(speed)  ((speed) * FSPR * MICRO_STEP / 60)  // æ ¹æ®ç”µæœºè½¬é€Ÿï¼ˆr/minï¼‰ï¼Œè®¡ç®—ç”µæœºæ­¥é€Ÿï¼ˆstep/sï¼‰
 
 
 typedef struct 
 {
-	int		Vo;  //³õËÙ¶È µ¥Î» Step/s
-	int		Vt;  //Ä©ËÙ¶È µ¥Î» Step/s
-	int		AccelHalfStep;   //¼ÓËÙ½×¶Î°ëÂ·³Ì	µ¥Î» Step   
-	int		AccelTotalStep;  //×ÜÂ·³Ì£¬¼ÓËÙ½×¶Î×Ü²½Êı Step
-	float   Form[FORM_LEN]; // ËÙ¶È±í¸ñ µ¥Î» Step/s
+	int		Vo;  //åˆé€Ÿåº¦ å•ä½ Step/s
+	int		Vt;  //æœ«é€Ÿåº¦ å•ä½ Step/s
+	int		AccelHalfStep;   //åŠ é€Ÿé˜¶æ®µåŠè·¯ç¨‹	å•ä½ Step   
+	int		AccelTotalStep;  //æ€»è·¯ç¨‹ï¼ŒåŠ é€Ÿé˜¶æ®µæ€»æ­¥æ•° Step
+	float   Form[FORM_LEN]; // é€Ÿåº¦è¡¨æ ¼ å•ä½ Step/s
 	
 }Speed_s;
 

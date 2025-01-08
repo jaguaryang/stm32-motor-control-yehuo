@@ -4,11 +4,11 @@
   * @author  LONGZR
   * @brief   This file contains all definitions and functions prototypes for the
   *          BusVoltageSensor component of the Motor Control SDK, 
-  *          在这里实现了ST MC SDK不一样的部分，重新写电压获取函数.
+  *          鍦ㄨ繖閲屽疄鐜颁簡ST MC SDK涓嶄竴鏍风殑閮ㄥ垎锛岄噸鏂板啓鐢靛帇鑾峰彇鍑芥暟.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 野火电子.
+  * <h2><center>&copy; Copyright (c) 2020 閲庣伀鐢靛瓙.
   * All rights reserved.</center></h2>
   *
   ******************************************************************************

@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ´®¿Ú¿ØÖÆ
+  * @brief   ä¸²å£æ§åˆ¶
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -21,78 +21,78 @@ void ShowHelp(void);
 void ShowData(int position, int accel_val, int decel_val, int speed, int steps);
 void MSD_demo_run(void);
 
-/*! \brief ´òÓ¡°ïÖúÃüÁî
+/*! \brief æ‰“å°å¸®åŠ©å‘½ä»¤
  */
 void ShowHelp(void)
 {
-    printf("\n\r¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ªÒ°»ğ²½½øµç»úÌİĞÎ¼Ó¼õËÙÑİÊ¾³ÌĞò¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª");
-    printf("\n\rÊäÈëÃüÁî£º");
-    printf("\n\r< ? >       -°ïÖú²Ëµ¥");
-    printf("\n\ra[data]     -ÉèÖÃ²½½øµç»úµÄ¼ÓËÙ¶È£¨·¶Î§£º71¡ª32000£©µ¥Î»Îª£º0.01rad/s^2");
-    printf("\n\rd[data]     -ÉèÖÃ²½½øµç»úµÄ¼õËÙ¶È£¨·¶Î§£º71¡ª32000£©µ¥Î»Îª£º0.01rad/s^2");
-    printf("\n\rs[data]     -ÉèÖÃ²½½øµç»úµÄ×î´óËÙ¶È£¨·¶Î§£º12¡ª3000£©µ¥Î»Îª£º0.01rad/s");
-    printf("\n\rm[data]     -ÒÔÉè¶¨µÄ²½ÊıÒÆ¶¯²½½øµç»ú£¨·¶Î§£º-2147483647¡ª2147483647£¬ÆäÖĞÕıÊıÎªË³Ê±Õë£¬¸ºÊıÎªÄæÊ±Õë£©");
+    printf("\n\râ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”é‡ç«æ­¥è¿›ç”µæœºæ¢¯å½¢åŠ å‡é€Ÿæ¼”ç¤ºç¨‹åºâ€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”â€”");
+    printf("\n\rè¾“å…¥å‘½ä»¤ï¼š");
+    printf("\n\r< ? >       -å¸®åŠ©èœå•");
+    printf("\n\ra[data]     -è®¾ç½®æ­¥è¿›ç”µæœºçš„åŠ é€Ÿåº¦ï¼ˆèŒƒå›´ï¼š71â€”32000ï¼‰å•ä½ä¸ºï¼š0.01rad/s^2");
+    printf("\n\rd[data]     -è®¾ç½®æ­¥è¿›ç”µæœºçš„å‡é€Ÿåº¦ï¼ˆèŒƒå›´ï¼š71â€”32000ï¼‰å•ä½ä¸ºï¼š0.01rad/s^2");
+    printf("\n\rs[data]     -è®¾ç½®æ­¥è¿›ç”µæœºçš„æœ€å¤§é€Ÿåº¦ï¼ˆèŒƒå›´ï¼š12â€”3000ï¼‰å•ä½ä¸ºï¼š0.01rad/s");
+    printf("\n\rm[data]     -ä»¥è®¾å®šçš„æ­¥æ•°ç§»åŠ¨æ­¥è¿›ç”µæœºï¼ˆèŒƒå›´ï¼š-2147483647â€”2147483647ï¼Œå…¶ä¸­æ­£æ•°ä¸ºé¡ºæ—¶é’ˆï¼Œè´Ÿæ•°ä¸ºé€†æ—¶é’ˆï¼‰");
   
     printf("\n\rmove [steps] [accel] [decel] [speed]");
-    printf("\n\r            -ÒÔÉè¶¨µÄ²½Êı¡¢¼ÓËÙ¶È£¬¼õËÙ¶È£¬×î´óËÙ¶È¿ªÊ¼ÔË¶¯");
-    printf("\n\r<Enter¼ü>   -ÖØ¸´×îºóÒ»´Î¶¯×÷");
-    printf("\n\r¿ª·¢°å°´¼ü£¬KEY1£ºÇı¶¯Æ÷½ûÖ¹Êä³ö(ÍÑ»ú×´Ì¬)  KEY2£ºÇı¶¯Æ÷»Ö¸´Õı³£¹¤×÷\n\r ");
+    printf("\n\r            -ä»¥è®¾å®šçš„æ­¥æ•°ã€åŠ é€Ÿåº¦ï¼Œå‡é€Ÿåº¦ï¼Œæœ€å¤§é€Ÿåº¦å¼€å§‹è¿åŠ¨");
+    printf("\n\r<Enteré”®>   -é‡å¤æœ€åä¸€æ¬¡åŠ¨ä½œ");
+    printf("\n\rå¼€å‘æ¿æŒ‰é”®ï¼ŒKEY1ï¼šé©±åŠ¨å™¨ç¦æ­¢è¾“å‡º(è„±æœºçŠ¶æ€)  KEY2ï¼šé©±åŠ¨å™¨æ¢å¤æ­£å¸¸å·¥ä½œ\n\r ");
     
 }
 
-/*! \brief ´òÓ¡µç»ú²ÎÊı
- *  \param accel_val ¼ÓËÙ¶È
- *  \param decel_val ¼õËÙ¶È
- *  \param speed        ×î´óËÙ¶È
- *  \param steps        ÒÆ¶¯²½Êı
+/*! \brief æ‰“å°ç”µæœºå‚æ•°
+ *  \param accel_val åŠ é€Ÿåº¦
+ *  \param decel_val å‡é€Ÿåº¦
+ *  \param speed        æœ€å¤§é€Ÿåº¦
+ *  \param steps        ç§»åŠ¨æ­¥æ•°
  */
 void ShowData(int position, int accel_val, int decel_val, int speed, int steps)
 {
-  printf("\n\r¼ÓËÙ¶È:%.2frad/s^2",1.0*accel_val/100);
-  printf("  ¼õËÙ¶È:%.2frad/s^2",1.0*decel_val/100);
-  printf("  ×î´óËÙ¶È:%.2frad/s(%.2frpm)",1.0*speed/100,9.55*speed/100);
-  printf("  ÒÆ¶¯²½Êı:%d",steps);
-  printf("\n\rµç»úµ±Ç°Î»ÖÃ: %d\r\n",position);
+  printf("\n\råŠ é€Ÿåº¦:%.2frad/s^2",1.0*accel_val/100);
+  printf("  å‡é€Ÿåº¦:%.2frad/s^2",1.0*decel_val/100);
+  printf("  æœ€å¤§é€Ÿåº¦:%.2frad/s(%.2frpm)",1.0*speed/100,9.55*speed/100);
+  printf("  ç§»åŠ¨æ­¥æ•°:%d",steps);
+  printf("\n\rç”µæœºå½“å‰ä½ç½®: %d\r\n",position);
 }
 
 
 /**
-  * @brief  ´¦Àí´®¿Ú½ÓÊÕµ½µÄÊı¾İ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  å¤„ç†ä¸²å£æ¥æ”¶åˆ°çš„æ•°æ®
+  * @param  æ— 
+  * @retval æ— 
   */
 void DealSerialData(void)
 {
     static char showflag =1;
-    //Ä¬ÈÏÒÆ¶¯²½Êı
+    //é»˜è®¤ç§»åŠ¨æ­¥æ•°
     static int steps = SPR*5;
-    //Ä¬ÈÏ¼ÓËÙ¶È
+    //é»˜è®¤åŠ é€Ÿåº¦
     static int accel_val = 500;
-    //Ä¬ÈÏ¼õËÙ¶È
+    //é»˜è®¤å‡é€Ÿåº¦
     static int decel_val = 100;
-    //Ä¬ÈÏ×î´óËÙ¶È
+    //é»˜è®¤æœ€å¤§é€Ÿåº¦
     static int speed = 5000;
     
     int acc_temp=0;
     int dec_temp=0;
     int speed_temp=0;
     
-    //½ÓÊÕµ½ÕıÈ·µÄÖ¸Áî²ÅÎªTRUE
+    //æ¥æ”¶åˆ°æ­£ç¡®çš„æŒ‡ä»¤æ‰ä¸ºTRUE
     char okCmd = FALSE;
     if(showflag)
     {
       showflag = 0;
       ShowData(stepPosition, accel_val, decel_val, speed, steps);
     }
-    //¼ì²éÊÇ·ñ½ÓÊÕµ½Ö¸Áî
+    //æ£€æŸ¥æ˜¯å¦æ¥æ”¶åˆ°æŒ‡ä»¤
     if(status.cmd == TRUE)
     {        
       if(UART_RxBuffer[0] == 'm')
       {
-        //ÒÔ¹Ì¶¨²½ÊıÒÆ¶¯
+        //ä»¥å›ºå®šæ­¥æ•°ç§»åŠ¨
         if(UART_RxBuffer[1] == ' ')
         {
-          //´Ó´®¿Ú»ñÈ¡²½Êı
+          //ä»ä¸²å£è·å–æ­¥æ•°
           steps = atoi((char const *)UART_RxBuffer+2);
           stepper_move_T(steps, accel_val, decel_val, speed);
           okCmd = TRUE;
@@ -104,7 +104,7 @@ void DealSerialData(void)
           {
             if(UART_RxBuffer[3] == 'e')
             {
-              //ÉèÖÃ²½Êı¡¢¼ÓËÙ¶È¡¢¼õËÙ¶È¡¢×î´óËÙ¶È
+              //è®¾ç½®æ­¥æ•°ã€åŠ é€Ÿåº¦ã€å‡é€Ÿåº¦ã€æœ€å¤§é€Ÿåº¦
               if(UART_RxBuffer[4] == ' ')
               {
                 int i = 6;
@@ -128,79 +128,79 @@ void DealSerialData(void)
       }
       else if(UART_RxBuffer[0] == 'a')
       {
-        //ÉèÖÃ¼ÓËÙ¶È
+        //è®¾ç½®åŠ é€Ÿåº¦
         if(UART_RxBuffer[1] == ' ')
         {
           acc_temp = atoi((char const *)UART_RxBuffer+2);
           if(acc_temp>=71 && acc_temp<=32000)
           {
             accel_val = acc_temp;
-            printf("\n\r¼ÓËÙ¶È:%.2frad/s^2",1.0*accel_val/100);
+            printf("\n\råŠ é€Ÿåº¦:%.2frad/s^2",1.0*accel_val/100);
             okCmd = TRUE;
           }
         }
       }
       else if(UART_RxBuffer[0] == 'd')
       {
-        //ÉèÖÃ¼õËÙ¶È
+        //è®¾ç½®å‡é€Ÿåº¦
         if(UART_RxBuffer[1] == ' ')
         {
           dec_temp = atoi((char const *)UART_RxBuffer+2);
           if(dec_temp>=71 && dec_temp<=32000)
           {
             decel_val = dec_temp;
-            printf("\n\r¼õËÙ¶È:%.2frad/s^2",1.0*decel_val/100);
+            printf("\n\rå‡é€Ÿåº¦:%.2frad/s^2",1.0*decel_val/100);
             okCmd = TRUE;
           }
         }
       }
       else if(UART_RxBuffer[0] == 's')
       {
-        //ÉèÖÃ×î´óËÙ¶È
+        //è®¾ç½®æœ€å¤§é€Ÿåº¦
         if(UART_RxBuffer[1] == ' ')
         {
           speed_temp = atoi((char const *)UART_RxBuffer+2);
           if(speed_temp>=12 && speed_temp<=20000)
           {
             speed = speed_temp;
-            printf("\n\r×î´óËÙ¶È:%.2frad/s",1.0*speed/100);
+            printf("\n\ræœ€å¤§é€Ÿåº¦:%.2frad/s",1.0*speed/100);
             okCmd = TRUE;
           }
         }
       }
       else if(UART_RxBuffer[0] == 13)
       {
-        //Èç¹ûÊÇ»Ø³µ¼üÖ±½ÓÖØ¸´ÉÏÒ»´ÎÔË¶¯
+        //å¦‚æœæ˜¯å›è½¦é”®ç›´æ¥é‡å¤ä¸Šä¸€æ¬¡è¿åŠ¨
         stepper_move_T(steps, accel_val, decel_val, speed);
         okCmd = TRUE;
       }
       else if(UART_RxBuffer[0] == '?')
       {
-        //´òÓ¡°ïÖúÃüÁî
+        //æ‰“å°å¸®åŠ©å‘½ä»¤
         ShowHelp();
         okCmd = TRUE;
       }
       else if(UART_RxBuffer[0] == 't')
       {
-        //²½½øµç»ú²âÊÔÖ¸Áî
+        //æ­¥è¿›ç”µæœºæµ‹è¯•æŒ‡ä»¤
         MSD_demo_run();         
         okCmd = TRUE;
       }
-      //Èç¹ûÖ¸ÁîÓĞÎŞÔò´òÓ¡°ïÖúÃüÁî
+      //å¦‚æœæŒ‡ä»¤æœ‰æ— åˆ™æ‰“å°å¸®åŠ©å‘½ä»¤
       if(okCmd != TRUE)
       {
-        printf("\n\r ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë...");
+        printf("\n\r è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥...");
         ShowHelp();
       }
 
-      //Çå¿Õ´®¿Ú½ÓÊÕ»º³åÊı×é
+      //æ¸…ç©ºä¸²å£æ¥æ”¶ç¼“å†²æ•°ç»„
       status.cmd = FALSE;
       uart_FlushRxBuffer();
 
       if(status.running == TRUE)
       {
         if(status.out_ena == TRUE)
-            printf("\n\rµç»úÕıÔÚÔËĞĞ...");
+            printf("\n\rç”µæœºæ­£åœ¨è¿è¡Œ...");
         while(status.running == TRUE)
         {
           if(status.out_ena != TRUE)
@@ -220,9 +220,9 @@ void DealSerialData(void)
 
 
 /**
-  * @brief  Çı¶¯Æ÷ÔËĞĞÑİÊ¾
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é©±åŠ¨å™¨è¿è¡Œæ¼”ç¤º
+  * @param  æ— 
+  * @retval æ— 
   */
 void MSD_demo_run(void)
 {

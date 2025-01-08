@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2020-xx-xx
-  * @brief   ֱ��Բ���岹
+  * @brief   直线圆弧插补
   ******************************************************************************
   * @attention
   *
-  * ʵ��ƽ̨:Ұ��  STM32 F407 ������ 
-  * ��̳    :http://www.firebbs.cn
-  * �Ա�    :http://firestm32.taobao.com
+  * 实验平台:野火  STM32 F407 开发板 
+  * 论坛    :http://www.firebbs.cn
+  * 淘宝    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -27,32 +27,32 @@
 #include "./led/bsp_led.h"
 
 
-/* �����ٶ� */
+/* 进给速度 */
 #define INTERPOLATION_SPEED  1000
 
 /**
-  * @brief  ������
-  * @param  ��
-  * @retval ��
+  * @brief  主函数
+  * @param  无
+  * @retval 无
   */
 int main(void) 
 {
   HAL_InitTick(0);
-	/* ��ʼ��ϵͳʱ��Ϊ168MHz */
+	/* 初始化系统时钟为168MHz */
 	SystemClock_Config();
-	/*��ʼ��USART ����ģʽΪ 1156400 8-N-1���жϽ���*/
+	/*初始化USART 配置模式为 1156400 8-N-1，中断接收*/
 	DEBUG_USART_Config();
-	printf("��ӭʹ��Ұ�� ��������� ������� ֱ��Բ���岹 ����\r\n");
-  /* LED��ʼ�� */
+	printf("欢迎使用野火 电机开发板 步进电机 直线圆弧插补 例程\r\n");
+  /* LED初始化 */
   LED_GPIO_Config();
-  /* ������ʼ�� */
+  /* 按键初始化 */
   Key_GPIO_Config();
-  /*���������ʼ��*/
+  /*步进电机初始化*/
 	stepper_Init();
 
 	while(1)
 	{
-    /* Բ���岹 */
+    /* 圆弧插补 */
     if(Key_Scan(KEY2_GPIO_PORT, KEY2_PIN) == KEY_ON)
     {
       Circular_InterPolation(6400 * 10, 0, 0, -6400 * 10, INTERPOLATION_SPEED, CW);
@@ -64,7 +64,7 @@ int main(void)
       Circular_InterPolation(0, 6400 * 10, 6400 * 10, 0, INTERPOLATION_SPEED, CW);
     }
     
-    /* ֱ�߲岹�����յõ���ͼ����Բ�ڽ������������� ����������ֶ������ */
+    /* 直线插补，最终得到的图形是圆内接两个正三角形 坐标参数是手动计算的 */
     if(Key_Scan(KEY3_GPIO_PORT, KEY3_PIN) == KEY_ON)
     {
       Linear_Interpolation(-6400 * 10, 6400 * 10, INTERPOLATION_SPEED);

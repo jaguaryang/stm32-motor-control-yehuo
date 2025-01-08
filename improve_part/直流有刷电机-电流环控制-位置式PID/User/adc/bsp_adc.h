@@ -3,30 +3,30 @@
 
 #include "stm32f4xx.h"
 
-// ADC ĞòºÅºê¶¨Òå
+// ADC åºå·å®å®šä¹‰
 #define CURR_ADC                        ADC1
 #define CURR_ADC_CLK_ENABLE()           __ADC1_CLK_ENABLE()
 
 #define ADC_VBUS_IRQ                    ADC_IRQn
 #define ADC_VBUS_IRQHandler             ADC_IRQHandler
 
-#define VREF                            3.3f     // ²Î¿¼µçÑ¹£¬ÀíÂÛÉÏÊÇ3.3£¬¿ÉÍ¨¹ıÊµ¼Ê²âÁ¿µÃ3.258
-#define ADC_NUM_MAX                     1024       // ADC ×ª»»½á¹û»º³åÇø×î´óÖµ
+#define VREF                            3.3f     // å‚è€ƒç”µå‹ï¼Œç†è®ºä¸Šæ˜¯3.3ï¼Œå¯é€šè¿‡å®é™…æµ‹é‡å¾—3.258
+#define ADC_NUM_MAX                     1024       // ADC è½¬æ¢ç»“æœç¼“å†²åŒºæœ€å¤§å€¼
 
-#define GET_ADC_VDC_VAL(val)            ((float)val/(float)65536*VREF)          // µÃµ½µçÑ¹Öµ
+#define GET_ADC_VDC_VAL(val)            ((float)val/(float)65536*VREF)          // å¾—åˆ°ç”µå‹å€¼
   
-/*********************** µçÁ÷²É¼¯ ******************/
-// ADC GPIO ºê¶¨Òå
+/*********************** ç”µæµé‡‡é›† ******************/
+// ADC GPIO å®å®šä¹‰
 #define CURR_ADC_GPIO_PORT              GPIOB
 #define CURR_ADC_GPIO_PIN               GPIO_PIN_1
 #define CURR_ADC_GPIO_CLK_ENABLE()      __GPIOB_CLK_ENABLE()
 
 #define CURR_ADC_CHANNEL                ADC_CHANNEL_9
 
-// ADC DR¼Ä´æÆ÷ºê¶¨Òå£¬ADC×ª»»ºóµÄÊı×ÖÖµÔò´æ·ÅÔÚÕâÀï
+// ADC DRå¯„å­˜å™¨å®å®šä¹‰ï¼ŒADCè½¬æ¢åçš„æ•°å­—å€¼åˆ™å­˜æ”¾åœ¨è¿™é‡Œ
 #define CURR_ADC_DR_ADDR                ((uint32_t)ADC1+0x4c)
 
-// ADC DMA Í¨µÀºê¶¨Òå£¬ÕâÀïÎÒÃÇÊ¹ÓÃDMA´«Êä
+// ADC DMA é€šé“å®å®šä¹‰ï¼Œè¿™é‡Œæˆ‘ä»¬ä½¿ç”¨DMAä¼ è¾“
 #define CURR_ADC_DMA_CLK_ENABLE()       __DMA2_CLK_ENABLE()
 #define CURR_ADC_DMA_CHANNEL            DMA_CHANNEL_0
 #define CURR_ADC_DMA_STREAM             DMA2_Stream0
@@ -34,9 +34,9 @@
 #define ADC_DMA_IRQ                     DMA2_Stream0_IRQn
 #define ADC_DMA_IRQ_Handler             DMA2_Stream0_IRQHandler
 
-#define GET_ADC_CURR_VAL(val)           (((float)val)/(float)8.0/(float)0.02*(float)1000.0)          // µÃµ½µçÁ÷Öµ£¬µçÑ¹·Å´ó8±¶£¬0.02ÊÇ²ÉÑùµç×è£¬µ¥Î»mA¡£
+#define GET_ADC_CURR_VAL(val)           (((float)val)/(float)8.0/(float)0.02*(float)1000.0)          // å¾—åˆ°ç”µæµå€¼ï¼Œç”µå‹æ”¾å¤§8å€ï¼Œ0.02æ˜¯é‡‡æ ·ç”µé˜»ï¼Œå•ä½mAã€‚
 
-/*********************** µçÔ´µçÑ¹²É¼¯ ******************/
+/*********************** ç”µæºç”µå‹é‡‡é›† ******************/
 
 #define VBUS_GPIO_PORT                  GPIOB
 #define VBUS_GPIO_PIN                   GPIO_PIN_0
@@ -44,13 +44,13 @@
 
 #define VBUS_ADC_CHANNEL                ADC_CHANNEL_8
 
-#define VBUS_MAX                        14    // µçÑ¹×î´óÖµ
-#define VBUS_MIN                        10    // µçÑ¹×îĞ¡Öµ
+#define VBUS_MAX                        14    // ç”µå‹æœ€å¤§å€¼
+#define VBUS_MIN                        10    // ç”µå‹æœ€å°å€¼
 
-#define VBUS_HEX_MAX                    ((VBUS_MAX/37.0+1.24)/VREF*65536)    // µçÑ¹×î´óÖµ£¨²âÁ¿µçÑ¹ÊÇµçÔ´µçÑ¹µÄ1/37£©
-#define VBUS_HEX_MIN                    ((VBUS_MIN/37.0+1.24)/VREF*65536)    // µçÑ¹×îĞ¡Öµ£¨²âÁ¿µçÑ¹ÊÇµçÔ´µçÑ¹µÄ1/37£©
+#define VBUS_HEX_MAX                    ((VBUS_MAX/37.0+1.24)/VREF*65536)    // ç”µå‹æœ€å¤§å€¼ï¼ˆæµ‹é‡ç”µå‹æ˜¯ç”µæºç”µå‹çš„1/37ï¼‰
+#define VBUS_HEX_MIN                    ((VBUS_MIN/37.0+1.24)/VREF*65536)    // ç”µå‹æœ€å°å€¼ï¼ˆæµ‹é‡ç”µå‹æ˜¯ç”µæºç”µå‹çš„1/37ï¼‰
 
-#define GET_VBUS_VAL(val)               (((float)val-(float)1.24) * (float)37.0)      // µçÔ´µçÑ¹Öµ£¨²âÁ¿µçÑ¹ÊÇµçÔ´µçÑ¹µÄ1/37£©
+#define GET_VBUS_VAL(val)               (((float)val-(float)1.24) * (float)37.0)      // ç”µæºç”µå‹å€¼ï¼ˆæµ‹é‡ç”µå‹æ˜¯ç”µæºç”µå‹çš„1/37ï¼‰
 
 extern DMA_HandleTypeDef DMA_Init_Handle;
 extern ADC_HandleTypeDef ADC_Handle;
