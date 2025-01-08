@@ -4,13 +4,13 @@
   * @author  STMicroelectronics
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷»¥²¹Êä³ö·¶Àı
+  * @brief   é«˜çº§æ§åˆ¶å®šæ—¶å™¨äº’è¡¥è¾“å‡ºèŒƒä¾‹
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -23,21 +23,21 @@ TIM_OC_InitTypeDef TIM_OCInitStructure;
 __IO uint16_t ChannelPulse = 500;
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_GPIO_Config(void) 
 {
-	/*¶¨ÒåÒ»¸öGPIO_InitTypeDefÀàĞÍµÄ½á¹¹Ìå*/
+	/*å®šä¹‰ä¸€ä¸ªGPIO_InitTypeDefç±»å‹çš„ç»“æ„ä½“*/
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	/*¿ªÆô¶¨Ê±Æ÷Ïà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+	/*å¼€å¯å®šæ—¶å™¨ç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
 	ADVANCE_OCPWM_GPIO_CLK_ENABLE();
 	ADVANCE_OCNPWM_GPIO_CLK_ENABLE();
 	ADVANCE_BKIN_GPIO_CLK_ENABLE(); 
 
-	/* ¶¨Ê±Æ÷¹¦ÄÜÒı½Å³õÊ¼»¯ */															   
+	/* å®šæ—¶å™¨åŠŸèƒ½å¼•è„šåˆå§‹åŒ– */															   
 	GPIO_InitStructure.Pin = ADVANCE_OCPWM_PIN;	
 	GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;    
 	GPIO_InitStructure.Pull = GPIO_NOPULL;
@@ -55,51 +55,51 @@ static void TIMx_GPIO_Config(void)
 }
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓĞ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓĞ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ğè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈı¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓĞ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æ„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓĞ
- * TIM_CounterMode			 TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓĞ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓĞ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode			 TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 static void TIM_Mode_Config(void)
 {
 	TIM_BreakDeadTimeConfigTypeDef TIM_BDTRInitStructure;
-	// ¿ªÆôTIMx_CLK,x[1,8] 
+	// å¼€å¯TIMx_CLK,x[1,8] 
 	ADVANCE_TIM_CLK_ENABLE(); 
-	/* ¶¨Òå¶¨Ê±Æ÷µÄ¾ä±ú¼´È·¶¨¶¨Ê±Æ÷¼Ä´æÆ÷µÄ»ùµØÖ·*/
+	/* å®šä¹‰å®šæ—¶å™¨çš„å¥æŸ„å³ç¡®å®šå®šæ—¶å™¨å¯„å­˜å™¨çš„åŸºåœ°å€*/
 	TIM_TimeBaseStructure.Instance = ADVANCE_TIM;
-	/* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üĞÂ»òÕßÖĞ¶Ï*/		
-	//µ±¶¨Ê±Æ÷´Ó0¼ÆÊıµ½999£¬¼´Îª1000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+	/* ç´¯è®¡ TIM_Periodä¸ªåäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/		
+	//å½“å®šæ—¶å™¨ä»0è®¡æ•°åˆ°999ï¼Œå³ä¸º1000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
 	TIM_TimeBaseStructure.Init.Period = 1000-1;
-	// ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=168MHz 
-	// Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=1MHz
+	// é«˜çº§æ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=168MHz 
+	// è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=1MHz
 	TIM_TimeBaseStructure.Init.Prescaler = 168-1;	
-	// ²ÉÑùÊ±ÖÓ·ÖÆµ
+	// é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘
 	TIM_TimeBaseStructure.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-	// ¼ÆÊı·½Ê½
+	// è®¡æ•°æ–¹å¼
 	TIM_TimeBaseStructure.Init.CounterMode=TIM_COUNTERMODE_UP;
-	// ÖØ¸´¼ÆÊıÆ÷
+	// é‡å¤è®¡æ•°å™¨
 	TIM_TimeBaseStructure.Init.RepetitionCounter=0;	
-	// ³õÊ¼»¯¶¨Ê±Æ÷TIMx, x[1,8]
+	// åˆå§‹åŒ–å®šæ—¶å™¨TIMx, x[1,8]
 	HAL_TIM_PWM_Init(&TIM_TimeBaseStructure);
 
-	/*PWMÄ£Ê½ÅäÖÃ*/
-	//ÅäÖÃÎªPWMÄ£Ê½1
+	/*PWMæ¨¡å¼é…ç½®*/
+	//é…ç½®ä¸ºPWMæ¨¡å¼1
 	TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM1;
 	TIM_OCInitStructure.Pulse = ChannelPulse;
 	TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH;
 	TIM_OCInitStructure.OCNPolarity = TIM_OCNPOLARITY_HIGH;
 	TIM_OCInitStructure.OCIdleState = TIM_OCIDLESTATE_SET;
 	TIM_OCInitStructure.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-	//³õÊ¼»¯Í¨µÀ1Êä³öPWM 
+	//åˆå§‹åŒ–é€šé“1è¾“å‡ºPWM 
 	HAL_TIM_PWM_ConfigChannel(&TIM_TimeBaseStructure,&TIM_OCInitStructure,TIM_CHANNEL_1);
 
-	/* ×Ô¶¯Êä³öÊ¹ÄÜ£¬¶ÏÂ·¡¢ËÀÇøÊ±¼äºÍËø¶¨ÅäÖÃ */
+	/* è‡ªåŠ¨è¾“å‡ºä½¿èƒ½ï¼Œæ–­è·¯ã€æ­»åŒºæ—¶é—´å’Œé”å®šé…ç½® */
 	TIM_BDTRInitStructure.OffStateRunMode = TIM_OSSR_ENABLE;
 	TIM_BDTRInitStructure.OffStateIDLEMode = TIM_OSSI_ENABLE;
 	TIM_BDTRInitStructure.LockLevel = TIM_LOCKLEVEL_1;
@@ -109,16 +109,16 @@ static void TIM_Mode_Config(void)
 	TIM_BDTRInitStructure.AutomaticOutput = TIM_AUTOMATICOUTPUT_ENABLE;
 	HAL_TIMEx_ConfigBreakDeadTime(&TIM_TimeBaseStructure, &TIM_BDTRInitStructure);
 
-	/* ¶¨Ê±Æ÷Í¨µÀ1Êä³öPWM */
+	/* å®šæ—¶å™¨é€šé“1è¾“å‡ºPWM */
 	HAL_TIM_PWM_Start(&TIM_TimeBaseStructure,TIM_CHANNEL_1);
-	/* ¶¨Ê±Æ÷Í¨µÀ1»¥²¹Êä³öPWM */
+	/* å®šæ—¶å™¨é€šé“1äº’è¡¥è¾“å‡ºPWM */
 	HAL_TIMEx_PWMN_Start(&TIM_TimeBaseStructure,TIM_CHANNEL_1);
 }
 
 /**
-  * @brief  ³õÊ¼»¯¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷¶¨Ê±£¬1s²úÉúÒ»´ÎÖĞ¶Ï
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–é«˜çº§æ§åˆ¶å®šæ—¶å™¨å®šæ—¶ï¼Œ1säº§ç”Ÿä¸€æ¬¡ä¸­æ–­
+  * @param  æ— 
+  * @retval æ— 
   */
 void TIMx_Configuration(void)
 {

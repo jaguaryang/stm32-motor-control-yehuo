@@ -3,26 +3,26 @@
 
 #include "stm32f4xx.h"
 
-/* ͨ�ö�ʱ�� */
+/* 通用定时器 */
 #define GENERAL_TIM                       TIM4
 #define GENERAL_TIM_CLK_ENABLE()          __TIM4_CLK_ENABLE()
 
-/* ͨ�ö�ʱ��PWM��� */
-/* PWM������� */
+/* 通用定时器PWM输出 */
+/* PWM输出引脚 */
 #define GENERAL_OCPWM_PIN                 GPIO_PIN_14              
 #define GENERAL_OCPWM_GPIO_PORT           GPIOD                      
 #define GENERAL_OCPWM_GPIO_CLK_ENABLE()   __GPIOD_CLK_ENABLE()
 #define GENERAL_OCPWM_AF                  GPIO_AF2_TIM4
 
-/* �߼����ƶ�ʱ�� */
+/* 高级控制定时器 */
 #define ADVANCE_TIM                       TIM1
 #define ADVANCE_TIM_CLK_ENABLE()          __TIM1_CLK_ENABLE()
 
-/* ����/�Ƚ��ж� */
+/* 捕获/比较中断 */
 #define ADVANCE_TIM_IRQn                  TIM1_CC_IRQn
 #define ADVANCE_TIM_IRQHandler            TIM1_CC_IRQHandler
-/* �߼����ƶ�ʱ��PWM���벶�� */
-/* PWM���벶������ */
+/* 高级控制定时器PWM输入捕获 */
+/* PWM输入捕获引脚 */
 #define ADVANCE_ICPWM_PIN                 GPIO_PIN_9              
 #define ADVANCE_ICPWM_GPIO_PORT           GPIOE                     
 #define ADVANCE_ICPWM_GPIO_CLK_ENABLE()   __GPIOE_CLK_ENABLE()

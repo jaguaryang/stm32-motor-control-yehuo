@@ -4,13 +4,13 @@
   * @author  STMicroelectronics
   * @version V1.0
   * @date    2015-xx-xx
-  * @brief   ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷»¥²¹Êä³ö·¶Àı
+  * @brief   é«˜çº§æ§åˆ¶å®šæ—¶å™¨äº’è¡¥è¾“å‡ºèŒƒä¾‹
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407¿ª·¢°å  
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407å¼€å‘æ¿  
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -25,21 +25,21 @@ __IO float DutyCycle = 0;
 __IO float Frequency = 0;
 
 /**
-  * @brief  ÅäÖÃTIM¸´ÓÃÊä³öPWMÊ±ÓÃµ½µÄI/O
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é…ç½®TIMå¤ç”¨è¾“å‡ºPWMæ—¶ç”¨åˆ°çš„I/O
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_GPIO_Config(void) 
 {
-  /*¶¨ÒåÒ»¸öGPIO_InitTypeDefÀàĞÍµÄ½á¹¹Ìå*/
+  /*å®šä¹‰ä¸€ä¸ªGPIO_InitTypeDefç±»å‹çš„ç»“æ„ä½“*/
   GPIO_InitTypeDef GPIO_InitStructure;
 
-  /*¿ªÆô¶¨Ê±Æ÷Ïà¹ØµÄGPIOÍâÉèÊ±ÖÓ*/
+  /*å¼€å¯å®šæ—¶å™¨ç›¸å…³çš„GPIOå¤–è®¾æ—¶é’Ÿ*/
   GENERAL_OCPWM_GPIO_CLK_ENABLE();
   ADVANCE_ICPWM_GPIO_CLK_ENABLE(); 
 
-  /* ¶¨Ê±Æ÷¹¦ÄÜÒı½Å³õÊ¼»¯ */
-  /* Í¨ÓÃ¶¨Ê±Æ÷PWMÊä³öÒı½Å */  
+  /* å®šæ—¶å™¨åŠŸèƒ½å¼•è„šåˆå§‹åŒ– */
+  /* é€šç”¨å®šæ—¶å™¨PWMè¾“å‡ºå¼•è„š */  
   GPIO_InitStructure.Pin = GENERAL_OCPWM_PIN; 
   GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;    
   GPIO_InitStructure.Pull = GPIO_NOPULL;
@@ -47,71 +47,71 @@ static void TIMx_GPIO_Config(void)
   GPIO_InitStructure.Alternate = GENERAL_OCPWM_AF;
   HAL_GPIO_Init(GENERAL_OCPWM_GPIO_PORT, &GPIO_InitStructure);
   
-  /* ¸ß¼¶¶¨Ê±Æ÷ÊäÈë²¶»ñÒı½Å */
+  /* é«˜çº§å®šæ—¶å™¨è¾“å…¥æ•è·å¼•è„š */
   GPIO_InitStructure.Pin = ADVANCE_ICPWM_PIN;
   GPIO_InitStructure.Alternate = ADVANCE_ICPWM_AF;  
   HAL_GPIO_Init(ADVANCE_ICPWM_GPIO_PORT, &GPIO_InitStructure);
 }
 
  /**
-  * @brief  ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷ TIMx,x[1,8]ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  é«˜çº§æ§åˆ¶å®šæ—¶å™¨ TIMx,x[1,8]ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+  * @param  æ— 
+  * @retval æ— 
   */
 static void TIMx_NVIC_Configuration(void)
 {
-  //ÉèÖÃÇÀÕ¼ÓÅÏÈ¼¶£¬×ÓÓÅÏÈ¼¶
+  //è®¾ç½®æŠ¢å ä¼˜å…ˆçº§ï¼Œå­ä¼˜å…ˆçº§
   HAL_NVIC_SetPriority(ADVANCE_TIM_IRQn, 0, 3);
-  // ÉèÖÃÖĞ¶ÏÀ´Ô´
+  // è®¾ç½®ä¸­æ–­æ¥æº
   HAL_NVIC_EnableIRQ(ADVANCE_TIM_IRQn);
 }
 
 /*
- * ×¢Òâ£ºTIM_TimeBaseInitTypeDef½á¹¹ÌåÀïÃæÓĞ5¸ö³ÉÔ±£¬TIM6ºÍTIM7µÄ¼Ä´æÆ÷ÀïÃæÖ»ÓĞ
- * TIM_PrescalerºÍTIM_Period£¬ËùÒÔÊ¹ÓÃTIM6ºÍTIM7µÄÊ±ºòÖ»Ğè³õÊ¼»¯ÕâÁ½¸ö³ÉÔ±¼´¿É£¬
- * ÁíÍâÈı¸ö³ÉÔ±ÊÇÍ¨ÓÃ¶¨Ê±Æ÷ºÍ¸ß¼¶¶¨Ê±Æ÷²ÅÓĞ.
+ * æ³¨æ„ï¼šTIM_TimeBaseInitTypeDefç»“æ„ä½“é‡Œé¢æœ‰5ä¸ªæˆå‘˜ï¼ŒTIM6å’ŒTIM7çš„å¯„å­˜å™¨é‡Œé¢åªæœ‰
+ * TIM_Prescalerå’ŒTIM_Periodï¼Œæ‰€ä»¥ä½¿ç”¨TIM6å’ŒTIM7çš„æ—¶å€™åªéœ€åˆå§‹åŒ–è¿™ä¸¤ä¸ªæˆå‘˜å³å¯ï¼Œ
+ * å¦å¤–ä¸‰ä¸ªæˆå‘˜æ˜¯é€šç”¨å®šæ—¶å™¨å’Œé«˜çº§å®šæ—¶å™¨æ‰æœ‰.
  *-----------------------------------------------------------------------------
- * TIM_Prescaler         ¶¼ÓĞ
- * TIM_CounterMode       TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ£¨»ù±¾¶¨Ê±Æ÷£©
- * TIM_Period            ¶¼ÓĞ
- * TIM_ClockDivision     TIMx,x[6,7]Ã»ÓĞ£¬ÆäËû¶¼ÓĞ(»ù±¾¶¨Ê±Æ÷)
- * TIM_RepetitionCounter TIMx,x[1,8]²ÅÓĞ(¸ß¼¶¶¨Ê±Æ÷)
+ * TIM_Prescaler         éƒ½æœ‰
+ * TIM_CounterMode       TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰ï¼ˆåŸºæœ¬å®šæ—¶å™¨ï¼‰
+ * TIM_Period            éƒ½æœ‰
+ * TIM_ClockDivision     TIMx,x[6,7]æ²¡æœ‰ï¼Œå…¶ä»–éƒ½æœ‰(åŸºæœ¬å®šæ—¶å™¨)
+ * TIM_RepetitionCounter TIMx,x[1,8]æ‰æœ‰(é«˜çº§å®šæ—¶å™¨)
  *-----------------------------------------------------------------------------
  */
 static void TIM_PWMOUTPUT_Config(void)
 { 
   TIM_OC_InitTypeDef TIM_OCInitStructure;
-  // ¿ªÆôTIMx_CLK,x[2,3,4,5,12,13,14] 
+  // å¼€å¯TIMx_CLK,x[2,3,4,5,12,13,14] 
   GENERAL_TIM_CLK_ENABLE(); 
-  /* ¶¨Òå¶¨Ê±Æ÷µÄ¾ä±ú¼´È·¶¨¶¨Ê±Æ÷¼Ä´æÆ÷µÄ»ùµØÖ·*/
+  /* å®šä¹‰å®šæ—¶å™¨çš„å¥æŸ„å³ç¡®å®šå®šæ—¶å™¨å¯„å­˜å™¨çš„åŸºåœ°å€*/
   TIM_PWMOUTPUT_Handle.Instance = GENERAL_TIM;
-  /* ÀÛ¼Æ TIM_Period¸öºó²úÉúÒ»¸ö¸üĞÂ»òÕßÖĞ¶Ï*/    
-  //µ±¶¨Ê±Æ÷´Ó0¼ÆÊıµ½9999£¬¼´Îª10000´Î£¬ÎªÒ»¸ö¶¨Ê±ÖÜÆÚ
+  /* ç´¯è®¡ TIM_Periodä¸ªåäº§ç”Ÿä¸€ä¸ªæ›´æ–°æˆ–è€…ä¸­æ–­*/    
+  //å½“å®šæ—¶å™¨ä»0è®¡æ•°åˆ°9999ï¼Œå³ä¸º10000æ¬¡ï¼Œä¸ºä¸€ä¸ªå®šæ—¶å‘¨æœŸ
   TIM_PWMOUTPUT_Handle.Init.Period = 500-1;
-  // ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=84MHz 
-  // Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=100KHz
+  // é«˜çº§æ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=84MHz 
+  // è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=100KHz
   TIM_PWMOUTPUT_Handle.Init.Prescaler = 84-1; 
-  // ²ÉÑùÊ±ÖÓ·ÖÆµ
+  // é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘
   TIM_PWMOUTPUT_Handle.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-  // ¼ÆÊı·½Ê½
+  // è®¡æ•°æ–¹å¼
   TIM_PWMOUTPUT_Handle.Init.CounterMode=TIM_COUNTERMODE_UP;
-  // ÖØ¸´¼ÆÊıÆ÷
+  // é‡å¤è®¡æ•°å™¨
   TIM_PWMOUTPUT_Handle.Init.RepetitionCounter=0;  
-  // ³õÊ¼»¯¶¨Ê±Æ÷TIMx, x[1,8]
+  // åˆå§‹åŒ–å®šæ—¶å™¨TIMx, x[1,8]
   HAL_TIM_PWM_Init(&TIM_PWMOUTPUT_Handle);
 
-  /*PWMÄ£Ê½ÅäÖÃ*/
-  //ÅäÖÃÎªPWMÄ£Ê½1
+  /*PWMæ¨¡å¼é…ç½®*/
+  //é…ç½®ä¸ºPWMæ¨¡å¼1
   TIM_OCInitStructure.OCMode = TIM_OCMODE_PWM1;
   TIM_OCInitStructure.Pulse = 250;
   TIM_OCInitStructure.OCPolarity = TIM_OCPOLARITY_HIGH;
   TIM_OCInitStructure.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   TIM_OCInitStructure.OCIdleState = TIM_OCIDLESTATE_SET;
   TIM_OCInitStructure.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  //³õÊ¼»¯Í¨µÀ3Êä³öPWM 
+  //åˆå§‹åŒ–é€šé“3è¾“å‡ºPWM 
   HAL_TIM_PWM_ConfigChannel(&TIM_PWMOUTPUT_Handle,&TIM_OCInitStructure,TIM_CHANNEL_3);
 
-  /* ¶¨Ê±Æ÷Í¨µÀ3Êä³öPWM */
+  /* å®šæ—¶å™¨é€šé“3è¾“å‡ºPWM */
   HAL_TIM_PWM_Start(&TIM_PWMOUTPUT_Handle,TIM_CHANNEL_3);
 
 }
@@ -122,49 +122,49 @@ static void TIM_PWMINPUT_Config(void)
   TIM_SlaveConfigTypeDef  TIM_SlaveConfigStructure;
   TIM_MasterConfigTypeDef TIM_MasterConfigStructure;
   
-  // ¿ªÆôTIMx_CLK,x[1,8] 
+  // å¼€å¯TIMx_CLK,x[1,8] 
   ADVANCE_TIM_CLK_ENABLE(); 
-  /* ¶¨Òå¶¨Ê±Æ÷µÄ¾ä±ú¼´È·¶¨¶¨Ê±Æ÷¼Ä´æÆ÷µÄ»ùµØÖ·*/
+  /* å®šä¹‰å®šæ—¶å™¨çš„å¥æŸ„å³ç¡®å®šå®šæ—¶å™¨å¯„å­˜å™¨çš„åŸºåœ°å€*/
   TIM_PWMINPUT_Handle.Instance = ADVANCE_TIM;
   TIM_PWMINPUT_Handle.Init.Period = 0xFFFF;   
-  // ¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷Ê±ÖÓÔ´TIMxCLK = HCLK=168MHz 
-  // Éè¶¨¶¨Ê±Æ÷ÆµÂÊÎª=TIMxCLK/(TIM_Prescaler+1)=1MHz
+  // é«˜çº§æ§åˆ¶å®šæ—¶å™¨æ—¶é’ŸæºTIMxCLK = HCLK=168MHz 
+  // è®¾å®šå®šæ—¶å™¨é¢‘ç‡ä¸º=TIMxCLK/(TIM_Prescaler+1)=1MHz
   TIM_PWMINPUT_Handle.Init.Prescaler = 168-1; 
-  // ²ÉÑùÊ±ÖÓ·ÖÆµ
+  // é‡‡æ ·æ—¶é’Ÿåˆ†é¢‘
   TIM_PWMINPUT_Handle.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-  // ¼ÆÊı·½Ê½
+  // è®¡æ•°æ–¹å¼
   TIM_PWMINPUT_Handle.Init.CounterMode=TIM_COUNTERMODE_UP;  
-  // ³õÊ¼»¯¶¨Ê±Æ÷TIMx, x[1,8]
+  // åˆå§‹åŒ–å®šæ—¶å™¨TIMx, x[1,8]
   HAL_TIM_IC_Init(&TIM_PWMINPUT_Handle);
   
-  /* IC1²¶»ñ£ºÉÏÉıÑØ´¥·¢ TI1FP1 */
+  /* IC1æ•è·ï¼šä¸Šå‡æ²¿è§¦å‘ TI1FP1 */
   TIM_ICInitStructure.ICPolarity = TIM_ICPOLARITY_RISING;
   TIM_ICInitStructure.ICSelection = TIM_ICSELECTION_DIRECTTI;
   TIM_ICInitStructure.ICPrescaler = TIM_ICPSC_DIV1;
   TIM_ICInitStructure.ICFilter = 0x0;
   HAL_TIM_IC_ConfigChannel(&TIM_PWMINPUT_Handle,&TIM_ICInitStructure,ADVANCE_IC1PWM_CHANNEL);
 
-  /* IC2²¶»ñ£ºÏÂ½µÑØ´¥·¢ TI1FP2 */  
+  /* IC2æ•è·ï¼šä¸‹é™æ²¿è§¦å‘ TI1FP2 */  
   TIM_ICInitStructure.ICPolarity = TIM_ICPOLARITY_FALLING;
   TIM_ICInitStructure.ICSelection = TIM_ICSELECTION_INDIRECTTI;
   TIM_ICInitStructure.ICPrescaler = TIM_ICPSC_DIV1;
   TIM_ICInitStructure.ICFilter = 0x0;
   HAL_TIM_IC_ConfigChannel(&TIM_PWMINPUT_Handle,&TIM_ICInitStructure,ADVANCE_IC2PWM_CHANNEL);
   
-  /* Ñ¡Ôñ´ÓÄ£Ê½: ¸´Î»Ä£Ê½ */
+  /* é€‰æ‹©ä»æ¨¡å¼: å¤ä½æ¨¡å¼ */
   TIM_SlaveConfigStructure.SlaveMode = TIM_SLAVEMODE_RESET;
-  /* Ñ¡Ôñ¶¨Ê±Æ÷ÊäÈë´¥·¢: TI1FP1 */
+  /* é€‰æ‹©å®šæ—¶å™¨è¾“å…¥è§¦å‘: TI1FP1 */
   TIM_SlaveConfigStructure.InputTrigger = TIM_TS_TI1FP1;
   HAL_TIM_SlaveConfigSynchronization(&TIM_PWMINPUT_Handle,&TIM_SlaveConfigStructure);
   
-  /* Ê¹ÄÜ²¶»ñ/±È½Ï2ÖĞ¶ÏÇëÇó */
+  /* ä½¿èƒ½æ•è·/æ¯”è¾ƒ2ä¸­æ–­è¯·æ±‚ */
   HAL_TIM_IC_Start_IT(&TIM_PWMINPUT_Handle,TIM_CHANNEL_1);
   HAL_TIM_IC_Start_IT(&TIM_PWMINPUT_Handle,TIM_CHANNEL_2);
 }
 /**
-  * @brief  ³õÊ¼»¯¸ß¼¶¿ØÖÆ¶¨Ê±Æ÷¶¨Ê±£¬1ms²úÉúÒ»´ÎÖĞ¶Ï
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  åˆå§‹åŒ–é«˜çº§æ§åˆ¶å®šæ—¶å™¨å®šæ—¶ï¼Œ1msäº§ç”Ÿä¸€æ¬¡ä¸­æ–­
+  * @param  æ— 
+  * @retval æ— 
   */
 void TIMx_Configuration(void)
 {
@@ -186,14 +186,14 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
   {
-    /* »ñÈ¡ÊäÈë²¶»ñÖµ */
+    /* è·å–è¾“å…¥æ•è·å€¼ */
     IC1Value = HAL_TIM_ReadCapturedValue(&TIM_PWMINPUT_Handle,ADVANCE_IC1PWM_CHANNEL);
     IC2Value = HAL_TIM_ReadCapturedValue(&TIM_PWMINPUT_Handle,ADVANCE_IC2PWM_CHANNEL);  
     if (IC1Value != 0)
     {
-      /* Õ¼¿Õ±È¼ÆËã */
+      /* å ç©ºæ¯”è®¡ç®— */
       DutyCycle = (float)((IC2Value+1) * 100) / (IC1Value+1);
-      /* ÆµÂÊ¼ÆËã */
+      /* é¢‘ç‡è®¡ç®— */
       Frequency = 168000000/168/(float)(IC1Value+1);
     }
     else

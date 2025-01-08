@@ -4,13 +4,13 @@
   * @author  fire
   * @version V1.0
   * @date    2017-xx-xx
-  * @brief   GPIOÊä³ö--Ê¹ÓÃ¹Ì¼ş¿âµãÁÁLEDµÆ
+  * @brief   GPIOè¾“å‡º--ä½¿ç”¨å›ºä»¶åº“ç‚¹äº®LEDç¯
   ******************************************************************************
   * @attention
   *
-  * ÊµÑéÆ½Ì¨:Ò°»ğ  STM32 F407 ¿ª·¢°å 
-  * ÂÛÌ³    :http://www.firebbs.cn
-  * ÌÔ±¦    :http://firestm32.taobao.com
+  * å®éªŒå¹³å°:é‡ç«  STM32 F407 å¼€å‘æ¿ 
+  * è®ºå›    :http://www.firebbs.cn
+  * æ·˜å®    :http://firestm32.taobao.com
   *
   ******************************************************************************
   */
@@ -24,35 +24,35 @@
 extern __IO uint16_t ChannelPulse;
 
 /**
-  * @brief  Ö÷º¯Êı
-  * @param  ÎŞ
-  * @retval ÎŞ
+  * @brief  ä¸»å‡½æ•°
+  * @param  æ— 
+  * @retval æ— 
   */
 int main(void) 
 {
-	/* ³õÊ¼»¯ÏµÍ³Ê±ÖÓÎª168MHz */
+	/* åˆå§‹åŒ–ç³»ç»Ÿæ—¶é’Ÿä¸º168MHz */
 	SystemClock_Config();
-	/* ³õÊ¼»¯°´¼üGPIO */
+	/* åˆå§‹åŒ–æŒ‰é”®GPIO */
 	Key_GPIO_Config();
-    /* ³õÊ¼»¯»ù±¾¶¨Ê±Æ÷¶¨Ê±£¬1s²úÉúÒ»´ÎÖĞ¶Ï */
+    /* åˆå§‹åŒ–åŸºæœ¬å®šæ—¶å™¨å®šæ—¶ï¼Œ1säº§ç”Ÿä¸€æ¬¡ä¸­æ–­ */
 	TIMx_Configuration();
   
 	while(1)
 	{ 
-		/* É¨ÃèKEY1 */
+		/* æ‰«æKEY1 */
 		if( Key_Scan(KEY1_GPIO_PORT,KEY1_PIN) == KEY_ON  )
 		{
-			/* Ôö´óÕ¼¿Õ±È */
+			/* å¢å¤§å ç©ºæ¯” */
 			if(ChannelPulse<950)
 				ChannelPulse+=50;
 			else
 				ChannelPulse=1000;
 			__HAL_TIM_SetCompare(&TIM_TimeBaseStructure,TIM_CHANNEL_1,ChannelPulse);
 		}   
-		/* É¨ÃèKEY2 */
+		/* æ‰«æKEY2 */
 		if( Key_Scan(KEY2_GPIO_PORT,KEY2_PIN) == KEY_ON  )
 		{
-			/* ¼õĞ¡Õ¼¿Õ±È */
+			/* å‡å°å ç©ºæ¯” */
 			if(ChannelPulse>=50)
 				ChannelPulse-=50;
 			else
