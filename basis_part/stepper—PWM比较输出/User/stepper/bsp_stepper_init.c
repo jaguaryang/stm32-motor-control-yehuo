@@ -168,7 +168,7 @@ void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim)
 }
 
 /**
-  * @brief  设置TIM通道的占空比
+  * @brief  设置TIM通道的占空比 视频说没有用到 by Jack
   * @param  channel   通道  （1,2,3,4）
   * @param  compare   占空比
   * @note   无
